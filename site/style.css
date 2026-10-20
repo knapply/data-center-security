@@ -116,3 +116,6 @@ main { max-width: 1200px; margin: 0 auto; padding: 16px; display: grid; gap: 16p
 .conf-likely { color: var(--it-ot); border-color: currentColor; }
 .conf-suspected { color: var(--elevated); border-color: currentColor; }
 .inc .sources { font-size: 13px; color: var(--muted); }
+.cause .guess { margin: 6px 0 2px; padding: 6px 10px; border: 1px dashed var(--elevated); border-radius: 6px; }
+.cause .guess details { margin-top: 4px; }
+.cause .guess ul { padding-left: 18px; font-size: 13px; }
