@@ -23,6 +23,40 @@
     - {publisher: AP via WTTW, url: "https://news.wttw.com/2020/12/26/downtown-nashville-explosion-knocks-communications-offline"}
     - {publisher: Tennessee Lookout, url: "https://tennesseelookout.com/2021/05/19/tennessee-board-details-impact-of-christmas-bombing-on-911-systems/"}
     - {publisher: FBI Memphis, url: "https://www.fbi.gov/contact-us/field-offices/memphis/news/press-releases/fbi-releases-report-on-nashville-bombing"}
+    - {publisher: Urgent Communications (TECB report), url: "https://urgentcomm.com/911/tennessee-board-reports-nashville-bombing-impact-on-911-future-plans"}
+  root_cause:
+    summary: >
+      A deliberate vehicle bomb cut commercial power; flooding and fire then disabled the
+      backup generators, and the site ran on batteries until they were exhausted.
+    confidence: confirmed
+    components:
+      - part: Commercial power feed
+        role: affected
+        manufacturer: null
+        model: null
+        versions: null
+        serial: null
+        detail: Lost in the blast (AT&T via Data Center Frontier).
+      - part: Backup power generators
+        role: affected
+        manufacturer: null
+        model: null
+        versions: null
+        serial: null
+        detail: >
+          AT&T said water and fire damage took out a number of generators; the basement had
+          more than 3 ft of water. Maker not published.
+      - part: Backup batteries
+        role: affected
+        manufacturer: null
+        model: null
+        versions: null
+        serial: null
+        detail: >
+          Carried the load until depleted; runtime not published. The TN 911 board report
+          says AT&T could not bring in supplemental power in time because site access was
+          restricted.
+  supply_chain_factors: []
 
 - id: 2021-ovh-sbg-fire
   date: 2021-03-10
@@ -46,6 +80,49 @@
     - {publisher: The Register, url: "https://www.theregister.com/2021/03/10/ovh_strasbourg_fire/"}
     - {publisher: Le Monde Informatique (BEA-RI report), url: "https://www.lemondeinformatique.fr/actualites/lireamp-incendie-ovh-le-bea-ri-liste-plusieurs-faiblesses-87043.html"}
     - {publisher: Le Monde Informatique (court ruling), url: "https://www.lemondeinformatique.fr/actualites/lire-incendie-sgb2-strasbourg-ovh-condamne-a-verser-plus-de-100-000-eteuro-89434.html"}
+    - {publisher: Journal du Net (BEA-RI report), url: "https://www.journaldunet.com/web-tech/cloud/1509749-enquete-sur-l-incendie-d-ovh-des-conclusions-accablantes/"}
+    - {publisher: Solutions Numériques (Klaba statement), url: "https://www.solutions-numeriques.com/securite/exclusif-les-causes-de-lincendie-ovh-strasbourg-des-explications-stupefiantes/"}
+  root_cause:
+    summary: >
+      Fire started in SBG2's ground-floor UPS and battery power room, almost simultaneously
+      on batteries and an inverter; the exact mechanism was not determined.
+    confidence: likely
+    components:
+      - part: UPS inverter (UPS 7)
+        role: origin
+        manufacturer: null
+        model: null
+        versions: null
+        serial: null
+        detail: >
+          BEA-RI cites CCTV showing fire starting at the UPS/batteries, and sensors logging
+          unusual humidity behind the inverters before the fire. Its hypotheses are water or
+          humidity from nearby cooling, or the maintenance done that morning; it left the
+          cause to a judicial inquiry. Octave Klaba said a supplier replaced many parts inside
+          UPS 7 that morning. Maker not published.
+      - part: Lead-acid UPS batteries
+        role: contributing
+        manufacturer: null
+        model: null
+        versions: null
+        serial: null
+        detail: Burned with the inverters (BEA-RI via Le Monde Informatique).
+      - part: Free-cooling building design
+        role: contributing
+        manufacturer: null
+        model: null
+        versions: null
+        serial: null
+        detail: >
+          BEA-RI found the inner courtyards of the outside-air cooling design acted as
+          chimneys. There was no automatic extinguishing and no general power cutoff; power
+          stayed live for about three hours.
+  supply_chain_factors:
+    - factor: >
+        UPS 7 had been serviced by its (unnamed) supplier the same morning; the maintenance
+        is one of BEA-RI's hypotheses, and the supplier link comes from OVHcloud's founder.
+      component: batteries
+      confidence: suspected
 
 - id: 2022-tlstorm-apc-ups
   date: 2022-03-08
@@ -68,6 +145,42 @@
     - {publisher: NVD, url: "https://nvd.nist.gov/vuln/detail/CVE-2022-22805"}
     - {publisher: NVD, url: "https://nvd.nist.gov/vuln/detail/CVE-2022-22806"}
     - {publisher: NVD, url: "https://nvd.nist.gov/vuln/detail/CVE-2022-0715"}
+    - {publisher: Duo Decipher, url: "https://duo.com/decipher/trio-of-flaws-allows-remote-takeover-of-some-apc-ups-devices"}
+  root_cause:
+    summary: >
+      APC's network-management firmware mishandled errors from the embedded NanoSSL TLS
+      library, and firmware updates were not securely signed.
+    confidence: confirmed
+    components:
+      - part: Smart-UPS SmartConnect / network management firmware
+        role: origin
+        manufacturer: Schneider Electric (APC)
+        model: Smart-UPS SMT, SMC, SMTL, SCL, SMX, SRT series
+        versions: >
+          CVE-2022-22806 per NVD: SMT up to UPS 04.5, SMC up to 04.2, SMTL up to 02.9,
+          SCL up to 02.5 (IDs 1029/1030/1036) or 03.1 (ID 1037), SMX up to 03.1.
+          CVE-2022-0715 also covers SRT and non-SmartConnect lines; see SEVD-2022-067-02.
+        serial: null
+        detail: >
+          CVE-2022-22805 is a TLS reassembly buffer overflow and CVE-2022-22806 a TLS
+          authentication bypass, both pre-auth RCE; CVE-2022-0715 is unsigned firmware
+          upgrades.
+      - part: NanoSSL TLS library
+        role: contributing
+        manufacturer: Mocana
+        model: NanoSSL
+        versions: null
+        serial: null
+        detail: >
+          Armis says the library requires callers to close the connection on TLS errors and
+          APC's code ignored some errors. The library itself was not reported as flawed.
+  supply_chain_factors:
+    - factor: A third-party embedded TLS library was integrated incorrectly into UPS firmware.
+      component: batteries
+      confidence: confirmed
+    - factor: UPS firmware updates were not cryptographically signed, so malicious firmware could be installed.
+      component: batteries
+      confidence: confirmed
 
 - id: 2022-london-heatwave-cooling
   date: 2022-07-19
@@ -90,6 +203,24 @@
   sources:
     - {publisher: Google Cloud status page, url: "https://status.cloud.google.com/incidents/XVq5om2XEDSqLtJZUvcH"}
     - {publisher: The Register, url: "https://www.theregister.com/2022/07/19/google_oracle_cloud/"}
+    - {publisher: Google Cloud incident report, url: "https://status.cloud.google.com/incidents/fmEL9i2fArADKawkZAa2"}
+  root_cause:
+    summary: >
+      Multiple redundant cooling systems (two chiller units, per Google's preliminary
+      report) failed during record heat; the deeper mechanism was not published.
+    confidence: likely
+    components:
+      - part: Chiller units
+        role: origin
+        manufacturer: null
+        model: null
+        versions: null
+        serial: null
+        detail: >
+          Google cites "simultaneous failure of multiple, redundant cooling systems combined
+          with extreme heat" and said it and its suppliers were analysing the failure. Oracle
+          published no component detail. Makers not published.
+  supply_chain_factors: []
 
 - id: 2022-us-chip-export-controls
   date: 2022-10-07
@@ -110,6 +241,33 @@
   sources:
     - {publisher: US Bureau of Industry and Security, url: "https://www.bis.gov/press-release/commerce-implements-new-export-controls-advanced-computing-semiconductor-manufacturing-items-peoples"}
     - {publisher: Federal Register, url: "https://www.federalregister.gov/documents/2022/10/13/2022-21658/implementation-of-additional-export-controls-certain-advanced-computing-and-semiconductor-manufacturing"}
+    - {publisher: Nvidia Form 8-K (SEC), url: "https://www.sec.gov/Archives/edgar/data/1045810/000104581022000146/nvda-20220826.htm"}
+  root_cause:
+    summary: >
+      Policy event. BIS licence requirements (first sent to Nvidia and AMD in August 2022,
+      codified on October 7) cut off exports of the top data center accelerators to China.
+    confidence: confirmed
+    components:
+      - part: Data center GPU accelerators
+        role: affected
+        manufacturer: Nvidia
+        model: A100, A100X, H100 (and DGX systems that use them)
+        versions: null
+        serial: null
+        detail: Named in Nvidia's 8-K of August 2022 after the BIS notice.
+      - part: Data center GPU accelerators
+        role: affected
+        manufacturer: AMD
+        model: Instinct MI250
+        versions: null
+        serial: null
+        detail: AMD told Reuters the MI250 was covered and the MI100 was not.
+  supply_chain_factors:
+    - factor: >
+        Nvidia shipped cut-down China variants (A800, H800) to stay under the thresholds;
+        later rules in October 2023 covered those too.
+      component: accelerators
+      confidence: confirmed
 
 - id: 2022-kakao-pangyo-fire
   date: 2022-10-15
@@ -133,6 +291,50 @@
     - {publisher: Korea JoongAng Daily, url: "https://www.koreajoongangdaily.com/business/ict-ministry-completes-its-probe-of-kakao-service-outage/11629261"}
     - {publisher: Bloomberg via Data Center Knowledge, url: "https://www.datacenterknowledge.com/business/data-center-fire-triggers-lithium-ion-battery-doubts-south-korea"}
     - {publisher: The Register, url: "https://www.theregister.com/2022/10/17/sk_cc_naver_kaako_fire/"}
+    - {publisher: iNews24 (MSIT findings), url: "https://www.inews24.com/view/1580504"}
+    - {publisher: Metro Seoul, url: "https://www.metroseoul.co.kr/article/20230308500034"}
+    - {publisher: EPRI Storage Wiki, url: "https://storagewiki.epri.com/index.php/Failure_Event_-_South_Korea,_Pangyo_-_15_Oct_2022"}
+  root_cause:
+    summary: >
+      A lithium-ion battery rack in a basement battery room caught fire; partial National
+      Forensic Service results cited by MSIT point to an internal short from age-related
+      insulation breakdown in a cell.
+    confidence: likely
+    components:
+      - part: Lithium-ion UPS battery cell/rack
+        role: origin
+        manufacturer: SK On
+        model: null
+        versions: null
+        serial: null
+        detail: >
+          Maker named by Kakao's CEO and Korean press, not by an investigator. The batteries
+          replaced lead-acid units in 2016 (Metro Seoul). The cell-ageing finding was
+          partial; no final police or forensic report was found.
+      - part: Battery monitoring system
+        role: contributing
+        manufacturer: null
+        model: null
+        versions: null
+        serial: null
+        detail: >
+          MSIT said the BMS detected nothing abnormal before the fire. SK published logs
+          showing normal readings; some local reports claimed warnings, so accounts differ.
+      - part: UPS and backup power
+        role: affected
+        manufacturer: null
+        model: null
+        versions: null
+        serial: null
+        detail: >
+          Sat in the same room as the batteries, so both were lost together. MSIT also found
+          no fire suppression suited to lithium-ion fires.
+  supply_chain_factors:
+    - factor: >
+        Battery maker and data center operator are affiliates in the same group (SK), and the
+        cells were about six years old when the cell-ageing finding was made.
+      component: batteries
+      confidence: likely
 
 - id: 2023-gcp-paris-water-fire
   date: 2023-04-26
@@ -155,6 +357,41 @@
   sources:
     - {publisher: Google Cloud status page, url: "https://status.cloud.google.com/incidents/dS9ps52MUnxQfyDGPfkY"}
     - {publisher: The Register, url: "https://www.theregister.com/2023/04/26/google_cloud_outage/"}
+  root_cause:
+    summary: >
+      A cooling-system water pipe leaked in a non-Google part of the building; the water
+      reached the level-2 UPS room and led to a fire.
+    confidence: confirmed
+    components:
+      - part: Cooling-system water pipe
+        role: origin
+        manufacturer: null
+        model: null
+        versions: null
+        serial: null
+        detail: >
+          Per Google's incident report. A secondhand account on a French operators' list
+          (reported by DCD) blamed a cooling water pump; Google does not mention a pump.
+      - part: UPS and batteries
+        role: affected
+        manufacturer: null
+        model: null
+        versions: null
+        serial: null
+        detail: Maker and battery chemistry not published.
+      - part: Building fire-suppression water supply
+        role: contributing
+        manufacturer: null
+        model: null
+        versions: null
+        serial: null
+        detail: Google reports the building's suppression water ran out during the fire.
+  supply_chain_factors:
+    - factor: >
+        The leaking cooling infrastructure belonged to the shared colocation building
+        (Global Switch), outside Google's own space and control.
+      component: cooling
+      confidence: confirmed
 
 - id: 2023-azure-sydney-chillers
   date: 2023-08-30
@@ -177,6 +414,42 @@
   sources:
     - {publisher: Microsoft Azure post-incident review (VVTQ-J98), url: "https://azure.status.microsoft/en-us/status/history/?trackingId=VVTQ-J98"}
     - {publisher: The Register, url: "https://www.theregister.com/2023/09/04/microsoft_australia_outage_incident_report/"}
+  root_cause:
+    summary: >
+      A lightning-induced voltage sag tripped chillers, and an operating configuration
+      susceptible to a timing defect in the Chiller Management System kept 13 of them
+      from restarting automatically.
+    confidence: confirmed
+    components:
+      - part: Chiller Management System
+        role: origin
+        manufacturer: null
+        model: null
+        versions: null
+        serial: null
+        detail: Timing defect named in the final PIR; vendor not published.
+      - part: Chillers
+        role: affected
+        manufacturer: null
+        model: null
+        versions: null
+        serial: null
+        detail: >
+          The two affected halls had 7 chillers (5 running, 2 standby) and needed at least 4.
+          Five would not restart manually because the chilled-water loop was already too hot.
+      - part: Onsite operations staffing
+        role: contributing
+        manufacturer: null
+        model: null
+        versions: null
+        serial: null
+        detail: >
+          The preliminary PIR (via The Register) said 3 night staff were too few; Microsoft
+          raised it to 7 and switched to a load-based restart order.
+  supply_chain_factors:
+    - factor: A defect in the chiller control software prevented automatic restart after a power event.
+      component: cooling
+      confidence: confirmed
 
 - id: 2023-equinix-sg-cooling
   date: 2023-10-14
@@ -201,6 +474,34 @@
     - {publisher: Monetary Authority of Singapore, url: "https://www.mas.gov.sg/news/parliamentary-replies/2023/oral-reply-to-parliamentary-question-onbanking-services-disruption-of-dbs-and-citibank"}
     - {publisher: DatacenterDynamics, url: "https://www.datacenterdynamics.com/en/news/equinix-blames-singapore-outage-on-third-party-contractor/"}
     - {publisher: Data Center Knowledge, url: "https://www.datacenterknowledge.com/uptime/dbs-citi-s-banking-services-resume-after-data-center-disruption"}
+  root_cause:
+    summary: >
+      During a planned upgrade, a third-party contractor incorrectly sent a signal that
+      closed the valves from the chilled-water buffer tanks, cutting cooling.
+    confidence: likely
+    components:
+      - part: Chilled-water buffer tank valves and control signal
+        role: origin
+        manufacturer: null
+        model: null
+        versions: null
+        serial: null
+        detail: >
+          Equinix's account via DCD; there is no independent report. MAS describes only a
+          cooling-system malfunction. The contractor and controls vendor are not published.
+      - part: Bank failover (DBS, Citibank)
+        role: contributing
+        manufacturer: null
+        model: null
+        versions: null
+        serial: null
+        detail: >
+          MAS found both banks missed its recovery requirements; DBS could not fail over
+          because of a network misconfiguration.
+  supply_chain_factors:
+    - factor: An error by a third-party contractor working on the cooling system caused the outage.
+      component: cooling
+      confidence: likely
 
 - id: 2024-red-sea-cable-cuts
   date: 2024-02-24
@@ -223,6 +524,39 @@
   sources:
     - {publisher: Bloomberg via Data Center Knowledge, url: "https://www.datacenterknowledge.com/networks/houthi-sunk-ship-seen-likely-cause-severed-red-sea-cables"}
     - {publisher: CBS News, url: "https://www.cbsnews.com/news/houthis-ship-cutting-red-sea-telecommunications-cables/"}
+    - {publisher: gCaptain, url: "https://gcaptain.com/damaged-subsea-cables-repaired-in-red-sea/"}
+    - {publisher: Marine Insight, url: "https://www.marineinsight.com/shipping-news/yemens-political-disputes-delay-full-repairs-of-3-submarine-internet-cables-in-the-red-sea/"}
+  root_cause:
+    summary: >
+      The anchor of MV Rubymar, abandoned after a Houthi missile strike on 2024-02-18,
+      likely dragged across and cut the cables before the ship sank on 2024-03-02.
+    confidence: likely
+    components:
+      - part: Ship's anchor (MV Rubymar)
+        role: origin
+        manufacturer: null
+        model: null
+        versions: null
+        serial: null
+        detail: >
+          US officials and the ICPC called the anchor the likely cause; AP reported the cause
+          remained unclear, and the Houthis denied involvement. Sources disagree on the ship's
+          flag (UK, Belize or Marshall Islands) and cargo size (21,000 t per CENTCOM vs
+          41,000 t elsewhere).
+      - part: Seacom, AAE-1 and EIG subsea cables
+        role: affected
+        manufacturer: null
+        model: null
+        versions: null
+        serial: null
+        detail: EIG had already been faulted since December 2023.
+  supply_chain_factors:
+    - factor: >
+        Repairs waited months on Yemeni permits (AAE-1's was refused over a TeleYemen
+        dispute) and on repair ship access; AAE-1 was restored by the cable ship Niwa around
+        July 2024.
+      component: subsea
+      confidence: confirmed
 
 - id: 2024-digital-realty-sg-fire
   date: 2024-09-10
@@ -245,6 +579,33 @@
   sources:
     - {publisher: The Register, url: "https://www.theregister.com/2024/09/10/digtal_realty_singapore_datacenter_fire/"}
     - {publisher: DatacenterDynamics, url: "https://www.datacenterdynamics.com/en/news/data-center-fire-in-singapore-impacts-alibaba-cloud-causes-bytedance-outage/"}
+    - {publisher: W.Media, url: "https://w.media/24-hours-on-firefighters-still-at-digital-realtys-singapore-data-center/"}
+    - {publisher: EPRI Storage Wiki, url: "https://storagewiki.epri.com/index.php/Failure_Event_-_Singapore_-_10_Sep_2024"}
+  root_cause:
+    summary: >
+      SCDF's preliminary finding is a fire likely of electrical origin in one of two
+      third-floor battery rooms holding lithium-ion batteries.
+    confidence: likely
+    components:
+      - part: Lithium-ion UPS batteries
+        role: origin
+        manufacturer: null
+        model: null
+        versions: null
+        serial: null
+        detail: >
+          Maker, model and age not published; Alibaba Cloud described an explosion of
+          lithium batteries. No final SCDF report found.
+      - part: Battery rooms on an upper floor
+        role: contributing
+        manufacturer: null
+        model: null
+        versions: null
+        serial: null
+        detail: >
+          SCDF's 2020 code places energy storage at ground level; Digital Realty said the
+          facility (opened 2016) predates it. Firefighting water then forced a power-down.
+  supply_chain_factors: []
 
 - id: 2024-baltic-cable-cuts
   date: 2024-11-17
@@ -267,6 +628,33 @@
   sources:
     - {publisher: German Federal Foreign Office, url: "https://www.auswaertiges-amt.de/en/newsroom/news/2685132-2685132"}
     - {publisher: Reuters via Baird Maritime, url: "https://www.bairdmaritime.com/amp/story/security/incidents/swedish-probe-inconclusive-on-evidence-of-deliberate-cable-damage-by-chinese-ship"}
+    - {publisher: Swedish Accident Investigation Authority (SHK), url: "https://shk.se/download/18.ffd11bf19626c638f3623/1744702687838/YP3-PM%202025-04-15%20-%20slutlig.docx.pdf"}
+    - {publisher: The Record, url: "https://therecord.media/sweden-report-chinese-ship-baltic-sea-cable"}
+    - {publisher: Cinia, url: "https://cinia.fi/en/news/cinias-c-lion1-submarine-cable-has-fully-restored"}
+  root_cause:
+    summary: >
+      The bulk carrier Yi Peng 3 dragged its anchor for about 180 nautical miles across
+      both cable routes; Sweden's accident board could not establish intent.
+    confidence: likely
+    components:
+      - part: Ship's port anchor (Yi Peng 3)
+        role: origin
+        manufacturer: null
+        model: null
+        versions: null
+        serial: null
+        detail: >
+          SHK found no damage to the chain box or windlass and the anchor partly bent; WSJ
+          sources described it as severely twisted. Investigators boarded about a month
+          later, after the voyage data recorder had been overwritten.
+      - part: BCS East-West Interlink and C-Lion1 subsea cables
+        role: affected
+        manufacturer: null
+        model: null
+        versions: null
+        serial: null
+        detail: Both repaired by 2024-11-28; C-Lion1 by the cable ship Cable Vigilance (Cinia).
+  supply_chain_factors: []
 
 - id: 2025-ami-megarac-bmc
   date: 2025-03-11
@@ -290,3 +678,50 @@
     - {publisher: NVD, url: "https://nvd.nist.gov/vuln/detail/CVE-2024-54085"}
     - {publisher: CISA, url: "https://www.cisa.gov/news-events/alerts/2025/06/25/cisa-adds-three-known-exploited-vulnerabilities-catalog"}
     - {publisher: Eclypsium, url: "https://eclypsium.com/blog/bmc-vulnerability-cve-2024-05485-cisa-known-exploited-vulnerabilities/"}
+    - {publisher: HPE security bulletin, url: "https://support.hpe.com/hpesc/public/docDisplay?docId=hpesbcr04828en_us&docLocale=en_US"}
+    - {publisher: The Hacker News, url: "https://thehackernews.com/2025/03/new-critical-ami-bmc-vulnerability.html"}
+    - {publisher: BleepingComputer, url: "https://www.bleepingcomputer.com/news/security/asus-releases-fix-for-ami-bug-that-lets-hackers-brick-servers/"}
+  root_cause:
+    summary: >
+      Authentication bypass by spoofing (CWE-290) in the Redfish Host Interface of AMI's
+      MegaRAC SPx BMC firmware, reachable remotely or from the host.
+    confidence: confirmed
+    components:
+      - part: BMC firmware (Redfish Host Interface)
+        role: origin
+        manufacturer: AMI
+        model: MegaRAC SPx
+        versions: >
+          12.0 to before 12.7 and 13.0 to before 13.5 per AMI's CVE record; NVD's
+          configuration lists only 13.0 to before 13.5.
+        serial: null
+        detail: Fixed in SPx 12.7+ and 13.5 (AMI-SA-2025003, 2025-03-11).
+      - part: Server BMC
+        role: affected
+        manufacturer: HPE
+        model: Cray XD670
+        versions: BMC before 1.19
+        serial: null
+        detail: Confirmed by Eclypsium; HPE bulletin hpesbcr04828.
+      - part: Server BMC
+        role: affected
+        manufacturer: ASUS
+        model: RS720A-E11-RS24U; PRO WS W790E-SAGE SE and other workstation boards
+        versions: null
+        serial: null
+        detail: >
+          Eclypsium confirmed the RS720A-E11-RS24U; ASUS's April 2025 fixes (via
+          BleepingComputer) covered four workstation boards.
+      - part: Server BMC
+        role: affected
+        manufacturer: ASRock Rack
+        model: null
+        versions: null
+        serial: null
+        detail: Named by Eclypsium from static analysis; no model given.
+  supply_chain_factors:
+    - factor: >
+        One AMI firmware stack is reused across many server OEMs, so a single flaw spans
+        brands and each OEM ships its own fix on its own schedule.
+      component: firmware
+      confidence: confirmed
