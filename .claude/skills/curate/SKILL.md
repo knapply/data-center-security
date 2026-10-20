@@ -17,7 +17,8 @@ Follow every rule in `CLAUDE.md`. This skill is the procedure.
 5. **Write changes.**
    - New qualifying events go into `incidents.yaml` (keep the file in date order).
    - Developments on tracked events update the existing entry.
-   - Revisit every `ongoing` and `unconfirmed` entry.
+   - Fill `root_cause` and `supply_chain_factors` for every new or updated entry (see "Root cause and supply chain factors" in CLAUDE.md). Search specifically for post-incident reports, investigator findings, recall notices, and vendor advisories that name the failed part, maker, and model. Where none are published, research an `inferred` best guess per CLAUDE.md.
+   - Revisit every `ongoing` and `unconfirmed` entry, and any entry with `root_cause.confidence: unknown` or `suspected`, for newly published causes.
    - Verify up to 3 `seed: true` entries per run: find real source URLs, correct any facts, and drop `seed: true`.
    - Add in-scope items to the top of `headlines.yaml` and trim it to about 30.
 6. **Validate.** Run `npm run check` and fix any errors.

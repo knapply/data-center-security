@@ -70,7 +70,7 @@ function renderSupply() {
   document.getElementById('supply-list').innerHTML = supply.components.map((c) => `
     <li><span class="name">${esc(c.name)}</span>
       <span class="level ${c.level}">${c.level}${c.trend === 'up' ? ' ↑' : c.trend === 'down' ? ' ↓' : ''}</span>
-      <span class="note">${esc(c.note)}</span></li>`).join('');
+      <span class="note">${esc(c.note)}${c.related_incidents?.length ? ` <a href="#incidents" data-component="${c.id}">${c.related_incidents.length} linked incident${c.related_incidents.length === 1 ? '' : 's'}</a>` : ''}</span></li>`).join('');
   document.getElementById('supply-asof').textContent = `Assessment as of ${supply.as_of}${supply.seed ? ' (seed, pending review)' : ''}.`;
 }
 
@@ -116,7 +116,8 @@ function renderNetwork(list) {
   for (const i of list) {
     node(i.id, 'incident', i.title, { cat: i.category[0], sev: i.severity });
     for (const a of i.affects) { node(`s:${a}`, 'system', a); links.push({ source: i.id, target: `s:${a}` }); }
-    for (const p of [...(i.vendors ?? []), ...(i.operators ?? [])]) { node(`p:${p}`, 'party', p); links.push({ source: i.id, target: `p:${p}` }); }
+    const makers = (i.root_cause?.components ?? []).map((c) => c.manufacturer).filter(Boolean);
+    for (const p of new Set([...(i.vendors ?? []), ...(i.operators ?? []), ...makers])) { node(`p:${p}`, 'party', p); links.push({ source: i.id, target: `p:${p}` }); }
   }
   const data = [...nodes.values()];
   const fill = (d) => d.kind === 'incident' ? catColor(d.cat) : d.kind === 'system' ? css('--system') : css('--party');
@@ -142,6 +143,36 @@ function renderNetwork(list) {
   });
 }
 
+const componentName = (id) => supply.components.find((c) => c.id === id)?.name ?? id;
+function renderGuess(g) {
+  const what = [g.manufacturer, g.model].filter(Boolean).map(esc).join(' ');
+  return `<div class="guess">
+    <div><span class="k">Best guess</span> equipment likely supplied by <strong>${what}</strong> <span class="tag conf-${g.confidence}">${g.confidence}</span></div>
+    <div class="muted small">Not confirmed by any source, and not a finding that this supplier caused the failure.</div>
+    <details><summary>Why we think so</summary>
+      <p>${esc(g.reasoning)}</p>
+      <ul>${g.evidence.map((e) => `<li><a href="${esc(e.url)}" rel="noopener">${esc(e.publisher)}</a>: ${esc(e.supports)}</li>`).join('')}</ul>
+    </details>
+  </div>`;
+}
+
+function renderCause(i) {
+  const rc = i.root_cause, fx = i.supply_chain_factors ?? [];
+  if (!rc && !fx.length) return '';
+  const field = (label, v) => v ? `<span><span class="k">${label}</span> ${esc(Array.isArray(v) ? v.join(', ') : v)}</span>` : '';
+  const parts = (rc?.components ?? []).map((c) => `
+    <li><strong>${esc(c.part)}</strong>${c.role ? ` <span class="tag">${c.role}</span>` : ''}
+      <div class="fields">${field('Maker', c.manufacturer)}${field('Model', c.model)}${field('Versions', c.versions)}${field('Serial', c.serial)}</div>
+      ${c.detail ? `<div class="muted">${esc(c.detail)}</div>` : ''}
+      ${c.inferred ? renderGuess(c.inferred) : ''}</li>`).join('');
+  const factors = fx.map((f) => `<li>${esc(f.factor)} <span class="tag conf-${f.confidence}">${f.confidence}</span>${f.component ? ` <span class="muted">· ${esc(componentName(f.component))}</span>` : ''}</li>`).join('');
+  return `<details class="cause"><summary>Root cause${rc ? ` <span class="tag conf-${rc.confidence}">${rc.confidence}</span>` : ''}${fx.length ? ` · ${fx.length} supply chain factor${fx.length === 1 ? '' : 's'}` : ''}</summary>
+    ${rc ? `<p>${esc(rc.summary)}</p>` : ''}
+    ${parts ? `<ul class="parts">${parts}</ul>` : ''}
+    ${factors ? `<div class="k">Supply chain factors</div><ul class="factors">${factors}</ul>` : ''}
+  </details>`;
+}
+
 function renderList(list) {
   document.getElementById('incident-list').innerHTML = list.map((i) => `
     <article class="inc" id="${esc(i.id)}">
@@ -153,6 +184,7 @@ function renderList(list) {
       </div>
       <div class="inc-meta">${fmtDate(i)} · ${i.location ? esc(`${i.location.city}, ${i.location.country}`) : 'Global'} · ${i.category.map((c) => CATS.find((x) => x.id === c).label).join(', ')}</div>
       <p>${esc(i.summary)}</p>
+      ${renderCause(i)}
       <div class="sources">Sources: ${i.sources.map((s) => s.url ? `<a href="${esc(s.url)}" rel="noopener">${esc(s.publisher)}</a>` : esc(s.publisher)).join(', ')}${i.sources.every((s) => !s.url) ? ' · links pending' : ''}</div>
     </article>`).join('');
 }
