@@ -176,10 +176,10 @@
           APC's code ignored some errors. The library itself was not reported as flawed.
   supply_chain_factors:
     - factor: A third-party embedded TLS library was integrated incorrectly into UPS firmware.
-      component: batteries
+      component: firmware
       confidence: confirmed
     - factor: UPS firmware updates were not cryptographically signed, so malicious firmware could be installed.
-      component: batteries
+      component: firmware
       confidence: confirmed
 
 - id: 2022-london-heatwave-cooling
@@ -293,6 +293,7 @@
     - {publisher: The Register, url: "https://www.theregister.com/2022/10/17/sk_cc_naver_kaako_fire/"}
     - {publisher: iNews24 (MSIT findings), url: "https://www.inews24.com/view/1580504"}
     - {publisher: Metro Seoul, url: "https://www.metroseoul.co.kr/article/20230308500034"}
+    - {publisher: Newsworker, url: "https://www.newsworker.co.kr/news/articleView.html?idxno=183955"}
     - {publisher: EPRI Storage Wiki, url: "https://storagewiki.epri.com/index.php/Failure_Event_-_South_Korea,_Pangyo_-_15_Oct_2022"}
   root_cause:
     summary: >
@@ -308,7 +309,8 @@
         versions: null
         serial: null
         detail: >
-          Maker named by Kakao's CEO and Korean press, not by an investigator. The batteries
+          Maker named by Kakao's CEO and Korean press, not by an investigator; SK C&C said
+          it could not confirm the battery maker. Battery model and UPS maker not published. The batteries
           replaced lead-acid units in 2016 (Metro Seoul). The cell-ageing finding was
           partial; no final police or forensic report was found.
       - part: Battery monitoring system
@@ -357,10 +359,12 @@
   sources:
     - {publisher: Google Cloud status page, url: "https://status.cloud.google.com/incidents/dS9ps52MUnxQfyDGPfkY"}
     - {publisher: The Register, url: "https://www.theregister.com/2023/04/26/google_cloud_outage/"}
+    - {publisher: Préfet des Hauts-de-Seine / DRIEAT inspection report (Géorisques), url: "https://georisques.gouv.fr/webappReport/ws/installations/inspection/uTYqOHTp7MEpeWajJaAcsGmb7jJr9G97"}
+    - {publisher: Le Monde Informatique, url: "https://www.lemondeinformatique.fr/actualites/lire-une-fuite-a-l-origine-de-l-incendie-du-datacenter-global-switch-clichy-90294.html"}
   root_cause:
     summary: >
-      A cooling-system water pipe leaked in a non-Google part of the building; the water
-      reached the level-2 UPS room and led to a fire.
+      Water leaking from a cooling-system pipe on the floor above reached the level-1 UPS
+      and battery rooms, and lithium batteries went into thermal runaway.
     confidence: confirmed
     components:
       - part: Cooling-system water pipe
@@ -370,15 +374,22 @@
         versions: null
         serial: null
         detail: >
-          Per Google's incident report. A secondhand account on a French operators' list
+          Google's report places the leak in a non-Google part of the building; the French
+          inspection report (DRIEAT, 2025) traces it to a cooling-tower secondary circuit pipe
+          on level 2. A secondhand account on a French operators' list
           (reported by DCD) blamed a cooling water pump; Google does not mention a pump.
-      - part: UPS and batteries
+      - part: Lithium UPS batteries
         role: affected
         manufacturer: null
         model: null
         versions: null
         serial: null
-        detail: Maker and battery chemistry not published.
+        detail: >
+          Per the DRIEAT inspection report, the operator's accident notice says lithium iron
+          (phosphate) batteries while its permit filing says lithium-ion. Water also reached
+          static UPS units, which lacked cable glands recommended by their (unnamed)
+          manufacturer. No maker is published; Global Switch's filings that might name one
+          are not public.
       - part: Building fire-suppression water supply
         role: contributing
         manufacturer: null
