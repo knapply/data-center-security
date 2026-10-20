@@ -106,4 +106,13 @@ main { max-width: 1200px; margin: 0 auto; padding: 16px; display: grid; gap: 16p
 .sev-critical, .sev-high { color: var(--high); border-color: currentColor; }
 .sev-medium { color: var(--elevated); border-color: currentColor; }
 .inc p { margin: 4px 0; font-size: 14px; }
+.cause { margin: 6px 0; font-size: 14px; border-left: 3px solid var(--border); padding-left: 10px; }
+.cause summary { cursor: pointer; color: var(--muted); font-size: 13px; }
+.cause ul { margin: 4px 0 8px; padding-left: 18px; }
+.cause li { margin: 4px 0; }
+.cause .fields { display: flex; flex-wrap: wrap; gap: 2px 14px; font-size: 13px; }
+.cause .k { color: var(--muted); font-size: 12px; text-transform: uppercase; letter-spacing: 0.04em; }
+.conf-confirmed { color: var(--normal); border-color: currentColor; }
+.conf-likely { color: var(--it-ot); border-color: currentColor; }
+.conf-suspected { color: var(--elevated); border-color: currentColor; }
 .inc .sources { font-size: 13px; color: var(--muted); }

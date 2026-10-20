@@ -16,6 +16,15 @@ affects:
   - bms          # building management / SCADA / ICS
   - access-control
   - facility     # the building itself
+confidence:      # how sure the sources are about a cause or a supply chain factor
+  - confirmed    # stated in an official report, advisory, or by the operator/vendor
+  - likely       # reported by investigators or multiple credible outlets
+  - suspected    # a single credible report or expert analysis
+  - unknown      # nothing published yet
+component_role:
+  - origin       # where the failure started
+  - contributing # made it worse or failed to stop it
+  - affected     # damaged or vulnerable, but not the cause
 impacts:
   - outage
   - service-degradation
