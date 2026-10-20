@@ -92,12 +92,45 @@ supply_chain_factors:
 ```
 
 Rules:
-- **Use only what sources say.** Fill `manufacturer`, `model`, `versions`, and `serial` only from a named source (official investigation, operator report, vendor advisory, recall notice, court filing, or credible press quoting one). Leave a field `null` rather than guess. Never infer a manufacturer from "who usually supplies that operator".
+- **Use only what sources say.** Fill `manufacturer`, `model`, `versions`, and `serial` only from a named source (official investigation, operator report, vendor advisory, recall notice, court filing, or credible press quoting one). These fields are for published facts only. Guesses go in `inferred` (below), never in these fields.
 - **Serial numbers** almost never appear publicly. Record one only when an official document published it (for example a recall notice or regulator report), and cite that document in `sources`.
 - **Separate fact from inference.** `confidence` applies to the cause as a whole; use `detail` to say which parts are confirmed and which are reported. If official and press accounts differ, say so in `detail` and raise it in the PR.
 - **Vulnerabilities:** the `origin` component is the affected product. Put the vendor in `manufacturer`, the product line in `model`, and the affected firmware in `versions`. Add the OEMs that ship it as `affected` components when the advisory names them.
 - **Supply chain factors** are upstream reasons the failure happened or spread: a defective lot, a single-source or shared firmware component, substitute parts used during a shortage, deferred maintenance waiting on parts, a vendor's insecure default, export-control-driven substitution, or long repair lead times that extended the outage. Link each to a `component` id in `supply-chain.yaml` when one fits. A factor without evidence is speculation; leave it out or put it in the PR as an open question.
 - `root_cause.confidence: unknown` with a one-line summary is fine when nothing has been published. Revisit it when a post-incident report comes out.
+
+### Best guesses (`inferred`)
+When no source publishes the manufacturer or model of a failed part, research a best guess and record it on that component:
+
+```yaml
+    - part: UPS lithium-ion battery rack
+      role: origin
+      manufacturer: null            # stays null: nothing published
+      inferred:
+        manufacturer: ExampleCell Co.
+        model: null
+        confidence: suspected      # likely | suspected (never confirmed)
+        reasoning: >
+          The operator announced a fleet-wide deal with ExampleCell for lithium-ion UPS
+          batteries in 2018, a year before this hall opened, and a 2020 vendor case study
+          names this campus.
+        evidence:
+          - {publisher: ExampleCell press release, url: "https://...", supports: 2018 fleet-wide supply deal with the operator}
+          - {publisher: ExampleCell case study, url: "https://...", supports: Names this campus as a customer site}
+```
+
+What counts as evidence, strongest first:
+1. **Site-specific:** vendor case studies, press releases or customer lists naming the facility or campus; planning, permit or environmental filings listing equipment (generator and battery permits often name the maker); official photos or videos where the equipment is identifiable; court or insurance filings.
+2. **Operator-specific:** the operator's announced supply agreement or standard for that equipment class in the same era (for example "operator X standardizes on vendor Y UPS"); the facility builder's or designer's published project sheet.
+3. **Not enough on its own:** market share, "commonly used in the industry", or a vendor merely being big in that region. Never guess from these alone.
+
+Rules:
+- At least one piece of evidence must be tier 1 or 2 above (tied to the operator or the site). Otherwise don't guess; note the gap in the PR.
+- `likely` = site-specific evidence. `suspected` = operator-specific evidence only. There is no `confirmed` guess: once a source confirms it, move the value into `manufacturer`/`model` and delete `inferred`.
+- `reasoning` explains the chain in plain words, including what would contradict it (for example "the hall was refitted in 2021; the supplier may have changed").
+- The guess is about **who supplied the equipment**, never about fault. Don't write that the supplier caused the failure. The site shows guesses as "equipment likely supplied by …", flagged as unconfirmed.
+- Never guess serial numbers.
+- List every new guess in the PR under "Best guesses" so the reviewer checks them one by one.
 
 ## Supply chain tracker
 - Levels: `normal`, `elevated`, `high`. Trend: `up`, `flat`, `down`.

@@ -63,7 +63,22 @@ for (const [i, inc] of incidents.entries()) {
       const cat = `${at} root_cause.components[${j}]`;
       if (!c?.part) err(cat, 'part is required');
       if (c?.role && !vocab.component_role.includes(c.role)) err(cat, `role must be one of ${vocab.component_role.join(', ')}`);
-      for (const k of Object.keys(c ?? {})) if (!['part', 'role', 'manufacturer', 'model', 'versions', 'serial', 'detail'].includes(k)) err(cat, `unknown field ${k}`);
+      for (const k of Object.keys(c ?? {})) if (!['part', 'role', 'manufacturer', 'model', 'versions', 'serial', 'detail', 'inferred'].includes(k)) err(cat, `unknown field ${k}`);
+      // Best guesses live apart from published facts and must show their evidence.
+      const g = c?.inferred;
+      if (g) {
+        if (!g.manufacturer && !g.model) err(cat, 'inferred needs a manufacturer or model');
+        if (g.manufacturer && c.manufacturer) err(cat, 'inferred.manufacturer is only for when no source publishes the manufacturer');
+        if (g.model && c.model) err(cat, 'inferred.model is only for when no source publishes the model');
+        if (!['likely', 'suspected'].includes(g.confidence)) err(cat, 'inferred.confidence must be likely or suspected');
+        if (!g.reasoning) err(cat, 'inferred.reasoning is required');
+        if (!Array.isArray(g.evidence) || !g.evidence.length) err(cat, 'inferred.evidence needs at least one item');
+        for (const e of g.evidence ?? []) {
+          if (!e?.publisher || !e?.supports) err(cat, 'each inferred.evidence item needs publisher and supports');
+          if (!/^https:\/\//.test(e?.url ?? '')) err(cat, 'each inferred.evidence item needs an https url');
+        }
+        for (const k of Object.keys(g)) if (!['manufacturer', 'model', 'confidence', 'reasoning', 'evidence'].includes(k)) err(cat, `unknown field inferred.${k}`);
+      }
     }
   }
   for (const [j, f] of (inc.supply_chain_factors ?? []).entries()) {

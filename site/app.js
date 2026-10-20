@@ -144,6 +144,18 @@ function renderNetwork(list) {
 }
 
 const componentName = (id) => supply.components.find((c) => c.id === id)?.name ?? id;
+function renderGuess(g) {
+  const what = [g.manufacturer, g.model].filter(Boolean).map(esc).join(' ');
+  return `<div class="guess">
+    <div><span class="k">Best guess</span> equipment likely supplied by <strong>${what}</strong> <span class="tag conf-${g.confidence}">${g.confidence}</span></div>
+    <div class="muted small">Not confirmed by any source, and not a finding that this supplier caused the failure.</div>
+    <details><summary>Why we think so</summary>
+      <p>${esc(g.reasoning)}</p>
+      <ul>${g.evidence.map((e) => `<li><a href="${esc(e.url)}" rel="noopener">${esc(e.publisher)}</a>: ${esc(e.supports)}</li>`).join('')}</ul>
+    </details>
+  </div>`;
+}
+
 function renderCause(i) {
   const rc = i.root_cause, fx = i.supply_chain_factors ?? [];
   if (!rc && !fx.length) return '';
@@ -151,7 +163,8 @@ function renderCause(i) {
   const parts = (rc?.components ?? []).map((c) => `
     <li><strong>${esc(c.part)}</strong>${c.role ? ` <span class="tag">${c.role}</span>` : ''}
       <div class="fields">${field('Maker', c.manufacturer)}${field('Model', c.model)}${field('Versions', c.versions)}${field('Serial', c.serial)}</div>
-      ${c.detail ? `<div class="muted">${esc(c.detail)}</div>` : ''}</li>`).join('');
+      ${c.detail ? `<div class="muted">${esc(c.detail)}</div>` : ''}
+      ${c.inferred ? renderGuess(c.inferred) : ''}</li>`).join('');
   const factors = fx.map((f) => `<li>${esc(f.factor)} <span class="tag conf-${f.confidence}">${f.confidence}</span>${f.component ? ` <span class="muted">· ${esc(componentName(f.component))}</span>` : ''}</li>`).join('');
   return `<details class="cause"><summary>Root cause${rc ? ` <span class="tag conf-${rc.confidence}">${rc.confidence}</span>` : ''}${fx.length ? ` · ${fx.length} supply chain factor${fx.length === 1 ? '' : 's'}` : ''}</summary>
     ${rc ? `<p>${esc(rc.summary)}</p>` : ''}
