@@ -1,0 +1,263 @@
+# Curated incident records. Schema and rules: see CLAUDE.md.
+# Seed entries (seed: true) were written from memory of well-reported events and still
+# need their sources verified and linked by the first curation pass.
+
+- id: 2020-nashville-co-bombing
+  date: 2020-12-25
+  title: Vehicle bomb damages AT&T central office in Nashville
+  type: incident
+  category: [physical]
+  status: confirmed
+  severity: high
+  location: {city: Nashville, country: US, lat: 36.16, lon: -86.78}
+  facility_type: telecom central office
+  affects: [power, connectivity]
+  impacts: [outage, service-degradation]
+  operators: [AT&T]
+  vendors: []
+  summary: >
+    A vehicle bomb outside a downtown telecom building damaged power and cooling,
+    disrupting phone, internet and 911 service across several states for days.
+  sources:
+    - {publisher: news reports, url: null}
+  seed: true
+
+- id: 2021-ovh-sbg-fire
+  date: 2021-03-10
+  title: Fire destroys OVHcloud SBG2 data center in Strasbourg
+  type: incident
+  category: [physical]
+  status: confirmed
+  severity: critical
+  location: {city: Strasbourg, country: FR, lat: 48.58, lon: 7.75}
+  facility_type: data center campus
+  affects: [ups, facility]
+  impacts: [outage, data-loss]
+  operators: [OVHcloud]
+  vendors: []
+  summary: >
+    A fire destroyed one building and damaged another on the Strasbourg campus.
+    Customers without off-site backups lost data permanently.
+  sources:
+    - {publisher: OVHcloud statements, url: null}
+  seed: true
+
+- id: 2022-tlstorm-apc-ups
+  date: 2022-03-08
+  title: TLStorm flaws allow remote takeover of APC Smart-UPS devices
+  type: vulnerability
+  category: [it-ot]
+  status: confirmed
+  severity: high
+  location: null
+  affects: [ups, firmware]
+  impacts: [exposure]
+  operators: []
+  vendors: [Schneider Electric]
+  summary: >
+    Three vulnerabilities in APC Smart-UPS network management could let an attacker
+    take over a UPS and physically damage it or cut power to connected equipment.
+  sources:
+    - {publisher: NVD, url: "https://nvd.nist.gov/vuln/detail/CVE-2022-22805"}
+    - {publisher: NVD, url: "https://nvd.nist.gov/vuln/detail/CVE-2022-22806"}
+    - {publisher: NVD, url: "https://nvd.nist.gov/vuln/detail/CVE-2022-0715"}
+  seed: true
+
+- id: 2022-london-heatwave-cooling
+  date: 2022-07-19
+  title: Record heat knocks out cooling at London cloud data centers
+  type: incident
+  category: [physical]
+  status: confirmed
+  severity: high
+  location: {city: London, country: GB, lat: 51.51, lon: -0.13}
+  facility_type: cloud region
+  affects: [cooling]
+  impacts: [outage]
+  operators: [Google Cloud, Oracle Cloud]
+  vendors: []
+  summary: >
+    Cooling failures during the UK's record heatwave forced cloud providers to power
+    down equipment in London, causing regional service outages.
+  sources:
+    - {publisher: provider status pages, url: null}
+  seed: true
+
+- id: 2022-us-chip-export-controls
+  date: 2022-10-07
+  title: US export controls restrict advanced AI chips and chipmaking tools
+  type: policy
+  category: [supply-chain]
+  status: confirmed
+  severity: medium
+  location: null
+  affects: [compute]
+  impacts: [delay, financial]
+  operators: []
+  vendors: []
+  summary: >
+    New Commerce Department rules limited exports of high-end accelerators and
+    semiconductor equipment, reshaping GPU supply for data centers worldwide.
+  sources:
+    - {publisher: US Bureau of Industry and Security, url: null}
+  seed: true
+
+- id: 2022-kakao-pangyo-fire
+  date: 2022-10-15
+  title: Battery fire at SK C&C Pangyo data center takes down Kakao services
+  type: incident
+  category: [physical]
+  status: confirmed
+  severity: critical
+  location: {city: Seongnam, country: KR, lat: 37.40, lon: 127.11}
+  facility_type: data center
+  affects: [ups, power]
+  impacts: [outage]
+  operators: [SK C&C, Kakao]
+  vendors: []
+  summary: >
+    A lithium-ion battery fire forced a power cut to the facility, taking South
+    Korea's dominant messaging app and related services offline for days.
+  sources:
+    - {publisher: news reports, url: null}
+  seed: true
+
+- id: 2023-gcp-paris-water-fire
+  date: 2023-04-26
+  title: Water leak and fire take Google Cloud europe-west9 zone offline
+  type: incident
+  category: [physical]
+  status: confirmed
+  severity: high
+  location: {city: Paris, country: FR, lat: 48.86, lon: 2.35}
+  facility_type: cloud region
+  affects: [ups, facility]
+  impacts: [outage]
+  operators: [Google Cloud]
+  vendors: []
+  summary: >
+    Water intrusion led to a fire in a battery room, causing a multi-zone outage in
+    the Paris region and a weeks-long recovery for one zone.
+  sources:
+    - {publisher: Google Cloud status page, url: null}
+  seed: true
+
+- id: 2023-azure-sydney-chillers
+  date: 2023-08-30
+  title: Utility power sag trips chillers in Azure Australia East
+  type: incident
+  category: [physical]
+  status: confirmed
+  severity: high
+  location: {city: Sydney, country: AU, lat: -33.87, lon: 151.21}
+  facility_type: cloud region
+  affects: [power, cooling]
+  impacts: [outage, service-degradation]
+  operators: [Microsoft Azure]
+  vendors: []
+  summary: >
+    A voltage dip on the grid tripped chillers; with too few staff on site to restart
+    them, rising temperatures forced equipment shutdowns.
+  sources:
+    - {publisher: Azure post-incident review, url: null}
+  seed: true
+
+- id: 2023-equinix-sg-cooling
+  date: 2023-10-14
+  title: Cooling fault at Equinix Singapore disrupts major banks
+  type: incident
+  category: [physical]
+  status: confirmed
+  severity: high
+  location: {city: Singapore, country: SG, lat: 1.35, lon: 103.82}
+  facility_type: colocation
+  affects: [cooling]
+  impacts: [outage, financial]
+  operators: [Equinix]
+  vendors: []
+  summary: >
+    A cooling system issue during contractor work led to outages for DBS and
+    Citibank customers; the regulator later penalized the banks.
+  sources:
+    - {publisher: news reports, url: null}
+  seed: true
+
+- id: 2024-red-sea-cable-cuts
+  date: 2024-02-24
+  title: Three subsea cables cut in the Red Sea
+  type: incident
+  category: [physical]
+  status: confirmed
+  severity: high
+  location: {city: Bab-el-Mandeb, country: YE, lat: 13.5, lon: 42.8}
+  facility_type: subsea cable
+  affects: [connectivity]
+  impacts: [service-degradation]
+  operators: []
+  vendors: []
+  summary: >
+    Damage to Seacom, AAE-1 and EIG cables, attributed to a sinking ship's dragged
+    anchor, rerouted a large share of Europe–Asia traffic.
+  sources:
+    - {publisher: news reports, url: null}
+  seed: true
+
+- id: 2024-digital-realty-sg-fire
+  date: 2024-09-10
+  title: Lithium-ion battery fire at Digital Realty Singapore hits Alibaba Cloud
+  type: incident
+  category: [physical]
+  status: confirmed
+  severity: high
+  location: {city: Singapore, country: SG, lat: 1.33, lon: 103.70}
+  facility_type: colocation
+  affects: [ups, facility]
+  impacts: [outage]
+  operators: [Digital Realty, Alibaba Cloud]
+  vendors: []
+  summary: >
+    A battery fire forced power-down of part of the facility, causing a multi-day
+    outage for Alibaba Cloud services in the region.
+  sources:
+    - {publisher: news reports, url: null}
+  seed: true
+
+- id: 2024-baltic-cable-cuts
+  date: 2024-11-18
+  title: Two Baltic Sea data cables damaged within a day
+  type: incident
+  category: [physical]
+  status: confirmed
+  severity: medium
+  location: {city: Baltic Sea, country: SE, lat: 55.9, lon: 18.0}
+  facility_type: subsea cable
+  affects: [connectivity]
+  impacts: [service-degradation]
+  operators: []
+  vendors: []
+  summary: >
+    The C-Lion1 and BCS East-West Interlink cables were damaged; investigators
+    examined a vessel that had passed over both routes.
+  sources:
+    - {publisher: news reports, url: null}
+  seed: true
+
+- id: 2025-ami-megarac-bmc
+  date: 2025-03-01
+  date_precision: month
+  title: Critical auth bypass in AMI MegaRAC BMC firmware
+  type: vulnerability
+  category: [it-ot, supply-chain]
+  status: confirmed
+  severity: critical
+  location: null
+  affects: [firmware, compute]
+  impacts: [exposure]
+  operators: []
+  vendors: [AMI]
+  summary: >
+    A maximum-severity flaw in baseboard management firmware shipped by many server
+    makers allows remote takeover of servers; later added to CISA's KEV catalog.
+  sources:
+    - {publisher: NVD, url: "https://nvd.nist.gov/vuln/detail/CVE-2024-54085"}
+  seed: true

@@ -1,0 +1,4 @@
+# Ticker headlines added by the daily sweep. Keep the newest ~30.
+# Each: {date: YYYY-MM-DD, title: "...", url: "...", category: physical|it-ot|supply-chain}
+# While this list is empty, the ticker shows the latest incidents instead.
+[]

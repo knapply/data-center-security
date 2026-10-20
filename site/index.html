@@ -1,0 +1,80 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Data Center Security Watch</title>
+  <meta name="description" content="A curated tracker of physical, IT/OT and supply-chain security incidents affecting data centers worldwide.">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.css">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header class="top">
+    <a class="brand" href="./">Data Center Security Watch</a>
+    <nav>
+      <a href="#map">Map</a>
+      <a href="#incidents">Incidents</a>
+      <a href="#supply">Supply chain</a>
+      <a href="#impact">Impact</a>
+      <a href="#about">About</a>
+    </nav>
+  </header>
+
+  <div class="ticker" aria-label="Latest headlines">
+    <span class="ticker-label">Latest</span>
+    <div class="ticker-track"><div class="ticker-items" id="ticker"></div></div>
+  </div>
+
+  <main>
+    <div id="seed-banner" class="banner" hidden>
+      Seed data: these entries are well-known events written up to bootstrap the site. Their sources are still being verified and linked.
+    </div>
+
+    <section class="stats" id="stats"></section>
+
+    <div class="filters" id="filters" role="group" aria-label="Filter by category"></div>
+
+    <div class="grid-2">
+      <section class="card" id="map">
+        <h2>Incident map</h2>
+        <div id="leaflet"></div>
+        <p class="muted small" id="unmapped"></p>
+      </section>
+      <section class="card" id="supply">
+        <h2>Supply chain watch</h2>
+        <ul class="supply" id="supply-list"></ul>
+        <p class="muted small" id="supply-asof"></p>
+      </section>
+    </div>
+
+    <section class="card" id="impact">
+      <h2>How threats cascade</h2>
+      <p class="muted small">Threat category → affected system → impact. Band width is the number of incidents.</p>
+      <svg id="sankey" role="img" aria-label="Sankey diagram from threat category to affected system to impact"></svg>
+    </section>
+
+    <section class="card">
+      <h2>Connections</h2>
+      <p class="muted small">Incidents linked to the systems they hit and the vendors or operators involved. Hover a node for details.</p>
+      <svg id="network" role="img" aria-label="Network graph of incidents, systems and vendors"></svg>
+    </section>
+
+    <section class="card" id="incidents">
+      <h2>Incidents</h2>
+      <div id="incident-list"></div>
+    </section>
+
+    <section class="card" id="about">
+      <h2>About</h2>
+      <p>This tracker covers security events that affect data centers: physical threats (fire, power, cooling, sabotage, cable cuts), IT/OT/SCADA vulnerabilities in facility and server infrastructure, and supply-chain risk for the components data centers depend on.</p>
+      <p>Every entry is curated: drafted from public sources, checked against an editorial rubric, and reviewed before publishing. Locations are shown at city or region level only.</p>
+      <p class="muted small">Data and methodology live in the <a href="https://github.com/knapply/data-center-security">GitHub repository</a>.</p>
+    </section>
+  </main>
+
+  <script src="https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/d3@7.9.0/dist/d3.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/d3-sankey@0.12.3/dist/d3-sankey.min.js"></script>
+  <script type="module" src="app.js"></script>
+</body>
+</html>

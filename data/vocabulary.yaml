@@ -1,0 +1,26 @@
+# Controlled vocabulary. The validator rejects values not listed here.
+# Add a term only when no existing one fits, and say why in the PR.
+
+type: [incident, vulnerability, policy]
+category: [physical, it-ot, supply-chain]
+status: [confirmed, ongoing, unconfirmed]
+severity: [low, medium, high, critical]
+affects:
+  - power        # utility feed, switchgear, generators
+  - ups          # UPS systems and battery rooms
+  - cooling      # chillers, CRAH/CRAC, liquid cooling
+  - connectivity # fiber, subsea cables, carrier links
+  - compute      # servers, accelerators
+  - storage
+  - firmware     # BMC, BIOS, device firmware
+  - bms          # building management / SCADA / ICS
+  - access-control
+  - facility     # the building itself
+impacts:
+  - outage
+  - service-degradation
+  - data-loss
+  - exposure     # exploitable weakness, no confirmed harm yet
+  - delay        # supply or construction delay
+  - financial
+  - safety
