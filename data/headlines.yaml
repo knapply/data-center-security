@@ -1,4 +1,11 @@
 # Ticker headlines added by the daily sweep. Keep the newest ~30.
 # Each: {date: YYYY-MM-DD, title: "...", url: "...", category: physical|it-ot|supply-chain}
 # While this list is empty, the ticker shows the latest incidents instead.
-[]
+
+- {date: 2026-10-11, title: "Drone attacks knock out a third Yandex data center in four days", url: "https://thenextweb.com/news/drone-attack-shuts-a-third-yandex-data-centre", category: physical}
+- {date: 2026-10-08, title: "Drone strike and fire halt Yandex Cloud data center in Sasovo, Russia", url: "https://www.datacenterdynamics.com/en/news/yandex-data-center-hit-in-drone-attack-in-russia/", category: physical}
+- {date: 2026-06-09, title: "Fire at third-party Delhi data center disrupts Google Cloud networking in India", url: "https://www.datacenterdynamics.com/en/news/google-cloud-suffers-network-disruptions-after-fire-at-third-party-data-center-in-india/", category: physical}
+- {date: 2026-03-01, title: "Drone strikes and fire impair two AWS availability zones in the UAE", url: "https://www.theregister.com/2026/03/02/amazon_outages_middle_east/", category: physical}
+- {date: 2026-01-24, title: "Lead-acid battery fire at Global Switch data center in London", url: "https://w.media/60-firefighters-called-to-put-out-small-fire-at-london-data-center/", category: physical}
+- {date: 2025-09-26, title: "UPS battery fire at Korea's NIRS Daejeon data center halts government services", url: "https://www.datacenterdynamics.com/en/news/south-korea-data-center-fire-government-services-could-be-offline-for-a-month/", category: physical}
+- {date: 2025-09-06, title: "Red Sea cable cuts slow internet and Azure traffic in the Middle East and Asia", url: "https://www.aljazeera.com/news/2025/9/7/internet-disruptions-in-middle-east-and-south-asia-after-red-sea-cable-cuts", category: physical}
