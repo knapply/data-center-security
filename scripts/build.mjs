@@ -19,6 +19,7 @@ const isDate = (d) => /^\d{4}-\d{2}-\d{2}$/.test(d instanceof Date ? d.toISOStri
 const iso = (d) => (d instanceof Date ? d.toISOString().slice(0, 10) : String(d));
 
 const ids = new Set();
+const componentIds = new Set((supply?.components ?? []).map((c) => c.id));
 for (const [i, inc] of incidents.entries()) {
   const at = `incidents[${i}] ${inc.id ?? '(no id)'}`;
   for (const k of ['id', 'date', 'title', 'type', 'category', 'status', 'severity', 'affects', 'impacts', 'summary', 'sources'])
@@ -50,6 +51,27 @@ for (const [i, inc] of incidents.entries()) {
     }
     if (!inc.seed && !inc.sources.some((s) => s?.url)) err(at, 'non-seed entries need at least one source url');
   }
+
+  // What failed, who made it, and how the supply chain contributed.
+  const rc = inc.root_cause;
+  if (!rc && !inc.seed) err(at, 'missing root_cause (use confidence: unknown if nothing is published)');
+  if (rc) {
+    if (!rc.summary) err(at, 'root_cause.summary is required');
+    if (!vocab.confidence.includes(rc.confidence)) err(at, `root_cause.confidence must be one of ${vocab.confidence.join(', ')}`);
+    if (rc.components && !Array.isArray(rc.components)) err(at, 'root_cause.components must be a list');
+    for (const [j, c] of (rc.components ?? []).entries()) {
+      const cat = `${at} root_cause.components[${j}]`;
+      if (!c?.part) err(cat, 'part is required');
+      if (c?.role && !vocab.component_role.includes(c.role)) err(cat, `role must be one of ${vocab.component_role.join(', ')}`);
+      for (const k of Object.keys(c ?? {})) if (!['part', 'role', 'manufacturer', 'model', 'versions', 'serial', 'detail'].includes(k)) err(cat, `unknown field ${k}`);
+    }
+  }
+  for (const [j, f] of (inc.supply_chain_factors ?? []).entries()) {
+    const fat = `${at} supply_chain_factors[${j}]`;
+    if (!f?.factor) err(fat, 'factor is required');
+    if (!vocab.confidence.includes(f?.confidence)) err(fat, `confidence must be one of ${vocab.confidence.join(', ')}`);
+    if (f?.component && !componentIds.has(f.component)) err(fat, `component "${f.component}" is not an id in supply-chain.yaml`);
+  }
 }
 
 const levels = ['normal', 'elevated', 'high'];
@@ -79,7 +101,15 @@ fs.mkdirSync(path.join(out, 'data'), { recursive: true });
 const sorted = incidents.map((x) => ({ ...x, date: iso(x.date) })).sort((a, b) => b.date.localeCompare(a.date));
 const write = (f, v) => fs.writeFileSync(path.join(out, 'data', f), JSON.stringify(v));
 write('incidents.json', sorted);
-write('supply-chain.json', { ...supply, as_of: iso(supply.as_of) });
+// A component's linked incidents = its hand-listed ones plus any incident whose supply_chain_factors name it.
+const components = supply.components.map((c) => ({
+  ...c,
+  related_incidents: [...new Set([
+    ...(c.related_incidents ?? []),
+    ...sorted.filter((i) => (i.supply_chain_factors ?? []).some((f) => f.component === c.id)).map((i) => i.id),
+  ])],
+}));
+write('supply-chain.json', { ...supply, as_of: iso(supply.as_of), components });
 write('headlines.json', headlines.map((h) => ({ ...h, date: iso(h.date) })));
 write('vocabulary.json', vocab);
 console.log('Built _site/');
