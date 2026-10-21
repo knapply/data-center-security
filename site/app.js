@@ -10,7 +10,8 @@ const css = (v) => getComputedStyle(document.documentElement).getPropertyValue(v
 const catColor = (c) => css(`--${c}`);
 const catLabel = (c) => CATS.find((x) => x.id === c)?.label ?? c;
 const esc = (s) => String(s ?? '').replace(/[&<>"']/g, (ch) => `&#${ch.charCodeAt(0)};`);
-const pretty = (s) => String(s).replace(/-/g, ' ');
+const ACRONYMS = { ups: 'UPS', bms: 'BMS' };
+const pretty = (s) => ACRONYMS[s] ?? String(s).replace(/-/g, ' ');
 const toDate = (s) => new Date(`${s}T00:00:00Z`);
 const fmtDate = (i) => toDate(i.date).toLocaleDateString('en-US', i.date_precision === 'month'
   ? { year: 'numeric', month: 'short', timeZone: 'UTC' } : { year: 'numeric', month: 'short', day: 'numeric', timeZone: 'UTC' });
@@ -21,12 +22,24 @@ const [incidents, supply, headlines] = await Promise.all(
   ['incidents', 'supply-chain', 'headlines'].map((f) => fetch(`data/${f}.json`).then((r) => r.json())),
 );
 const byId = new Map(incidents.map((i) => [i.id, i]));
-const state = { cats: new Set(CATS.map((c) => c.id)), minSev: 'low', q: '', component: null, until: Infinity };
+// focus = a cross-filter set by clicking a chart element: {kind, value, label}
+const state = { cats: new Set(CATS.map((c) => c.id)), minSev: 'low', q: '', focus: null, until: Infinity };
+
+const partiesOf = (i) => [...new Set([...(i.vendors ?? []), ...(i.operators ?? []),
+  ...(i.root_cause?.components ?? []).map((c) => c.manufacturer).filter(Boolean)])];
+const FOCUS_TEST = {
+  system: (i, v) => i.affects.includes(v),
+  impact: (i, v) => i.impacts.includes(v),
+  category: (i, v) => i.category.includes(v),
+  party: (i, v) => partiesOf(i).includes(v),
+  component: (i, v) => supply.components.find((c) => c.id === v)?.related_incidents.includes(i.id),
+};
+const FOCUS_NOUN = { system: 'System hit', impact: 'Consequence', category: 'Threat type', party: 'Company', component: 'Supply chain' };
 
 const matches = (i) =>
   i.category.some((c) => state.cats.has(c)) &&
   SEV[i.severity] >= SEV[state.minSev] &&
-  (!state.component || supply.components.find((c) => c.id === state.component)?.related_incidents.includes(i.id)) &&
+  (!state.focus || FOCUS_TEST[state.focus.kind](i, state.focus.value)) &&
   (!state.q || [i.title, i.summary, place(i), ...(i.operators ?? []), ...(i.vendors ?? []),
     ...(i.root_cause?.components ?? []).flatMap((c) => [c.part, c.manufacturer, c.model])]
     .join(' ').toLowerCase().includes(state.q));
@@ -88,12 +101,38 @@ filters.addEventListener('click', (e) => {
   on ? state.cats.delete(b.dataset.cat) : state.cats.add(b.dataset.cat);
   render();
 });
-document.getElementById('sev-filter').addEventListener('change', (e) => { state.minSev = e.target.value; render(); });
+const sevEl = document.getElementById('sev-filter'), searchEl = document.getElementById('search');
+sevEl.addEventListener('change', (e) => { state.minSev = e.target.value; render(); });
 let qTimer;
-document.getElementById('search').addEventListener('input', (e) => {
+searchEl.addEventListener('input', (e) => {
   clearTimeout(qTimer);
   qTimer = setTimeout(() => { state.q = e.target.value.trim().toLowerCase(); render(); }, 150);
 });
+addEventListener('keydown', (e) => {
+  if (e.key === '/' && !/input|select|textarea/i.test(document.activeElement.tagName)) { e.preventDefault(); searchEl.focus(); }
+  if (e.key === 'Escape' && state.focus) setFocus(null);
+});
+
+function setFocus(kind, value, label) {
+  state.focus = kind ? { kind, value, label: label ?? pretty(value) } : null;
+  hideTip();
+  render();
+}
+function resetAll() {
+  state.cats = new Set(CATS.map((c) => c.id)); state.minSev = 'low'; state.q = ''; state.focus = null;
+  filters.querySelectorAll('.chip').forEach((b) => b.setAttribute('aria-pressed', 'true'));
+  sevEl.value = 'low'; searchEl.value = '';
+  render();
+}
+function renderFocusBar(list) {
+  const bar = document.getElementById('focus-bar');
+  bar.hidden = !state.focus;
+  if (!state.focus) return;
+  bar.innerHTML = `<span class="k">${FOCUS_NOUN[state.focus.kind]}</span> <strong>${esc(state.focus.label)}</strong>
+    <span class="muted">· ${list.length} incident${list.length === 1 ? '' : 's'}</span>
+    <button class="chip" style="--c:var(--accent)">Clear ×</button>`;
+  bar.querySelector('button').onclick = () => setFocus(null);
+}
 
 // ---------- KPIs ----------
 function renderStats(list) {
@@ -106,7 +145,17 @@ function renderStats(list) {
     ['Root causes traced', list.filter((i) => i.root_cause && i.root_cause.confidence !== 'unknown').length, 'Failed part identified from sources', css('--ok')],
   ];
   const el = document.getElementById('stats');
-  if (!el.children.length) el.innerHTML = cards.map(([l, , s, c]) => `<div class="kpi" style="--c:${c}"><div class="label">${l}</div><div class="value">0</div><div class="sub">${s}</div></div>`).join('');
+  if (!el.children.length) {
+    const hints = ['Reset all filters', 'Show only critical and high', 'Explore the globe', 'Read the root causes'];
+    el.innerHTML = cards.map(([l, , s, c], k) => `<button class="kpi" data-k="${k}" title="${hints[k]}" style="--c:${c}"><div class="label">${l}</div><div class="value">0</div><div class="sub">${s}</div><span class="kpi-go">${hints[k]} →</span></button>`).join('');
+    el.addEventListener('click', (e) => {
+      const k = e.target.closest('.kpi')?.dataset.k;
+      if (k === '0') resetAll();
+      if (k === '1') { sevEl.value = 'high'; state.minSev = 'high'; render(); document.getElementById('map').scrollIntoView({ behavior: 'smooth' }); }
+      if (k === '2') document.getElementById('map').scrollIntoView({ behavior: 'smooth' });
+      if (k === '3') document.getElementById('incidents').scrollIntoView({ behavior: 'smooth' });
+    });
+  }
   [...el.children].forEach((k, idx) => {
     countUp(k.querySelector('.value'), cards[idx][1]);
     k.querySelector('.sub').textContent = cards[idx][2];
@@ -142,6 +191,7 @@ function renderMap(list) {
     markerById.set(i.id, L.marker([i.location.lat, i.location.lon], { icon, title: i.title, riseOnHover: true })
       .on('click', () => showDetail(i)).addTo(markers));
   }
+  renderGlobe(onMap);
   const off = list.filter((x) => !x.location).length;
   document.getElementById('unmapped').textContent = off ? `${off} advisory or policy entr${off === 1 ? 'y' : 'ies'} with no single location appear in the list below` : '';
   const through = Number.isFinite(state.until) ? new Date(state.until) : new Date(t1);
@@ -149,8 +199,86 @@ function renderMap(list) {
     `${through.toLocaleDateString('en-US', { month: 'short', year: 'numeric' })} · ${onMap.length} on map`;
 }
 
+// ---------- 3D globe ----------
+const TEX = 'https://cdn.jsdelivr.net/npm/three-globe@2.45.6/example/img/';
+const rgba = (hex, a) => { const n = parseInt(hex.replace('#', ''), 16); return `rgba(${n >> 16},${(n >> 8) & 255},${n & 255},${a})`; };
+const hasWebGL = (() => { try { const c = document.createElement('canvas'); return !!(c.getContext('webgl2') || c.getContext('webgl')); } catch { return false; } })();
+const globeEl = document.getElementById('globe'), leafletEl = document.getElementById('leaflet');
+let globe = null, view = 'globe';
+
+// Arcs join mapped incidents that share a vendor, operator or maker.
+function sharedArcs(onMap) {
+  const arcs = [];
+  for (let a = 0; a < onMap.length; a++) for (let b = a + 1; b < onMap.length; b++) {
+    const A = onMap[a], B = onMap[b];
+    const shared = partiesOf(A).filter((p) => partiesOf(B).includes(p));
+    if (shared.length) arcs.push({ A, B, shared });
+  }
+  return arcs;
+}
+
+function initGlobe() {
+  if (globe) return true;
+  if (typeof Globe === 'undefined' || !hasWebGL) return false;
+  globe = Globe()(globeEl)
+    .width(globeEl.clientWidth).height(globeEl.clientHeight)
+    .backgroundColor('rgba(0,0,0,0)')
+    .globeImageUrl(`${TEX}earth-night.jpg`).bumpImageUrl(`${TEX}earth-topology.png`)
+    .showAtmosphere(true).atmosphereColor('#38b6ff').atmosphereAltitude(0.2)
+    .pointLat((d) => d.location.lat).pointLng((d) => d.location.lon)
+    .pointColor((d) => catColor(d.category[0]))
+    .pointAltitude((d) => 0.03 + SEV[d.severity] * 0.06).pointRadius((d) => 0.35 + SEV[d.severity] * 0.15)
+    .pointLabel((d) => `<div class="gtip">${incTip(d)}<em>Click for details</em></div>`)
+    .onPointClick((d) => showDetail(d))
+    .ringLat((d) => d.location.lat).ringLng((d) => d.location.lon)
+    .ringColor((d) => (t) => rgba(catColor(d.category[0]), 1 - t))
+    .ringMaxRadius((d) => 3 + SEV[d.severity] * 1.6).ringPropagationSpeed(2.2)
+    .ringRepeatPeriod((d) => 1600 - SEV[d.severity] * 250)
+    .arcStartLat((d) => d.A.location.lat).arcStartLng((d) => d.A.location.lon)
+    .arcEndLat((d) => d.B.location.lat).arcEndLng((d) => d.B.location.lon)
+    .arcColor((d) => [rgba(catColor(d.A.category[0]), 0.9), rgba(catColor(d.B.category[0]), 0.9)])
+    .arcStroke(0.45).arcDashLength(0.45).arcDashGap(0.25).arcDashAnimateTime(reduceMotion ? 0 : 2600).arcAltitudeAutoScale(0.45)
+    .arcLabel((d) => `<div class="gtip"><strong>Shared: ${esc(d.shared.join(', '))}</strong><span class="meta">${esc(d.A.title)}<br>↔ ${esc(d.B.title)}</span></div>`);
+  globe.pointOfView({ lat: 30, lng: 40, altitude: 1.95 });
+  const ctl = globe.controls();
+  ctl.autoRotate = !reduceMotion; ctl.autoRotateSpeed = 0.45;
+  ctl.enableZoom = false; // don't hijack page scrolling until the visitor clicks the globe
+  globeEl.addEventListener('pointerdown', () => { ctl.autoRotate = false; ctl.enableZoom = true; });
+  globeEl.addEventListener('pointerleave', () => { ctl.enableZoom = false; });
+  new ResizeObserver(() => globe.width(globeEl.clientWidth).height(globeEl.clientHeight)).observe(globeEl);
+  return true;
+}
+
+function renderGlobe(onMap) {
+  if (!globe) return;
+  globe.pointsData(onMap).ringsData(onMap).arcsData(sharedArcs(onMap));
+}
+
+function setView(v) {
+  if (v === 'globe' && !initGlobe()) v = 'flat';
+  view = v;
+  globeEl.hidden = v !== 'globe';
+  document.getElementById('globe-hint').hidden = v !== 'globe';
+  leafletEl.hidden = v !== 'flat';
+  document.getElementById('view-globe').setAttribute('aria-pressed', String(v === 'globe'));
+  document.getElementById('view-flat').setAttribute('aria-pressed', String(v === 'flat'));
+  if (v === 'flat') setTimeout(() => map.invalidateSize(), 0);
+  renderMap(visible());
+}
+document.getElementById('view-globe').onclick = () => setView('globe');
+document.getElementById('view-flat').onclick = () => setView('flat');
+
+function locate(i) {
+  document.getElementById('map').scrollIntoView({ behavior: reduceMotion ? 'auto' : 'smooth', block: 'center' });
+  showDetail(i);
+}
+
 const detail = document.getElementById('map-detail');
 function showDetail(i) {
+  if (i.location) {
+    if (view === 'globe' && globe) { globe.controls().autoRotate = false; globe.pointOfView({ lat: i.location.lat, lng: i.location.lon, altitude: 1.3 }, 1400); }
+    else map.flyTo([i.location.lat, i.location.lon], 4, { duration: 1.2 });
+  }
   const c = catColor(i.category[0]);
   detail.style.setProperty('--c', c);
   detail.innerHTML = `
@@ -241,8 +369,7 @@ document.getElementById('supply-list').addEventListener('click', (e) => {
   const a = e.target.closest('[data-component]');
   if (!a) return;
   e.preventDefault();
-  state.component = a.dataset.component;
-  render();
+  setFocus('component', a.dataset.component, componentName(a.dataset.component));
   document.getElementById('incidents').scrollIntoView({ behavior: reduceMotion ? 'auto' : 'smooth' });
 });
 
@@ -288,8 +415,19 @@ function renderSankey(list) {
     .attr('text-anchor', (d) => (d.depth === 0 ? 'end' : 'start'))
     .text((d) => `${d.id.startsWith('c:') ? catLabel(d.id.slice(2)) : pretty(d.id.slice(2))} ${d.value}`);
   const connected = (d, l) => l.source === d || l.target === d;
+  const KIND = { c: 'category', a: 'system', i: 'impact' };
   node.on('mouseenter', (e, d) => link.attr('stroke-opacity', (l) => connected(d, l) ? 0.75 : 0.06))
-    .on('mouseleave', () => link.attr('stroke-opacity', 0.4));
+    .on('mousemove', (e, d) => showTip(e, `<strong>${esc(d.id.startsWith('c:') ? catLabel(d.id.slice(2)) : pretty(d.id.slice(2)))}</strong>Click to filter the whole page`))
+    .on('mouseleave', () => { link.attr('stroke-opacity', 0.4); hideTip(); })
+    .on('click', (e, d) => {
+      const [k, v] = [d.id[0], d.id.slice(2)];
+      setFocus(KIND[k], v, k === 'c' ? catLabel(v) : pretty(v));
+    });
+  // Keep the focused node lit so the filter is visible here too.
+  if (state.focus) node.selectAll('rect').attr('opacity', (d) => {
+    const k = { category: 'c', system: 'a', impact: 'i' }[state.focus.kind];
+    return !k || d.id === `${k}:${state.focus.value}` ? 1 : 0.35;
+  });
 }
 
 // ---------- Network ----------
@@ -347,7 +485,10 @@ function renderNetwork(list) {
       .attr('stroke', (l) => l.source.id === d.id || l.target.id === d.id ? fill(d) : css('--border-strong'));
   }).on('mousemove', (e, d) => d.kind === 'incident' && showTip(e, incTip(d.inc)))
     .on('mouseleave', () => { g.style('opacity', 1); link.style('opacity', 1).attr('stroke', css('--border-strong')); hideTip(); })
-    .on('click', (e, d) => d.kind === 'incident' && jumpTo(d.id));
+    .on('click', (e, d) => {
+      if (d.kind === 'incident') return jumpTo(d.id);
+      setFocus(d.kind === 'system' ? 'system' : 'party', d.kind === 'system' ? d.id.slice(2) : d.label, d.label);
+    });
   sim.on('tick', () => {
     for (const d of data) { d.x = Math.max(16, Math.min(W - 90, d.x)); d.y = Math.max(16, Math.min(H - 16, d.y)); }
     link.attr('x1', (d) => d.source.x).attr('y1', (d) => d.source.y).attr('x2', (d) => d.target.x).attr('y2', (d) => d.target.y);
@@ -387,10 +528,7 @@ function renderCause(i) {
 }
 
 function renderList(list) {
-  const comp = state.component && componentName(state.component);
-  document.getElementById('list-count').innerHTML = `${list.length} of ${incidents.length} shown${comp
-    ? ` · linked to <strong>${esc(comp)}</strong> <button class="chip" id="clear-comp" style="--c:var(--accent);padding:2px 10px">Clear ×</button>` : ''}`;
-  document.getElementById('clear-comp')?.addEventListener('click', () => { state.component = null; render(); });
+  document.getElementById('list-count').textContent = `${list.length} of ${incidents.length} shown`;
   document.getElementById('incident-list').innerHTML = list.length ? list.map((i) => `
     <article class="card" id="${esc(i.id)}" style="--c:${catColor(i.category[0])}">
       <div class="card-top">
@@ -398,14 +536,32 @@ function renderList(list) {
         ${i.category.map((c) => `<span class="tag" style="color:${catColor(c)}">${catLabel(c)}</span>`).join('')}
         <span class="tag">${i.type}</span>
         ${i.status !== 'confirmed' ? `<span class="tag">${i.status}</span>` : ''}
+        ${i.location ? `<button class="locate" data-locate="${esc(i.id)}" title="Show on the map">◎ Locate</button>` : ''}
       </div>
       <h3>${esc(i.title)}</h3>
       <div class="meta">${fmtDate(i)} · ${esc(place(i))}</div>
+      <div class="card-links">${partiesOf(i).map((p) => `<button class="pill" data-party="${esc(p)}">${esc(p)}</button>`).join('')}</div>
       <p>${esc(i.summary)}</p>
       ${renderCause(i)}
       <div class="sources">Sources: ${i.sources.map((s) => s.url ? `<a href="${esc(s.url)}" target="_blank" rel="noopener">${esc(s.publisher)}</a>` : esc(s.publisher)).join(', ')}${i.sources.every((s) => !s.url) ? ' · links pending' : ''}</div>
     </article>`).join('') : '<div class="empty">No incidents match these filters.</div>';
 }
+
+// Card interactions: locate on the map, filter by company, and a glow that follows the cursor.
+const listEl = document.getElementById('incident-list');
+listEl.addEventListener('click', (e) => {
+  const loc = e.target.closest('[data-locate]');
+  if (loc) return locate(byId.get(loc.dataset.locate));
+  const party = e.target.closest('[data-party]');
+  if (party) setFocus('party', party.dataset.party, party.dataset.party);
+});
+listEl.addEventListener('pointermove', (e) => {
+  const card = e.target.closest('.card');
+  if (!card) return;
+  const r = card.getBoundingClientRect();
+  card.style.setProperty('--mx', `${e.clientX - r.left}px`);
+  card.style.setProperty('--my', `${e.clientY - r.top}px`);
+});
 
 // Keep the sticky filter bar just under the header, whose height changes when the nav wraps.
 const header = document.querySelector('.top'), controls = document.querySelector('.controls');
@@ -423,6 +579,7 @@ document.querySelectorAll('.reveal').forEach((el) => io.observe(el));
 
 function render() {
   const list = visible();
+  renderFocusBar(list);
   renderStats(list);
   renderMap(list);
   renderBeeswarm(list);
@@ -431,4 +588,6 @@ function render() {
   renderList(list);
 }
 renderSupply();
+// Globe by default; the flat map on phones (a globe there traps page scrolling) or without WebGL.
+setView(matchMedia('(max-width: 700px)').matches ? 'flat' : 'globe');
 render();
