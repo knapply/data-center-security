@@ -8,6 +8,10 @@ A curated tracker of the data center industry: security incidents (physical, IT/
 - **Incident map**: events plotted at city level, colored by category and sized by severity; flat map by default, with a 3D globe view
 - **Market watch and stock tape**: AI and cloud, GPUs, cooling, power, construction, operators, and networking companies (TradingView widgets)
 - **Ticker**: latest curated headlines
+- **Opportunity radar**: data center campuses by stage, size, region, and cooling approach, with a campus layer on the map
+- **Heat and water watch**: 7-day peak temperatures (Open-Meteo), WRI Aqueduct water stress, and nearby cooling incidents and build pipeline for major hubs
+- **Cooling vendor tracker**: acquisitions, backlogs, capacity, and products from the major cooling suppliers
+- **Operator briefs**: one page per company with key points, campuses, events, and a stock quote
 - **Supply chain watch**: risk levels for GPUs, transformers, batteries, cooling, firmware, and subsea capacity
 - **How threats cascade**: Sankey diagram from threat category to affected system to impact
 - **Connections**: network graph linking incidents, systems, and vendors

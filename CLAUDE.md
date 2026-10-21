@@ -147,6 +147,29 @@ Rules:
 - Never guess serial numbers.
 - List every new guess in the PR under "Best guesses" so the reviewer checks them one by one.
 
+## Campuses (`data/campuses.yaml`)
+The opportunity radar tracks individual campuses. Each entry:
+
+```yaml
+- id: 2025-stargate-abilene        # YYYY-slug, year announced; never change once published
+  name: Stargate Abilene
+  operator: Crusoe                  # developer or operator
+  tenants: [OpenAI, Oracle]         # known anchor tenants, or []
+  location: {city: Abilene, region: Texas, country: US, lat: 32.45, lon: -99.73}   # city level, 2 decimals
+  capacity_mw: 1200                 # as reported; null if unknown
+  capacity_basis: planned total     # what the MW figure means (IT load, utility, phase 1...)
+  stage: under-construction         # announced | permitting | under-construction | operational | paused | cancelled
+  announced: 2025-01-21
+  expected_online: "2026"           # year or YYYY-MM, or null
+  cooling: {liquid: true, vendors: [], notes: "..."}   # liquid: true/false only when a source says so, else null
+  power: "..."                      # power arrangement if reported, else null
+  sources: [{publisher: ..., url: "https://..."}]
+```
+
+- Same sourcing bar as incidents. Name cooling vendors only when a source names them for that site.
+- Update `stage` and `expected_online` as projects move. Don't add a second entry for a new phase unless it's a separate campus.
+- `data/hubs.yaml` lists major hubs for the heat and water watch. `water_stress` is the WRI Aqueduct 4.0 baseline category for the hub point; keep the version consistent.
+
 ## Supply chain tracker
 - Levels: `normal`, `elevated`, `high`. Trend: `up`, `flat`, `down`.
 - Change a level only with a cited reason (lead-time data, policy, an incident). Put the reason in `note` and the source in the PR.
