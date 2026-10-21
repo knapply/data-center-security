@@ -1,11 +1,12 @@
-# Data Center Security Watch
+# Data Center Watch
 
-A curated tracker of security events affecting data centers worldwide. It covers physical threats, IT/OT/SCADA vulnerabilities, and supply-chain risk.
+A curated tracker of the data center industry: security incidents (physical, IT/OT/SCADA, supply chain) and industry developments (energy, capacity, markets, regulation), plus a market watch of the public companies behind data centers and AI.
 
 **Live site:** https://knapply.github.io/data-center-security/
 
 ## What's on the site
-- **Incident map**: events plotted at city level, colored by category and sized by severity
+- **Incident map**: events plotted at city level, colored by category and sized by severity; flat map by default, with a 3D globe view
+- **Market watch and stock tape**: AI and cloud, GPUs, cooling, power, construction, operators, and networking companies (TradingView widgets)
 - **Ticker**: latest curated headlines
 - **Supply chain watch**: risk levels for GPUs, transformers, batteries, cooling, firmware, and subsea capacity
 - **How threats cascade**: Sankey diagram from threat category to affected system to impact

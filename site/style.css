@@ -10,8 +10,12 @@
   --physical: #ff5468;
   --it-ot: #38b6ff;
   --supply-chain: #ffb020;
+  --energy: #4ade80;
+  --capacity: #c084fc;
+  --market: #2dd4bf;
+  --regulation: #f472b6;
   --system: #7f8da3;
-  --party: #a78bfa;
+  --party: #8b9dff;
   --critical: #ff3b5c;
   --high: #ff7a45;
   --medium: #ffb020;
@@ -323,3 +327,10 @@ button.kpi:hover .kpi-go, button.kpi:focus-visible .kpi-go { opacity: 1; transfo
 .analysis { grid-template-columns: minmax(0, 1.25fr) minmax(0, 1fr); }
 @media (max-width: 960px) { .analysis { grid-template-columns: minmax(0, 1fr); } }
 .mx-col { writing-mode: vertical-rl; transform: rotate(180deg); justify-self: center; text-align: left; white-space: nowrap; padding: 0 0 4px; }
+
+/* ---------- Market widgets (TradingView) ---------- */
+.market-tape { border-bottom: 1px solid var(--border); background: var(--surface); min-height: 46px; }
+.market-overview { min-height: 560px; }
+.tradingview-widget-copyright { font-size: 12px; margin-top: 6px; text-align: right; }
+.tradingview-widget-copyright a { color: var(--muted); }
+@media print { .market-tape, #markets { display: none !important; } }

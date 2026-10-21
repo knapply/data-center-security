@@ -1,6 +1,6 @@
-# Data Center Security Watch: editorial rules
+# Data Center Watch: editorial rules
 
-This repo is a curated tracker of security events affecting data centers, published with GitHub Pages.
+This repo is a curated tracker of the data center industry, published with GitHub Pages. It started with security (physical, IT/OT, supply chain) and now also covers the wider industry: energy, capacity and construction, the market, and regulation.
 Claude does the curation. A human reviews every change. Read this whole file before editing `data/`.
 
 ## Layout
@@ -27,13 +27,20 @@ In scope:
 - **IT/OT/SCADA**: vulnerabilities or attacks on facility systems (BMS, UPS, PDUs, cooling controls, access control) and server management planes (BMC, firmware), plus confirmed intrusions into data center operators.
 - **Supply chain**: policy, shortages, compromised components, or vendor failures that affect data center equipment or construction.
 
-Out of scope: ordinary software bugs, routine cloud outages with no physical or infrastructure cause, generic ransomware against companies that merely own servers, product announcements, and opinion pieces.
+Industry (use `type: development` unless it is a law or rule, which is `policy`):
+- **Energy**: power purchase agreements and nuclear, gas or renewable generation built or contracted for data centers; grid interconnection limits and utility tariffs for large loads.
+- **Capacity**: new campuses and expansions of roughly 50 MW or more (or a major operator entering a new market), construction milestones, and cancellations or pauses.
+- **Market**: M&A, financing and capex commitments of roughly $1B or more, major leases, notable earnings or guidance changes from data center suppliers and operators, and pricing shifts.
+- **Regulation**: permitting decisions, moratoria, water-use and efficiency rules, reporting mandates (for example the EU Energy Efficiency Directive), and tax incentives.
+
+Out of scope: ordinary software bugs, routine cloud outages with no physical or infrastructure cause, generic ransomware against companies that merely own servers, minor product announcements, stock-price moves on their own, rumors, and opinion pieces.
 
 When unsure, leave it out and list it under "Considered and rejected" with your reasoning.
 
 ## Sources
 - **Tier 1 (primary)**: CISA advisories and KEV, NVD, vendor PSIRTs, operator post-incident reports and status pages, regulators, court filings.
-- **Tier 2**: established trade and news outlets (DatacenterDynamics, Data Center Knowledge, The Register, Reuters, AP, Bloomberg).
+- **Tier 2**: established trade and news outlets (DatacenterDynamics, Data Center Knowledge, Data Center Frontier, The Register, Reuters, AP, Bloomberg, Utility Dive).
+- For industry developments, company press releases, SEC filings and earnings materials, utility filings and planning documents count as tier 1 for what the company itself is doing.
 - **Tier 3**: social media, forums, single unnamed-source reports.
 
 An entry needs **one tier-1 source or two independent tier-2 sources**. Tier-3-only items are not published. Mention them as open questions if they look important.
@@ -58,6 +65,14 @@ Every non-seed entry needs at least one source URL. Link to the most primary sou
 - **high**: outage lasting hours at a significant operator, a remotely exploitable flaw in widely deployed DC infrastructure, or a supply disruption affecting a major component class.
 - **medium**: a limited or regional outage, a vulnerability that needs local or authenticated access, or a policy change with indirect effects.
 - **low**: a near miss, a contained incident, or a minor advisory.
+
+For `development` and `policy` entries, `severity` means **significance** to the industry:
+- **critical**: reshapes the market: a multi-gigawatt or $10B+ commitment, a national moratorium, or a top-tier merger.
+- **high**: a major campus (roughly 300 MW+), a $1B+ deal, a nuclear or large generation deal for data centers, or a regional rule that changes where operators build.
+- **medium**: a notable project or deal below those sizes, or a local permitting decision.
+- **low**: worth noting but unlikely to change behavior.
+
+`root_cause` is required for incidents and vulnerabilities only. Developments and policies may leave `affects` and `impacts` as empty lists when nothing fits; use `capacity-added`, `capacity-delayed`, `investment` or `cost` impacts where they do.
 
 ## Tagging (feeds the Sankey and network graph)
 - `category`: one or more of physical, it-ot, supply-chain.

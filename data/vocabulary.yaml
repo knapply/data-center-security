@@ -1,8 +1,21 @@
 # Controlled vocabulary. The validator rejects values not listed here.
 # Add a term only when no existing one fits, and say why in the PR.
 
-type: [incident, vulnerability, policy]
-category: [physical, it-ot, supply-chain]
+type:
+  - incident       # something went wrong: fire, outage, attack, cable cut
+  - vulnerability  # a flaw in data center infrastructure
+  - policy         # a law, regulation, permit rule or moratorium
+  - development    # industry news: new builds, power deals, financing, M&A, earnings
+category:
+  # Security
+  - physical
+  - it-ot
+  - supply-chain
+  # Industry
+  - energy       # power procurement, grid capacity, generation built for data centers
+  - capacity     # new campuses, expansions, cancellations, construction
+  - market       # deals, M&A, financing, earnings, pricing
+  - regulation   # permitting, moratoria, water, efficiency and reporting rules
 status: [confirmed, ongoing, unconfirmed]
 severity: [low, medium, high, critical]
 affects:
@@ -33,3 +46,7 @@ impacts:
   - delay        # supply or construction delay
   - financial
   - safety
+  - capacity-added    # new data center capacity announced or delivered
+  - capacity-delayed  # a project slowed, paused or cancelled
+  - investment        # capital committed
+  - cost              # higher prices or costs for operators or customers
