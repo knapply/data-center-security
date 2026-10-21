@@ -5,72 +5,138 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Data Center Security Watch</title>
   <meta name="description" content="A curated tracker of physical, IT/OT and supply-chain security incidents affecting data centers worldwide.">
+  <meta name="theme-color" content="#070b11">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Cpath d='M16 2 4 7v8c0 7.5 5 13 12 15 7-2 12-7.5 12-15V7z' fill='%23ff4d6a'/%3E%3Crect x='10' y='11' width='12' height='3' rx='1' fill='%23070b11'/%3E%3Crect x='10' y='16' width='12' height='3' rx='1' fill='%23070b11'/%3E%3C/svg%3E">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.css">
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
   <header class="top">
-    <a class="brand" href="./">Data Center Security Watch</a>
+    <a class="brand" href="./">
+      <svg class="brand-mark" viewBox="0 0 32 32" aria-hidden="true"><path d="M16 2 4 7v8c0 7.5 5 13 12 15 7-2 12-7.5 12-15V7z"/><rect x="10" y="11" width="12" height="3" rx="1"/><rect x="10" y="16" width="12" height="3" rx="1"/></svg>
+      <span>Data Center <b>Security Watch</b></span>
+    </a>
     <nav>
       <a href="#map">Map</a>
-      <a href="#incidents">Incidents</a>
+      <a href="#timeline">Timeline</a>
       <a href="#supply">Supply chain</a>
       <a href="#impact">Impact</a>
+      <a href="#incidents">Incidents</a>
       <a href="#about">About</a>
     </nav>
+    <div class="status"><span class="pulse-dot"></span><span id="status-text">Monitoring</span></div>
   </header>
 
   <div class="ticker" aria-label="Latest headlines">
-    <span class="ticker-label">Latest</span>
+    <span class="ticker-label"><span class="pulse-dot"></span>Latest</span>
     <div class="ticker-track"><div class="ticker-items" id="ticker"></div></div>
   </div>
+
+  <section class="hero">
+    <div class="hero-text">
+      <p class="eyebrow">Global threat tracker</p>
+      <h1>Fires, cyberattacks, cut cables, and chip shortages: the threats hitting the world's data centers.</h1>
+      <p class="lede">Every incident is researched from public sources, traced to its root cause, and linked to the supply chain behind it.</p>
+    </div>
+    <div class="kpis" id="stats"></div>
+  </section>
 
   <main>
     <div id="seed-banner" class="banner" hidden>
       Seed data: these entries are well-known events written up to bootstrap the site. Their sources are still being verified and linked.
     </div>
 
-    <section class="stats" id="stats"></section>
-
-    <div class="filters" id="filters" role="group" aria-label="Filter by category"></div>
-
-    <div class="grid-2">
-      <section class="card" id="map">
-        <h2>Incident map</h2>
-        <div id="leaflet"></div>
-        <p class="muted small" id="unmapped"></p>
-      </section>
-      <section class="card" id="supply">
-        <h2>Supply chain watch</h2>
-        <ul class="supply" id="supply-list"></ul>
-        <p class="muted small" id="supply-asof"></p>
-      </section>
+    <div class="controls" role="group" aria-label="Filters">
+      <div class="chips" id="filters"></div>
+      <div class="control-right">
+        <label class="select"><span>Severity</span>
+          <select id="sev-filter">
+            <option value="low">All</option>
+            <option value="medium">Medium and up</option>
+            <option value="high">High and up</option>
+            <option value="critical">Critical only</option>
+          </select>
+        </label>
+        <input id="search" type="search" placeholder="Search incidents, vendors, places" aria-label="Search incidents">
+      </div>
     </div>
 
-    <section class="card" id="impact">
-      <h2>How threats cascade</h2>
-      <p class="muted small">Threat category → affected system → impact. Band width is the number of incidents.</p>
+    <section class="panel map-panel reveal" id="map">
+      <div class="panel-head">
+        <h2>Incident map</h2>
+        <span class="muted small" id="unmapped"></span>
+      </div>
+      <div class="map-wrap">
+        <div id="leaflet"></div>
+        <aside class="map-detail" id="map-detail" hidden></aside>
+        <div class="map-legend">
+          <span><i style="background:var(--physical)"></i>Physical</span>
+          <span><i style="background:var(--it-ot)"></i>IT / OT</span>
+          <span><i style="background:var(--supply-chain)"></i>Supply chain</span>
+          <span class="muted">Size = severity</span>
+        </div>
+        <div class="playback">
+          <button id="play" class="play" aria-label="Play the incident history">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path id="play-icon" d="M8 5v14l11-7z"/></svg>
+          </button>
+          <input id="time" type="range" min="0" max="100" value="100" aria-label="Show incidents up to this date">
+          <span class="time-label" id="time-label"></span>
+        </div>
+      </div>
+    </section>
+
+    <section class="panel reveal" id="timeline">
+      <div class="panel-head">
+        <h2>Timeline</h2>
+        <span class="muted small">Each dot is an incident. Hover for details, click to jump to it.</span>
+      </div>
+      <svg id="beeswarm" role="img" aria-label="Timeline of incidents by date, colored by category"></svg>
+    </section>
+
+    <section class="panel reveal" id="supply">
+      <div class="panel-head">
+        <h2>Supply chain risk</h2>
+        <span class="muted small" id="supply-asof"></span>
+      </div>
+      <ul class="meters" id="supply-list"></ul>
+    </section>
+
+    <section class="panel reveal" id="impact">
+      <div class="panel-head">
+        <h2>How threats cascade</h2>
+        <span class="muted small">Threat type → system hit → consequence. Hover a node to trace its flows.</span>
+      </div>
       <svg id="sankey" role="img" aria-label="Sankey diagram from threat category to affected system to impact"></svg>
     </section>
 
-    <section class="card">
-      <h2>Connections</h2>
-      <p class="muted small">Incidents linked to the systems they hit and the vendors or operators involved. Hover a node for details.</p>
-      <svg id="network" role="img" aria-label="Network graph of incidents, systems and vendors"></svg>
+    <section class="panel reveal">
+      <div class="panel-head">
+        <h2>Connections</h2>
+        <span class="muted small">Incidents linked to the systems they hit and the companies involved. Hover to highlight, drag to rearrange.</span>
+      </div>
+      <svg id="network" role="img" aria-label="Network graph of incidents, systems and companies"></svg>
     </section>
 
-    <section class="card" id="incidents">
-      <h2>Incidents</h2>
-      <div id="incident-list"></div>
+    <section id="incidents">
+      <div class="panel-head">
+        <h2>Incidents</h2>
+        <span class="muted small" id="list-count"></span>
+      </div>
+      <div class="cards" id="incident-list"></div>
     </section>
 
-    <section class="card" id="about">
+    <section class="panel about" id="about">
       <h2>About</h2>
       <p>This tracker covers security events that affect data centers: physical threats (fire, power, cooling, sabotage, cable cuts), IT/OT/SCADA vulnerabilities in facility and server infrastructure, and supply-chain risk for the components data centers depend on.</p>
-      <p>Every entry is curated: drafted from public sources, checked against an editorial rubric, and reviewed before publishing. Locations are shown at city or region level only.</p>
+      <p>Every entry is curated: drafted from public sources, checked against an editorial rubric, and reviewed before publishing. Locations are shown at city or region level only. Where no source names the maker of a failed part, any best guess is labeled as one, with its evidence.</p>
       <p class="muted small">Data and methodology live in the <a href="https://github.com/knapply/data-center-security">GitHub repository</a>.</p>
     </section>
   </main>
+
+  <div class="tooltip" id="tooltip" hidden></div>
 
   <script src="https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/d3@7.9.0/dist/d3.min.js"></script>

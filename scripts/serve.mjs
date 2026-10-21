@@ -13,6 +13,6 @@ http.createServer((req, res) => {
   if (fs.existsSync(p) && fs.statSync(p).isDirectory()) p = path.join(p, 'index.html');
   fs.readFile(p, (e, buf) => {
     if (e) { res.writeHead(404).end('Not found'); return; }
-    res.writeHead(200, { 'content-type': types[path.extname(p)] ?? 'application/octet-stream' }).end(buf);
+    res.writeHead(200, { 'cache-control': 'no-store', 'content-type': types[path.extname(p)] ?? 'application/octet-stream' }).end(buf);
   });
 }).listen(port, () => console.log(`http://localhost:${port}`));
