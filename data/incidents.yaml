@@ -736,3 +736,512 @@
         brands and each OEM ships its own fix on its own schedule.
       component: firmware
       confidence: confirmed
+
+# --- Industry developments and policy (energy, capacity, market, regulation) ---
+
+- id: 2024-eu-dc-reporting-scheme
+  date: 2024-03-14
+  title: EU adopts mandatory energy and water reporting for data centers
+  type: policy
+  category: [regulation, energy]
+  status: confirmed
+  severity: high
+  location: null
+  affects: []
+  impacts: [cost]
+  operators: []
+  vendors: []
+  summary: >
+    The European Commission adopted Delegated Regulation (EU) 2024/1364, the first phase
+    of a Union rating scheme under the Energy Efficiency Directive. Data centers with 500 kW
+    or more of installed IT power must report energy, PUE-type, water, renewable and
+    waste-heat indicators to an EU database, with the first reports due on 15 September 2024.
+  sources:
+    - {publisher: EUR-Lex (Official Journal of the EU), url: "https://eur-lex.europa.eu/eli/reg_del/2024/1364/oj/eng"}
+
+- id: 2024-microsoft-crane-nuclear-ppa
+  date: 2024-09-20
+  title: Microsoft signs 20-year PPA to restart Three Mile Island Unit 1
+  type: development
+  category: [energy]
+  status: ongoing
+  severity: high
+  location: {city: Middletown, country: US, lat: 40.2, lon: -76.73}
+  affects: [power]
+  impacts: [investment]
+  operators: [Microsoft]
+  vendors: [Constellation Energy]
+  summary: >
+    Constellation agreed to restart the roughly 835 MW reactor, retired in 2019 and renamed
+    the Crane Clean Energy Center, and sell its output to Microsoft for 20 years to match
+    Microsoft's PJM data center load. Constellation later moved the target from 2028 to
+    2027, and DOE closed a $1B loan in November 2025; PJM interconnection timing remains a risk.
+  sources:
+    - {publisher: Constellation Energy (investor release), url: "https://investors.constellationenergy.com/node/8716/html"}
+    - {publisher: Constellation Energy, url: "https://www.constellationenergy.com/newsroom/2025/09/one-year-later-crane-clean-energy-center-still-in-the-spotlight-and-ahead-of-schedule.html"}
+    - {publisher: US Department of Energy, url: "https://www.energy.gov/articles/energy-Department-closes-loan-restart-nuclear-power-plant-pennsylvania"}
+    - {publisher: Power Engineering, url: "https://www.power-eng.com/business/constellation-files-at-ferc-to-keep-crane-nuclear-restart-on-2027-timeline/"}
+
+- id: 2024-google-kairos-smr
+  date: 2024-10-14
+  title: Google agrees to buy power from up to 500 MW of Kairos small reactors
+  type: development
+  category: [energy]
+  status: ongoing
+  severity: high
+  location: null
+  affects: [power]
+  impacts: [investment]
+  operators: [Google]
+  vendors: [Kairos Power]
+  summary: >
+    Google and Kairos Power signed a master plant development agreement for up to 500 MW of
+    molten-salt-cooled small modular reactors, with the first unit targeted for 2030 and the
+    rest by 2035. Google called it the first corporate deal to buy power from multiple SMRs;
+    no site was named.
+  sources:
+    - {publisher: Kairos Power, url: "https://kairospower.com/updates/google-and-kairos-power-partner-to-deploy-500-mw-of-clean-electricity-generation"}
+    - {publisher: Google, url: "https://blog.google/outreach-initiatives/sustainability/google-kairos-power-nuclear-energy-agreement/"}
+
+- id: 2024-meta-hyperion-louisiana
+  date: 2024-12-04
+  title: Meta picks Richland Parish, Louisiana, for its Hyperion AI campus
+  type: development
+  category: [capacity, energy, market]
+  status: ongoing
+  severity: critical
+  location: {city: Richland Parish, country: US, lat: 32.47, lon: -91.76}
+  facility_type: hyperscale campus
+  affects: [power]
+  impacts: [capacity-added, investment]
+  operators: [Meta]
+  vendors: [Entergy, Blue Owl Capital]
+  summary: >
+    Louisiana announced a $10B, 4 million sq ft Meta AI data center on a 2,250-acre site,
+    later named Hyperion. Regulators approved three Entergy gas plants (about 2.26 GW) to
+    serve it in August 2025, and in October 2025 Meta formed a joint venture with Blue Owl
+    funds (80%) to finance about $27B of construction; DCD later reported plans to grow it to 5 GW.
+  sources:
+    - {publisher: Louisiana Economic Development, url: "https://www.opportunitylouisiana.gov/news/meta-selects-northeast-louisiana-as-site-of-10-billion-artificial-intelligence-optimized-data-center-governor-jeff-landry-calls-investment-a-new-chapter-for-state"}
+    - {publisher: Meta (release via Nasdaq), url: "https://www.nasdaq.com/press-release/meta-announces-joint-venture-funds-managed-blue-owl-capital-develop-hyperion-data"}
+    - {publisher: DatacenterDynamics, url: "https://www.datacenterdynamics.com/en/news/entergy-obtains-approval-to-construct-three-gas-facilities-to-serve-metas-2gw-data-center-in-louisiana"}
+    - {publisher: Data Center Frontier, url: "https://www.datacenterfrontier.com/hyperscale/article/55325337/metas-27b-hyperion-campus-a-new-blueprint-for-ai-infrastructure-finance"}
+    - {publisher: DatacenterDynamics, url: "https://www.datacenterdynamics.com/en/news/meta-expands-data-center-campus-in-richland-parish-louisiana-to-5gw-will-invest-50bn/"}
+
+- id: 2025-stargate-launch
+  date: 2025-01-21
+  title: OpenAI, SoftBank, Oracle and MGX launch $500B Stargate venture
+  type: development
+  category: [capacity, market]
+  status: ongoing
+  severity: critical
+  location: {city: Abilene, country: US, lat: 32.45, lon: -99.73}
+  facility_type: hyperscale campus
+  affects: []
+  impacts: [capacity-added, investment]
+  operators: [OpenAI, Oracle]
+  vendors: [SoftBank, MGX, Nvidia]
+  summary: >
+    The partners announced a new company to invest up to $500B over four years in US AI
+    infrastructure for OpenAI, starting with a campus in Abilene, Texas. In September 2025
+    they named five more sites, bringing planned capacity to nearly 7 GW; in March 2026
+    press reports said a 600 MW Abilene expansion had been dropped, which Oracle disputed.
+  sources:
+    - {publisher: OpenAI, url: "https://openai.com/index/announcing-the-stargate-project/"}
+    - {publisher: OpenAI, url: "https://openai.com/index/five-new-stargate-sites/"}
+    - {publisher: SoftBank Group, url: "https://group.softbank/en/news/press/20250924"}
+    - {publisher: Tom's Hardware, url: "https://www.tomshardware.com/tech-industry/oracle-rebuts-incorrect-reporting-on-stargate-expansion"}
+
+- id: 2025-microsoft-licking-county-pause
+  date: 2025-04-01
+  date_precision: month
+  title: Microsoft drops $1B of planned data centers in Licking County, Ohio
+  type: development
+  category: [capacity]
+  status: confirmed
+  severity: medium
+  location: {city: Licking County, country: US, lat: 40.06, lon: -82.4}
+  affects: []
+  impacts: [capacity-delayed]
+  operators: [Microsoft]
+  vendors: []
+  summary: >
+    Microsoft said it would not move forward "at this time" with planned data centers at
+    three Licking County sites near Columbus and would return two of them to farmland. The
+    same week its cloud operations chief said Microsoft was slowing or pausing some
+    early-stage projects, while keeping its $80B fiscal-2025 capex plan.
+  sources:
+    - {publisher: DatacenterDynamics, url: "https://www.datacenterdynamics.com/en/news/microsoft-backs-away-from-1bn-data-center-plans-in-licking-county-ohio/"}
+    - {publisher: The Hill, url: "https://thehill.com/policy/technology/5242344-microsoft-slowing-or-pausing-some-ai-data-center-projects/amp"}
+
+- id: 2025-meta-clinton-nuclear-ppa
+  date: 2025-06-03
+  title: Meta signs 20-year PPA for 1.1 GW from the Clinton nuclear plant
+  type: development
+  category: [energy]
+  status: confirmed
+  severity: high
+  location: {city: Clinton, country: US, lat: 40.15, lon: -88.96}
+  affects: [power]
+  impacts: [investment]
+  operators: [Meta]
+  vendors: [Constellation Energy]
+  summary: >
+    Meta agreed to buy 1,121 MW from Constellation's Clinton Clean Energy Center in Illinois
+    for 20 years from June 2027, when the state's zero-emission credit support ends. The deal
+    supports relicensing the plant and a 30 MW uprate.
+  sources:
+    - {publisher: Constellation Energy, url: "https://www.constellationenergy.com/newsroom/2025/constellation-meta-sign-20-year-deal-for-clean-reliable-nuclear-energy-in-illinois.html"}
+    - {publisher: Constellation Energy (investor release), url: "https://investors.constellationenergy.com/news-releases/news-release-details/constellation-meta-sign-20-year-deal-clean-reliable-nuclear"}
+
+- id: 2025-amazon-talen-susquehanna-ppa
+  date: 2025-06-11
+  title: Amazon and Talen sign 1.92 GW Susquehanna nuclear PPA after FERC setback
+  type: development
+  category: [energy, market]
+  status: confirmed
+  severity: high
+  location: {city: Berwick, country: US, lat: 41.05, lon: -76.23}
+  affects: [power]
+  impacts: [investment]
+  operators: [Amazon Web Services]
+  vendors: [Talen Energy]
+  summary: >
+    Talen agreed to supply AWS with up to 1,920 MW from the Susquehanna nuclear plant through
+    2042, about $18B of revenue, ramping up from 2029. The deal moves the earlier
+    behind-the-meter co-location to a front-of-meter arrangement after FERC in November 2024
+    rejected an amended agreement to raise co-located load at the plant from 300 to 480 MW.
+  sources:
+    - {publisher: Talen Energy (8-K exhibit, SEC), url: "https://www.sec.gov/Archives/edgar/data/1622536/000162828025030559/a20250611pressreleasebusin.htm"}
+    - {publisher: Utility Dive, url: "https://www.utilitydive.com/news/talen-amazon-aws-susquehanna-nuclear-data-center-t/750440/"}
+    - {publisher: DatacenterDynamics, url: "https://datacenterdynamics.com/en/news/ferc-blocks-plan-for-susquehanna-nuclear-plant-interconnection-to-amazon-data-center"}
+
+- id: 2025-texas-sb6-large-loads
+  date: 2025-06-20
+  title: Texas law sets grid rules for data centers of 75 MW or more
+  type: policy
+  category: [regulation, energy]
+  status: confirmed
+  severity: high
+  location: null
+  affects: [power]
+  impacts: [cost]
+  operators: []
+  vendors: []
+  summary: >
+    Senate Bill 6 makes large loads (75 MW or more) share interconnection costs, pay study
+    fees and disclose duplicate requests, and requires new large loads to accept curtailment
+    during firm load shed. It also lets ERCOT disconnect co-located loads in emergencies and
+    sets reviews of net-metering deals with existing generators.
+  sources:
+    - {publisher: LegiScan (Texas SB 6 text and history), url: "https://legiscan.com/TX/research/SB6"}
+    - {publisher: Utility Dive, url: "https://www.utilitydive.com/news/texas-law-gives-grid-operator-power-to-disconnect-data-centers-during-crisis/751587"}
+    - {publisher: DatacenterDynamics, url: "https://www.datacenterdynamics.com/en/news/texas-governor-approves-bill-mandating-data-centers-to-contribute-to-costs-of-interconnection/"}
+
+- id: 2025-aep-ohio-dc-tariff
+  date: 2025-07-09
+  title: Ohio regulators approve AEP data center tariff with minimum demand charges
+  type: policy
+  category: [regulation, energy]
+  status: confirmed
+  severity: high
+  location: null
+  affects: [power]
+  impacts: [cost]
+  operators: []
+  vendors: [AEP Ohio]
+  summary: >
+    PUCO approved a settlement requiring new data centers over 25 MW in AEP Ohio's territory
+    to pay for at least 85% of subscribed capacity for up to 12 years, with exit fees and
+    proof of financial viability. The order told AEP Ohio to lift its pause on new data
+    center connections in the Columbus area.
+  sources:
+    - {publisher: AEP Ohio (release via Seeking Alpha), url: "https://seekingalpha.com/pr/20161398-aep-ohio-proposal-on-data-centers-to-protect-ohio-consumers-adopted-by-puco"}
+    - {publisher: POWER Magazine, url: "https://www.powermag.com/regulator-approves-aep-ohios-landmark-data-center-tariff/"}
+    - {publisher: Power Engineering, url: "https://www.power-eng.com/business/policy-and-regulation/ohio-utility-regulators-approve-aeps-contested-data-center-tariff-proposal/"}
+
+- id: 2025-us-dc-permitting-eo
+  date: 2025-07-23
+  title: US executive order speeds federal permits for data centers over 100 MW
+  type: policy
+  category: [regulation]
+  status: confirmed
+  severity: high
+  location: null
+  affects: []
+  impacts: []
+  operators: []
+  vendors: []
+  summary: >
+    Executive Order 14318 directs agencies to fast-track environmental reviews and FAST-41
+    coverage for data centers adding more than 100 MW of load and their power, chip and
+    network infrastructure, and to offer brownfield and federal land. It revoked the January
+    2025 order (EO 14141) on AI data centers at federal sites.
+  sources:
+    - {publisher: The White House, url: "https://www.whitehouse.gov/presidential-actions/2025/07/accelerating-federal-permitting-of-data-center-infrastructure/"}
+    - {publisher: GovInfo, url: "https://www.govinfo.gov/link/cpd/executiveorder/14318"}
+
+- id: 2025-pw-digital-gateway-voided
+  date: 2025-08-07
+  title: Court voids Prince William Digital Gateway rezoning in Virginia
+  type: policy
+  category: [regulation, capacity]
+  status: confirmed
+  severity: high
+  location: {city: Prince William County, country: US, lat: 38.8, lon: -77.61}
+  facility_type: hyperscale campus
+  affects: []
+  impacts: [capacity-delayed]
+  operators: [QTS, Compass Datacenters]
+  vendors: []
+  summary: >
+    A circuit court voided the rezonings for the roughly 2,100-acre, 22 million sq ft campus
+    planned by QTS and Compass, ruling the county's public notice was defective. The Court of
+    Appeals upheld the ruling in March 2026, and QTS withdrew its final appeal in July 2026,
+    ending the project.
+  sources:
+    - {publisher: WTOP, url: "https://wtop.com/prince-william-county/2025/08/judge-voids-digital-gateway-rezoning-in-prince-william-county/"}
+    - {publisher: Virginia Lawyers Weekly, url: "https://valawyersweekly.com/2026/04/01/virginia-court-upholds-block-prince-william-digital-gateway/"}
+    - {publisher: Bisnow, url: "https://www.bisnow.com/news/washington-dc/data-center-development/blackstones-qts-abandons-digital-gateway-project-ends-lawsuit-135295"}
+
+- id: 2025-microsoft-fairwater-wisconsin
+  date: 2025-09-18
+  title: Microsoft details Fairwater AI campus in Wisconsin, adds $4B second site
+  type: development
+  category: [capacity, market]
+  status: confirmed
+  severity: high
+  location: {city: Mount Pleasant, country: US, lat: 42.72, lon: -87.88}
+  facility_type: hyperscale campus
+  affects: [compute, cooling]
+  impacts: [capacity-added, investment]
+  operators: [Microsoft]
+  vendors: [Nvidia]
+  summary: >
+    Microsoft said its Fairwater datacenter, built on Nvidia GB200 NVL72 systems with
+    closed-loop liquid cooling for over 90% of capacity, would come online in early 2026,
+    completing a $3.3B pledge. It committed another $4B to a second Wisconsin datacenter,
+    and in November 2025 linked a sister Fairwater site in Atlanta.
+  sources:
+    - {publisher: Microsoft, url: "https://blogs.microsoft.com/on-the-issues/2025/09/18/made-in-wisconsin-the-worlds-most-powerful-ai-datacenter/"}
+    - {publisher: SiliconANGLE, url: "https://siliconangle.com/2025/11/12/microsoft-brings-atlanta-based-ai-super-factory-online/"}
+
+- id: 2025-nvidia-openai-10gw-loi
+  date: 2025-09-22
+  title: Nvidia and OpenAI sign letter of intent for 10 GW and up to $100B
+  type: development
+  category: [market, capacity]
+  status: ongoing
+  severity: critical
+  location: null
+  affects: [compute]
+  impacts: [investment]
+  operators: [OpenAI]
+  vendors: [Nvidia]
+  summary: >
+    OpenAI plans to deploy at least 10 GW of Nvidia systems, and Nvidia intends to invest up
+    to $100B in OpenAI as each gigawatt comes online, starting in the second half of 2026 on
+    the Vera Rubin platform. In December 2025 Nvidia's CFO said no definitive agreement had
+    been signed.
+  sources:
+    - {publisher: Nvidia, url: "https://investor.nvidia.com/news/press-release-details/2025/OpenAI-and-NVIDIA-Announce-Strategic-Partnership-to-Deploy-10-Gigawatts-of-NVIDIA-Systems/default.aspx"}
+    - {publisher: OpenAI, url: "https://openai.com/index/openai-nvidia-systems-partnership/"}
+    - {publisher: DatacenterDynamics, url: "https://www.datacenterdynamics.com/en/news/nvidia-cfo-says-100bn-openai-deal-has-yet-to-complete/"}
+
+- id: 2025-aligned-data-centers-acquisition
+  date: 2025-10-15
+  title: BlackRock's GIP, MGX and AIP agree to buy Aligned Data Centers for $40B
+  type: development
+  category: [market]
+  status: confirmed
+  severity: critical
+  location: null
+  affects: []
+  impacts: [investment]
+  operators: [Aligned Data Centers]
+  vendors: [BlackRock, MGX, Macquarie Asset Management]
+  summary: >
+    A consortium of the AI Infrastructure Partnership, MGX and BlackRock's Global
+    Infrastructure Partners agreed to buy Aligned from Macquarie funds at an enterprise
+    value of about $40B, the largest data center deal on record. It closed in July 2026
+    with $5B of added growth capital; Aligned then had 51 campuses and over 6.4 GW planned
+    or operating.
+  sources:
+    - {publisher: DatacenterDynamics, url: "https://datacenterdynamics.com/en/news/aligned-data-centers-sold-to-blackrock-and-mgx-in-record-breaking-40bn-deal"}
+    - {publisher: DatacenterDynamics, url: "https://www.datacenterdynamics.com/en/news/mgx-aip-and-blackrocks-gip-complete-40bn-acquisition-of-aligned-data-centers/"}
+    - {publisher: WAM (Emirates News Agency), url: "https://www.wam.ae/en/article/c1c097j-aip-mgx-blackrocks-gip-close-40-billion"}
+
+- id: 2025-ireland-cru-dc-connection-policy
+  date: 2025-12-12
+  title: Ireland requires new data centers to bring their own generation to connect
+  type: policy
+  category: [regulation, energy]
+  status: confirmed
+  severity: high
+  location: null
+  affects: [power]
+  impacts: [cost]
+  operators: []
+  vendors: []
+  summary: >
+    The Commission for Regulation of Utilities issued its final large energy user connection
+    policy (CRU2025236): new data center grid connections must be matched by new dispatchable
+    generation or storage that participates in the market, plus additional Irish renewables.
+    CRU puts data centers at about 22% of national electricity use.
+  sources:
+    - {publisher: Commission for Regulation of Utilities, url: "https://cru.ie/publications/28573"}
+    - {publisher: Mason Hayes & Curran, url: "https://mhc.ie/latest/insights/large-energy-users-connection-policy"}
+
+- id: 2025-pjm-capacity-shortfall
+  date: 2025-12-17
+  title: PJM capacity auction clears at the cap and falls short, citing data centers
+  type: development
+  category: [energy, market]
+  status: ongoing
+  severity: high
+  location: null
+  affects: [power]
+  impacts: [cost]
+  operators: []
+  vendors: [PJM Interconnection]
+  summary: >
+    PJM's 2027/28 auction cleared at the $333.44/MW-day cap and came up 6,623 MW short of
+    its reliability requirement, the first RTO-wide shortfall; PJM attributed 5,100 MW of
+    the 5,250 MW rise in forecast peak to data centers. The July 2026 auction for 2028/29
+    again cleared at the cap and short, after prices had already jumped from $28.92 to
+    $269.92 in the 2025/26 auction.
+  sources:
+    - {publisher: PJM Interconnection, url: "https://www.pjm.com/-/media/DotCom/about-pjm/newsroom/2025-releases/20251217-pjm-auction-procures-134479-mw-of-generation-resources.pdf"}
+    - {publisher: PJM Interconnection, url: "https://www.pjm.com/-/media/DotCom/about-pjm/newsroom/2026-releases/20260714-pjm-capacity-auction-procures-138318-mw-of-generation-resources.pdf"}
+    - {publisher: Power Engineering, url: "https://www.power-eng.com/business/pjm-capacity-auction-hits-price-cap-again-as-region-falls-short-of-reliability-target/"}
+
+- id: 2026-hyperscaler-capex-guidance
+  date: 2026-01-28
+  title: Meta, Alphabet and Amazon guide to over $500B of combined 2026 capex
+  type: development
+  category: [market]
+  status: confirmed
+  severity: critical
+  location: null
+  affects: []
+  impacts: [investment]
+  operators: [Meta, Google, Amazon Web Services]
+  vendors: []
+  summary: >
+    In results from 28 January to 5 February 2026, Meta guided 2026 capex to $115-135B,
+    Alphabet to $175-185B (about double 2025) and Amazon to about $200B, mostly for AWS. Most
+    of the spending goes to AI servers, data centers and networking.
+  sources:
+    - {publisher: Meta (8-K exhibit 99.1, SEC), url: "https://www.sec.gov/Archives/edgar/data/1326801/000162828026003832/meta-12312025xexhibit991.htm"}
+    - {publisher: DatacenterDynamics, url: "https://www.datacenterdynamics.com/en/news/amazon-capex-to-hit-200bn-in-2026-will-mostly-fund-aws-data-centers/"}
+    - {publisher: The Register, url: "https://www.theregister.com/2026/02/05/alphabet_google_q4_2025/"}
+    - {publisher: Reuters via Yahoo Finance, url: "https://finance.yahoo.com/news/google-parent-alphabet-forecasts-sharp-210559455.html"}
+
+- id: 2026-kkr-singtel-stt-gdc
+  date: 2026-02-04
+  title: KKR and Singtel agree to take full ownership of STT GDC at S$13.8B value
+  type: development
+  category: [market]
+  status: confirmed
+  severity: high
+  location: null
+  affects: []
+  impacts: [investment]
+  operators: [ST Telemedia Global Data Centres]
+  vendors: [KKR, Singtel]
+  summary: >
+    A KKR-led consortium with Singtel agreed to buy the remaining 82% of ST Telemedia Global
+    Data Centres for S$6.6B (about US$5.1B), valuing the operator at about S$13.8B. STT GDC
+    has 2.3 GW of design capacity across 12 markets; KKR will hold 75% and Singtel 25%.
+  sources:
+    - {publisher: STT GDC, url: "https://www.sttgdc.com/newsroom/kkr-led-consortium-to-fully-acquire-stt-gdc-13.8-billion-enterprise-value"}
+    - {publisher: Singtel, url: "https://www.singtel.com/about-us/media-centre/news-releases/kkr-led-consortium-with-singtel-group-to-fully-acquire-st-telemedia-global-data-centres"}
+
+- id: 2026-ferc-large-load-show-cause
+  date: 2026-06-18
+  title: FERC orders all six US grid operators to justify large-load connection rules
+  type: policy
+  category: [regulation, energy]
+  status: ongoing
+  severity: high
+  location: null
+  affects: [power]
+  impacts: []
+  operators: []
+  vendors: [PJM Interconnection]
+  summary: >
+    Acting on a DOE request from October 2025, FERC issued show cause orders to PJM, MISO,
+    SPP, CAISO, ISO-NE and NYISO requiring each to justify its tariff for connecting data
+    centers and other large loads or file reforms within 60 days. PJM won an abeyance to
+    prepare its own large-load filing.
+  sources:
+    - {publisher: PJM Interconnection (FERC docket EL26-67), url: "https://www.pjm.com/-/media/DotCom/committees-groups/workshops/cllsco/2026/20260730/20260730-item-02---co-located-load-and-large-load-show-cause-orders---presentation.pdf"}
+    - {publisher: Akin Gump, url: "https://www.akingump.com/en/insights/blogs/speaking-energy/ferc-issues-landmark-show-cause-orders-on-large-load-interconnection"}
+    - {publisher: Orrick, url: "https://www.orrick.com/en/Insights/2026/07/FERC-Show-Cause-Orders-Signal-Broad-Reform-to-Large-Load-Interconnection-Policies"}
+
+- id: 2026-new-york-dc-moratorium
+  date: 2026-07-14
+  title: New York pauses state permits for data centers of 50 MW or more
+  type: policy
+  category: [regulation, capacity]
+  status: ongoing
+  severity: high
+  location: null
+  affects: []
+  impacts: [capacity-delayed]
+  operators: []
+  vendors: []
+  summary: >
+    Governor Hochul's Executive Order 62 pauses discretionary DEC permits for new or
+    expanded data centers of 50 MW or more until the state completes a generic environmental
+    impact statement, the first statewide moratorium in the US. Research, education,
+    manufacturing and medical facilities are exempt; the order cites about 12 GW of data
+    center requests in the NYISO queue.
+  sources:
+    - {publisher: Davis Polk, url: "https://www.davispolk.com/insights/client-update/new-york-state-enacts-data-center-moratorium"}
+    - {publisher: Davis Wright Tremaine, url: "https://www.dwt.com/blogs/energy--environmental-law-blog/2026/07/ny-data-center-permitting-pause-executive-order-62"}
+    - {publisher: SiliconANGLE, url: "https://siliconangle.com/2026/07/14/new-york-becomes-first-us-state-impose-data-center-moratorium/"}
+
+- id: 2026-texas-dc-interconnection-audit
+  date: 2026-08-03
+  title: Texas halts new data center grid connections pending a statewide audit
+  type: policy
+  category: [regulation, energy, capacity]
+  status: ongoing
+  severity: high
+  location: null
+  affects: [power]
+  impacts: [capacity-delayed]
+  operators: []
+  vendors: [ERCOT]
+  summary: >
+    Governor Abbott directed the PUCT and ERCOT to audit data centers in ERCOT's queue,
+    about 474 GW of requests, before any more are approved, and to deny connection to
+    projects found in violation. ERCOT sought to push back deadlines in its "Batch Zero"
+    study of loads of 75 MW and above.
+  sources:
+    - {publisher: Office of the Texas Governor, url: "https://gov.texas.gov/news/post/governor-abbott-directs-comprehensive-data-center-audit"}
+    - {publisher: DatacenterDynamics, url: "https://www.datacenterdynamics.com/en/news/texas-governor-directs-puct-ercot-to-audit-all-data-centers-seeking-grid-connection/"}
+
+- id: 2026-eu-dc-sustainability-rating
+  date: 2026-09-21
+  title: EU Commission adopts mandatory sustainability rating and label for data centers
+  type: policy
+  category: [regulation, energy]
+  status: ongoing
+  severity: high
+  location: null
+  affects: []
+  impacts: [cost]
+  operators: []
+  vendors: []
+  summary: >
+    The Commission adopted a delegated regulation (C(2026) 3472) amending 2024/1364 that turns
+    data center reporting into a mandatory A-to-G sustainability rating and electronic label
+    for sites of 500 kW or more, based on PUE, WUE, energy sourcing and waste-heat reuse, with
+    labels from August 2027. It came alongside a proposed Cloud and AI Development Act
+    and is now under Parliament and Council scrutiny.
+  sources:
+    - {publisher: Linklaters, url: "https://sustainablefutures.linklaters.com/post/102o5fr/eu-commission-adopts-data-centre-sustainability-rating-scheme"}
+    - {publisher: Freshfields, url: "https://www.freshfields.com/en/our-thinking/blogs/sustainability/from-reporting-to-rating-the-eus-next-steps-for-data-centres-102o345"}
+    - {publisher: Beveridge & Diamond, url: "https://www.bdlaw.com/publications/european-commission-advances-data-center-sustainability-ratings-and-consults-on-minimum-performance-standards/"}

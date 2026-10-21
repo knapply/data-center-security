@@ -1,11 +1,22 @@
 # Ticker headlines added by the daily sweep. Keep the newest ~30.
-# Each: {date: YYYY-MM-DD, title: "...", url: "...", category: physical|it-ot|supply-chain}
+# Each: {date: YYYY-MM-DD, title: "...", url: "...", category: any category in vocabulary.yaml}
 # While this list is empty, the ticker shows the latest incidents instead.
 
 - {date: 2026-10-11, title: "Drone attacks knock out a third Yandex data center in four days", url: "https://thenextweb.com/news/drone-attack-shuts-a-third-yandex-data-centre", category: physical}
 - {date: 2026-10-08, title: "Drone strike and fire halt Yandex Cloud data center in Sasovo, Russia", url: "https://www.datacenterdynamics.com/en/news/yandex-data-center-hit-in-drone-attack-in-russia/", category: physical}
+- {date: 2026-09-21, title: "EU Commission adopts mandatory sustainability rating and label for data centers", url: "https://sustainablefutures.linklaters.com/post/102o5fr/eu-commission-adopts-data-centre-sustainability-rating-scheme", category: regulation}
+- {date: 2026-08-03, title: "Texas governor orders audit of all data centers seeking ERCOT grid connections", url: "https://www.datacenterdynamics.com/en/news/texas-governor-directs-puct-ercot-to-audit-all-data-centers-seeking-grid-connection/", category: regulation}
+- {date: 2026-07-21, title: "BlackRock's GIP, MGX and AIP complete $40B Aligned Data Centers acquisition", url: "https://www.datacenterdynamics.com/en/news/mgx-aip-and-blackrocks-gip-complete-40bn-acquisition-of-aligned-data-centers/", category: market}
+- {date: 2026-07-14, title: "PJM capacity auction for 2028/29 clears at the price cap and short of target", url: "https://www.publicpower.org/periodical/article/pjm-capacity-auction-procures-138318-mw-generation-resources-capacity-price-comes-cap-325", category: energy}
+- {date: 2026-07-14, title: "New York becomes first US state to pause permits for large data centers", url: "https://siliconangle.com/2026/07/14/new-york-becomes-first-us-state-impose-data-center-moratorium/", category: regulation}
+- {date: 2026-07-02, title: "QTS abandons Prince William Digital Gateway and ends its appeal", url: "https://www.bisnow.com/news/washington-dc/data-center-development/blackstones-qts-abandons-digital-gateway-project-ends-lawsuit-135295", category: capacity}
 - {date: 2026-06-09, title: "Fire at third-party Delhi data center disrupts Google Cloud networking in India", url: "https://www.datacenterdynamics.com/en/news/google-cloud-suffers-network-disruptions-after-fire-at-third-party-data-center-in-india/", category: physical}
 - {date: 2026-03-01, title: "Drone strikes and fire impair two AWS availability zones in the UAE", url: "https://www.theregister.com/2026/03/02/amazon_outages_middle_east/", category: physical}
+- {date: 2026-02-05, title: "Alphabet plans $175-185B of 2026 capex, mostly for AI infrastructure", url: "https://www.theregister.com/2026/02/05/alphabet_google_q4_2025/", category: market}
+- {date: 2026-02-05, title: "Amazon expects about $200B of 2026 capex, mostly for AWS data centers", url: "https://www.datacenterdynamics.com/en/news/amazon-capex-to-hit-200bn-in-2026-will-mostly-fund-aws-data-centers/", category: market}
+- {date: 2026-02-04, title: "KKR-led consortium with Singtel to take full ownership of STT GDC", url: "https://www.sttgdc.com/newsroom/kkr-led-consortium-to-fully-acquire-stt-gdc-13.8-billion-enterprise-value", category: market}
 - {date: 2026-01-24, title: "Lead-acid battery fire at Global Switch data center in London", url: "https://w.media/60-firefighters-called-to-put-out-small-fire-at-london-data-center/", category: physical}
+- {date: 2025-12-17, title: "PJM capacity auction hits the cap and falls short of its reliability target", url: "https://www.power-eng.com/business/pjm-capacity-auction-hits-price-cap-again-as-region-falls-short-of-reliability-target/", category: energy}
+- {date: 2025-10-21, title: "Meta and Blue Owl form $27B joint venture to fund Hyperion campus", url: "https://www.datacenterdynamics.com/en/news/meta-forms-27-billion-joint-venture-with-blue-owl-to-fund-gigawatt-scale-ai-data-center-campus-in-louisiana", category: market}
 - {date: 2025-09-26, title: "UPS battery fire at Korea's NIRS Daejeon data center halts government services", url: "https://www.datacenterdynamics.com/en/news/south-korea-data-center-fire-government-services-could-be-offline-for-a-month/", category: physical}
 - {date: 2025-09-06, title: "Red Sea cable cuts slow internet and Azure traffic in the Middle East and Asia", url: "https://www.aljazeera.com/news/2025/9/7/internet-disruptions-in-middle-east-and-south-asia-after-red-sea-cable-cuts", category: physical}
