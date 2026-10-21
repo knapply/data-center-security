@@ -786,14 +786,14 @@ function renderRadar() {
       <td class="mono">${esc(c.expected_online ?? '—')}</td>
       <td>${c.cooling?.liquid === true ? '<span class="tag conf-confirmed">liquid</span>' : c.cooling?.liquid === false ? '<span class="tag">air</span>' : '<span class="muted">unknown</span>'}
         ${(c.cooling?.vendors ?? []).length ? `<div class="muted small">${esc(c.cooling.vendors.join(', '))}</div>` : ''}${c.cooling?.notes ? `<div class="muted small">${esc(c.cooling.notes)}</div>` : ''}</td>
-      <td class="nowrap">${c.location ? `<button class="locate" data-campus="${esc(c.id)}">◎ Map</button>` : ''} ${c.sources.filter((x) => x.url).slice(0, 2).map((x, k) => `<a href="${esc(x.url)}" target="_blank" rel="noopener" title="${esc(x.publisher)}">[${k + 1}]</a>`).join(' ')}</td>
+      <td class="nowrap">${c.location?.lat != null ? `<button class="locate" data-campus="${esc(c.id)}">◎ Map</button>` : ''} ${c.sources.filter((x) => x.url).slice(0, 2).map((x, k) => `<a href="${esc(x.url)}" target="_blank" rel="noopener" title="${esc(x.publisher)}">[${k + 1}]</a>`).join(' ')}</td>
     </tr>`).join('')}</tbody>` : campuses.length ? '<tbody><tr><td class="muted">No campuses match these filters.</td></tr></tbody>' : '';
 }
 Object.values(radarEl).forEach((el) => el.addEventListener('change', renderRadar));
 
 // Campuses as an optional layer on the flat map.
 const campusLayer = L.layerGroup();
-for (const c of campuses.filter((x) => x.location)) {
+for (const c of campuses.filter((x) => x.location?.lat != null)) {
   const s = Math.max(12, Math.min(30, 8 + Math.sqrt(c.capacity_mw ?? 50)));
   L.marker([c.location.lat, c.location.lon], {
     title: c.name,
@@ -836,7 +836,7 @@ async function loadForecasts() {
   renderHeatWater();
 }
 function renderHeatWater() {
-  const near = (h, xs, loc) => xs.filter((x) => loc(x) && kmBetween(h, loc(x)) <= 300);
+  const near = (h, xs, loc) => xs.filter((x) => loc(x)?.lat != null && kmBetween(h, loc(x)) <= 300);
   const rows = hubs.map((h) => {
     const f = forecasts?.get(h.id);
     const coolingHits = near(h, incidents.filter((i) => i.affects.includes('cooling')), (i) => i.location);

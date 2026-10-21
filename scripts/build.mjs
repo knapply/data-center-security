@@ -111,7 +111,9 @@ for (const [i, c] of campuses.entries()) {
   if (c.stage && !STAGES.includes(c.stage)) err(at, `stage must be one of ${STAGES.join(', ')}`);
   if (c.capacity_mw != null && !(typeof c.capacity_mw === 'number' && c.capacity_mw > 0)) err(at, 'capacity_mw must be a positive number or null');
   if (c.announced != null && !isDate(c.announced)) err(at, 'announced must be YYYY-MM-DD');
-  if (c.location && !(twoDp(c.location.lat) && twoDp(c.location.lon))) err(at, 'location needs lat/lon with at most 2 decimals');
+  // A campus with an undisclosed site keeps its country but null coordinates, and stays off the map.
+  const unsited = c.location && c.location.lat == null && c.location.lon == null;
+  if (c.location && !unsited && !(twoDp(c.location.lat) && twoDp(c.location.lon))) err(at, 'location needs lat/lon with at most 2 decimals, or both null');
   if (c.cooling && ![true, false, null, undefined].includes(c.cooling.liquid)) err(at, 'cooling.liquid must be true, false or null');
   if (!Array.isArray(c.sources) || !c.sources.some((s) => /^https:\/\//.test(s?.url ?? ''))) err(at, 'needs at least one https source url');
 }

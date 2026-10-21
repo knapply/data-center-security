@@ -1,2 +1,1205 @@
 # Data center campuses for the opportunity radar. Schema and rules: see "Campuses" in CLAUDE.md.
-[]
+# Researched 2026-10-21. Capacity figures are as reported and not always comparable: some are IT load,
+# some are planned power or generation (see capacity_basis). Coordinates are city or county centroids.
+- id: 2025-stargate-abilene
+  name: Stargate Abilene (Lancium Clean Campus)
+  operator: Crusoe
+  tenants:
+    - OpenAI
+    - Oracle
+  location:
+    city: Abilene
+    region: Texas
+    country: US
+    lat: 32.45
+    lon: -99.73
+  capacity_mw: 1200
+  capacity_basis: planned total across 8 buildings (Crusoe)
+  stage: under-construction
+  announced: "2025-01-21"
+  expected_online: "2026"
+  cooling:
+    liquid: true
+    vendors: []
+    notes: >-
+      Crusoe press release: direct-to-chip liquid cooling on a closed-loop system that recirculates water ('zero-water evaporation'); Crusoe blog: heat rejected
+      via air-cooled chillers, ~1M gallon initial fill per building.
+  power: ERCOT grid connection plus onsite gas generation (Data Center Frontier); first phase live on OCI 2025-09-30, six further buildings targeted mid-2026
+  sources:
+    - publisher: Crusoe
+      url: https://www.crusoe.ai/resources/newsroom/crusoe-expands-ai-data-center-campus-in-abilene-to-1-2-gigawatts
+    - publisher: Crusoe
+      url: https://www.crusoe.ai/resources/blog/an-inside-look-at-the-abilene-ai-data-center
+    - publisher: Crusoe
+      url: https://www.crusoe.ai/resources/newsroom/crusoe-announces-flagship-abilene-data-center-is-live
+    - publisher: Data Center Frontier
+      url: https://www.datacenterfrontier.com/hyperscale/article/55276169/crusoe-adds-45-gw-natural-gas-to-fuel-ai-expands-abilene-data-center-to-12-gw
+- id: 2025-stargate-abilene-expansion
+  name: Stargate Abilene expansion
+  operator: Crusoe
+  tenants:
+    - OpenAI
+    - Oracle
+  location:
+    city: Abilene
+    region: Texas
+    country: US
+    lat: 32.45
+    lon: -99.73
+  capacity_mw: 600
+  capacity_basis: planned expansion beyond the 1.2 GW campus; cancellation reported by Bloomberg (Mar 2026), disputed by Oracle
+  stage: cancelled
+  announced: "2025-09-23"
+  expected_online: null
+  cooling:
+    liquid: null
+    vendors: []
+    notes: No cooling details reported for the expansion.
+  power: null
+  sources:
+    - publisher: Bloomberg
+      url: https://bloomberg.com/news/articles/2026-03-06/oracle-and-openai-end-plans-to-expand-flagship-data-center
+    - publisher: Tom's Hardware
+      url: https://www.tomshardware.com/tech-industry/oracle-and-openai-scrap-planned-600mw-abilene-expansion
+    - publisher: The Register
+      url: https://www.theregister.com/2025/09/24/openai_oracle_softbank_datacenters/
+- id: 2025-vantage-frontier-shackelford
+  name: Vantage Frontier (Stargate Shackelford County)
+  operator: Vantage Data Centers
+  tenants:
+    - OpenAI
+    - Oracle
+  location:
+    city: Shackelford County
+    region: Texas
+    country: US
+    lat: 32.72
+    lon: -99.3
+  capacity_mw: 1400
+  capacity_basis: critical IT load, 10 buildings on 1,200 acres
+  stage: under-construction
+  announced: "2025-08-19"
+  expected_online: "2026"
+  cooling:
+    liquid: true
+    vendors: []
+    notes: >-
+      Vantage press release: 'Frontier will utilize liquid cooling to enable next generation GPU work loads'; DCD reports a closed-loop chiller system with low
+      water use and a mix of air and liquid cooling.
+  power: null
+  sources:
+    - publisher: Vantage Data Centers
+      url: https://vantage-dc.com/news/vantage-data-centers-unveils-plans-for-frontier-a-25b-mega-campus-in-texas-to-meet-unprecedented-ai-demand/
+    - publisher: DatacenterDynamics
+      url: https://www.datacenterdynamics.com/en/news/vantage-breaks-ground-on-texas-gigawatt-data-center-campus-for-openai/
+- id: 2025-project-jupiter-dona-ana
+  name: Project Jupiter (Stargate New Mexico)
+  operator: STACK Infrastructure / BorderPlex Digital Assets
+  tenants:
+    - Oracle
+    - OpenAI
+  location:
+    city: Doña Ana County
+    region: New Mexico
+    country: US
+    lat: 32.32
+    lon: -106.76
+  capacity_mw: null
+  capacity_basis: IT capacity not reported; four buildings on 1,400 acres
+  stage: permitting
+  announced: "2025-09-23"
+  expected_online: null
+  cooling:
+    liquid: null
+    vendors: []
+    notes: No cooling method reported in sources reviewed.
+  power: >-
+    Off-grid gas-fired microgrid; air permit applications describe up to ~2.8 GW of fossil generation (Albuquerque Journal); developers pledge 500 MW renewables
+    by 2028
+  sources:
+    - publisher: DatacenterDynamics
+      url: https://www.datacenterdynamics.com/en/news/oracle-revealed-as-tenant-of-project-jupiter-data-center-campus-in-new-mexico/
+    - publisher: Microgrid Knowledge
+      url: >-
+        https://microgridknowledge.com/data-center-microgrids/article/55338399/gas-fired-microgrid-for-project-jupiter-data-center-campus-draws-ire-of-environmentalists-in-new-mexico
+    - publisher: Source NM
+      url: https://sourcenm.com/2025/12/02/project-jupiters-plan-relies-on-natural-gas-its-impact-on-air-quality-remains-unclear/
+- id: 2025-stargate-lordstown
+  name: Stargate Lordstown
+  operator: SoftBank
+  tenants:
+    - OpenAI
+  location:
+    city: Lordstown
+    region: Ohio
+    country: US
+    lat: 41.17
+    lon: -80.86
+  capacity_mw: null
+  capacity_basis: not disclosed by SoftBank/OpenAI
+  stage: under-construction
+  announced: "2025-09-23"
+  expected_online: "2026"
+  cooling:
+    liquid: null
+    vendors: []
+    notes: No cooling details reported.
+  power: null
+  sources:
+    - publisher: The Register
+      url: https://www.theregister.com/2025/09/24/openai_oracle_softbank_datacenters/
+    - publisher: Business Journal Daily
+      url: https://businessjournaldaily.com/lordstown-data-center-to-be-operational-next-year/
+- id: 2026-stargate-milam-county
+  name: Stargate Milam County
+  operator: SB Energy
+  tenants:
+    - OpenAI
+  location:
+    city: Milam County
+    region: Texas
+    country: US
+    lat: 30.85
+    lon: -96.98
+  capacity_mw: 1200
+  capacity_basis: OpenAI lease capacity
+  stage: announced
+  announced: "2026-01-09"
+  expected_online: null
+  cooling:
+    liquid: null
+    vendors: []
+    notes: "OpenAI: SB Energy designed the site to minimize water usage; method not specified."
+  power: New utility-scale solar plus integrated storage planned by SB Energy and OpenAI
+  sources:
+    - publisher: OpenAI
+      url: https://openai.com/index/stargate-sb-energy-partnership/
+    - publisher: DatacenterDynamics
+      url: https://www.datacenterdynamics.com/en/news/softbanks-sb-energy-to-build-and-operate-openais-12gw-stargate-data-center-in-milam-county-texas/
+- id: 2025-stargate-michigan-saline
+  name: Stargate Michigan ("The Barn")
+  operator: Related Digital
+  tenants:
+    - OpenAI
+    - Oracle
+  location:
+    city: Saline Township
+    region: Michigan
+    country: US
+    lat: 42.17
+    lon: -83.78
+  capacity_mw: 1000
+  capacity_basis: "\"more than 1 GW\" as announced"
+  stage: under-construction
+  announced: "2025-10-30"
+  expected_online: null
+  cooling:
+    liquid: null
+    vendors: []
+    notes: "Related/press: closed-loop cooling system limiting water use to office-building levels; does not specify liquid-to-chip."
+  power: DTE Energy to supply 100% of power, plus developer-financed battery storage
+  sources:
+    - publisher: Oracle
+      url: >-
+        https://www.oracle.com/news/announcement/related-digital-oracle-openai-walbridge-and-governor-whitmer-celebrate-construction-of-stargate-campus-in-saline-township-2026-06-01/
+    - publisher: DatacenterDynamics
+      url: https://www.datacenterdynamics.com/en/news/related-digitals-michigan-1gw-data-center-project-to-serve-openai-oracle/
+- id: 2025-vantage-lighthouse-port-washington
+  name: Lighthouse (Stargate Wisconsin)
+  operator: Vantage Data Centers
+  tenants:
+    - OpenAI
+    - Oracle
+  location:
+    city: Port Washington
+    region: Wisconsin
+    country: US
+    lat: 43.39
+    lon: -87.88
+  capacity_mw: 1000
+  capacity_basis: "\"close to a gigawatt\" across four buildings"
+  stage: under-construction
+  announced: "2025-10-22"
+  expected_online: "2028"
+  cooling:
+    liquid: true
+    vendors: []
+    notes: "Vantage/DCD: campus will use closed-loop liquid cooling; Vantage pledges water-positive restoration projects."
+  power: Vantage to deploy new solar, wind and battery storage (70% to campus, 30% to Wisconsin customers); remainder from grid
+  sources:
+    - publisher: Vantage Data Centers
+      url: https://vantage-dc.com/news/openai-oracle-and-vantage-data-centers-announce-stargate-data-center-site-in-wisconsin/
+    - publisher: DatacenterDynamics
+      url: https://datacenterdynamics.com/en/news/openai-oracle-and-vantage-plan-stargate-wisconsin-data-center-expected-to-be-close-to-a-gigawatt
+- id: 2024-meta-hyperion-richland-parish
+  name: Meta Richland Parish Data Center (Hyperion)
+  operator: Meta
+  tenants:
+    - Meta
+  location:
+    city: Richland Parish
+    region: Louisiana
+    country: US
+    lat: 32.42
+    lon: -91.76
+  capacity_mw: 5000
+  capacity_basis: 5 GW compute capacity (Meta, July 2026 expansion)
+  stage: under-construction
+  announced: "2024-12-04"
+  expected_online: "2030"
+  cooling:
+    liquid: null
+    vendors: []
+    notes: Meta's July 2026 update does not specify cooling; mentions water efficiency and restoration only.
+  power: Entergy Louisiana to build gas plants (7 new units in latest agreement), grid batteries and nuclear uprates; Meta to help fund up to 2.5 GW clean generation
+  sources:
+    - publisher: Meta
+      url: https://datacenters.atmeta.com/2026/07/deepening-our-investment-in-richland-parish-louisiana/
+    - publisher: Meta
+      url: https://datacenters.atmeta.com/2024/12/hello-louisiana/
+    - publisher: TechCrunch
+      url: https://techcrunch.com/2025/07/14/mark-zuckerberg-says-meta-is-building-a-5gw-ai-data-center
+    - publisher: The Register
+      url: https://www.theregister.com/2025/10/17/meta_blue_owl_hyperion/
+- id: 2025-meta-prometheus-new-albany
+  name: Meta Prometheus
+  operator: Meta
+  tenants:
+    - Meta
+  location:
+    city: New Albany
+    region: Ohio
+    country: US
+    lat: 40.08
+    lon: -82.81
+  capacity_mw: 1000
+  capacity_basis: 1 GW AI supercluster (Zuckerberg)
+  stage: under-construction
+  announced: "2025-07-14"
+  expected_online: "2026"
+  cooling:
+    liquid: null
+    vendors: []
+    notes: No cooling method reported; permits show rapid-deployment tent structures.
+  power: Onsite gas generation reported locally; Meta nuclear agreements (Vistra, TerraPower, Oklo) announced Jan 2026 tied to Prometheus
+  sources:
+    - publisher: TechCrunch
+      url: https://techcrunch.com/2025/07/14/mark-zuckerberg-says-meta-is-building-a-5gw-ai-data-center
+    - publisher: Spectrum News
+      url: https://spectrumnews1.com/oh/columbus/news/2025/11/13/meta-gigawatt-data-center-new-albany-
+- id: 2025-meta-el-paso
+  name: Meta El Paso Data Center
+  operator: Meta (JV with BlackRock-managed funds, 80%)
+  tenants:
+    - Meta
+  location:
+    city: El Paso
+    region: Texas
+    country: US
+    lat: 31.76
+    lon: -106.49
+  capacity_mw: 1000
+  capacity_basis: 1 GW campus (Meta)
+  stage: under-construction
+  announced: "2025-10-01"
+  expected_online: "2028"
+  cooling:
+    liquid: true
+    vendors: []
+    notes: "Meta: 'water efficient closed-loop, liquid-cooled system that recirculates the same water and will use zero water for a majority of the year.'"
+  power: Reported plan for ~366 MW of modular gas-fired units (Baxtel); contested locally
+  sources:
+    - publisher: Meta
+      url: https://about.fb.com/news/2025/10/metas-new-ai-optimized-data-center-el-paso/
+    - publisher: Meta
+      url: https://datacenters.atmeta.com/2026/03/big-things-are-happening-el-paso/
+    - publisher: Meta
+      url: https://about.fb.com/news/2026/07/meta-announces-new-venture-with-blackrock-to-develop-data-center-in-el-paso/
+- id: 2026-meta-lebanon-indiana
+  name: Meta Lebanon Data Center
+  operator: Meta
+  tenants:
+    - Meta
+  location:
+    city: Lebanon
+    region: Indiana
+    country: US
+    lat: 40.05
+    lon: -86.47
+  capacity_mw: 1000
+  capacity_basis: 1 GW design capacity
+  stage: under-construction
+  announced: "2026-02-11"
+  expected_online: null
+  cooling:
+    liquid: true
+    vendors: []
+    notes: "Meta: 'water-efficient closed-loop, liquid-cooled system that recirculates the same water.'"
+  power: Meta to match 100% with clean energy; $1M/yr for 20 years to Boone REMC community fund
+  sources:
+    - publisher: Meta
+      url: https://about.fb.com/news/2026/02/metas-new-data-center-lebanon-indiana-marks-milestone-ai-investment/
+- id: 2026-meta-sturgeon-county
+  name: Meta Sturgeon County Data Centre
+  operator: Meta
+  tenants:
+    - Meta
+  location:
+    city: Sturgeon County
+    region: Alberta
+    country: CA
+    lat: 53.85
+    lon: -113.55
+  capacity_mw: 1000
+  capacity_basis: 1 GW (Meta)
+  stage: announced
+  announced: "2026-07-08"
+  expected_online: null
+  cooling:
+    liquid: true
+    vendors: []
+    notes: "Meta: 'closed-loop, liquid-cooled system with dry cooling' with no operational water use in the cooling system."
+  power: Meta to add clean energy to the Alberta grid matching 100% of use and fund new generation/grid infrastructure
+  sources:
+    - publisher: Meta
+      url: https://datacenters.atmeta.com/2026/07/hello-sturgeon-county/
+- id: 2024-xai-colossus-memphis
+  name: xAI Colossus (Colossus 1)
+  operator: xAI
+  tenants:
+    - xAI
+  location:
+    city: Memphis
+    region: Tennessee
+    country: US
+    lat: 35.15
+    lon: -90.05
+  capacity_mw: 150
+  capacity_basis: TVA-approved grid supply via MLGW (Nov 2024)
+  stage: operational
+  announced: null
+  expected_online: null
+  cooling:
+    liquid: true
+    vendors:
+      - Supermicro
+    notes: >-
+      Trade press: described as the world's largest liquid-cooled GPU cluster, with liquid-cooled Supermicro racks (GetCoAI, Data Center Frontier); secondary
+      sources.
+  power: 150 MW from TVA/MLGW; temporary onsite gas turbines drew Clean Air Act challenges
+  sources:
+    - publisher: DatacenterDynamics
+      url: https://www.datacenterdynamics.com/en/news/xai-colossus-memphis-power-tva/
+    - publisher: Data Center Frontier
+      url: >-
+        https://www.datacenterfrontier.com/machine-learning/article/55244139/the-colossus-ai-supercomputer-elon-musks-drive-toward-data-center-ai-technology-domination
+    - publisher: GetCoAI
+      url: https://getcoai.com/news/building-colossus-inside-the-ai-supercomputer-supermicro-is-building-for-xai
+- id: 2025-xai-colossus-2
+  name: xAI Colossus 2
+  operator: xAI
+  tenants:
+    - xAI
+  location:
+    city: Memphis / Southaven
+    region: Tennessee / Mississippi
+    country: US
+    lat: 35
+    lon: -90.01
+  capacity_mw: 2000
+  capacity_basis: Musk-stated total complex compute power (~2 GW) after third building purchase
+  stage: under-construction
+  announced: null
+  expected_online: null
+  cooling:
+    liquid: null
+    vendors: []
+    notes: No site-specific cooling statement found.
+  power: Onsite gas turbines at a former power plant in Southaven, MS, partly via Solaris Energy Infrastructure JV (SemiAnalysis)
+  sources:
+    - publisher: Bloomberg
+      url: https://www.bloomberg.com/news/articles/2025-12-30/musk-s-xai-to-expand-colossus-data-center-information-reports
+    - publisher: SiliconANGLE
+      url: https://siliconangle.com/2025/12/30/elon-musk-reveals-plan-expand-xais-colossus-data-center-2-gigawatts/
+    - publisher: SemiAnalysis
+      url: https://newsletter.semianalysis.com/p/xais-colossus-2-first-gigawatt-datacenter
+- id: 2025-microsoft-fairwater-wisconsin
+  name: Microsoft Fairwater (Mount Pleasant)
+  operator: Microsoft
+  tenants:
+    - Microsoft
+    - OpenAI
+  location:
+    city: Mount Pleasant
+    region: Wisconsin
+    country: US
+    lat: 42.71
+    lon: -87.88
+  capacity_mw: null
+  capacity_basis: not disclosed; 3 buildings, 1.2M sq ft on 315 acres
+  stage: operational
+  announced: "2025-09-18"
+  expected_online: 2026-06
+  cooling:
+    liquid: true
+    vendors: []
+    notes: "Microsoft blog: over 90% of the facility uses a closed-loop liquid cooling system; remainder uses outside air, water only in peak heat."
+  power: null
+  sources:
+    - publisher: Microsoft
+      url: https://blogs.microsoft.com/blog/2025/09/18/inside-the-worlds-most-powerful-ai-datacenter/
+    - publisher: Microsoft
+      url: https://news.microsoft.com/source/2026/06/23/microsoft-completes-construction-on-first-datacenter-facility-in-mount-pleasant-wisconsin/
+- id: 2025-microsoft-fairwater-atlanta
+  name: Microsoft Fairwater Atlanta
+  operator: Microsoft
+  tenants:
+    - Microsoft
+  location:
+    city: Atlanta
+    region: Georgia
+    country: US
+    lat: 33.75
+    lon: -84.39
+  capacity_mw: null
+  capacity_basis: not disclosed (~140 kW/rack, 1,360 kW/row per DCD)
+  stage: operational
+  announced: "2025-11-12"
+  expected_online: 2025-10
+  cooling:
+    liquid: true
+    vendors: []
+    notes: "Microsoft: closed-loop liquid cooling, filled once with no evaporation; two-story building (Microsoft blog, Nov 2025)."
+  power: "DCD: designed without UPS or generator sets"
+  sources:
+    - publisher: Microsoft
+      url: https://blogs.microsoft.com/blog/2025/11/12/infinite-scale-the-architecture-behind-the-azure-ai-superfactory/
+    - publisher: DatacenterDynamics
+      url: https://www.datacenterdynamics.com/en/news/microsoft-launches-atlanta-fairwater-data-center-two-stories-no-ups-or-gen-sets/
+- id: 2024-aws-project-rainier-new-carlisle
+  name: Project Rainier (New Carlisle)
+  operator: Amazon Web Services
+  tenants:
+    - Anthropic
+  location:
+    city: New Carlisle
+    region: Indiana
+    country: US
+    lat: 41.7
+    lon: -86.51
+  capacity_mw: 2200
+  capacity_basis: 2.2 GW campus at full build (Amazon)
+  stage: operational
+  announced: null
+  expected_online: 2025-10
+  cooling:
+    liquid: null
+    vendors: []
+    notes: "Amazon: campus will use water for cooling only ~2-3% of the year; method not specified."
+  power: Indiana Michigan Power grid supply; I&M acquiring a gas plant in Oregon, Ohio
+  sources:
+    - publisher: Amazon
+      url: https://www.aboutamazon.com/news/aws/aws-project-rainier-ai-trainium-chips-compute-cluster
+    - publisher: Amazon
+      url: https://sustainability.aboutamazon.com/stories/inside-amazons-approach-to-data-center-sustainability
+    - publisher: Data Center Knowledge
+      url: https://www.datacenterknowledge.com/supercomputers/project-rainer-aws-anthropic-complete-massive-ai-supercomputing-cluster
+- id: 2025-google-armstrong-county
+  name: Google Armstrong County campus
+  operator: Crusoe
+  tenants:
+    - Google
+  location:
+    city: Armstrong County
+    region: Texas
+    country: US
+    lat: 35.11
+    lon: -101.36
+  capacity_mw: null
+  capacity_basis: not disclosed
+  stage: under-construction
+  announced: "2025-11-14"
+  expected_online: null
+  cooling:
+    liquid: true
+    vendors: []
+    notes: "Crusoe: 'closed-loop, non-evaporative liquid cooling system'."
+  power: Direct connection to Goodnight 1 wind farm (265.5 MW), linked to Goodnight 2 under construction
+  sources:
+    - publisher: Crusoe
+      url: https://www.crusoe.ai/resources/newsroom/crusoe-developing-data-center-campus-in-armstrong-county-texas
+    - publisher: Bloomberg
+      url: https://www.bloomberg.com/news/articles/2025-11-14/google-to-invest-40-billion-in-new-data-centers-in-texas
+- id: 2025-google-haskell-county
+  name: Google Haskell County campuses (2 sites)
+  operator: Google
+  tenants:
+    - Google
+  location:
+    city: Haskell County
+    region: Texas
+    country: US
+    lat: 33.16
+    lon: -99.73
+  capacity_mw: null
+  capacity_basis: not disclosed
+  stage: announced
+  announced: "2025-11-14"
+  expected_online: "2027"
+  cooling:
+    liquid: null
+    vendors: []
+    notes: No cooling details reported.
+  power: One site co-located with a solar plus battery storage plant
+  sources:
+    - publisher: Bloomberg
+      url: https://www.bloomberg.com/news/articles/2025-11-14/google-to-invest-40-billion-in-new-data-centers-in-texas
+    - publisher: AP via KSAT
+      url: https://www.ksat.com/news/texas/2025/11/15/google-to-build-three-new-data-centers-in-texas-in-40-billion-investment/
+- id: 2026-crusoe-lancium-childress
+  name: Crusoe/Lancium Childress campus
+  operator: Crusoe / Lancium
+  tenants: []
+  location:
+    city: Childress
+    region: Texas
+    country: US
+    lat: 34.43
+    lon: -100.2
+  capacity_mw: 1000
+  capacity_basis: 1.0 GW at full scale
+  stage: announced
+  announced: "2026-07-15"
+  expected_online: null
+  cooling:
+    liquid: true
+    vendors: []
+    notes: "Crusoe: 'closed-loop, non-evaporative liquid cooling system to optimize water efficiency.'"
+  power: Grid-connected; Lancium handles interconnect and energy orchestration; onsite energy storage
+  sources:
+    - publisher: Crusoe
+      url: https://www.crusoe.ai/resources/newsroom/crusoe-and-lancium-announce-1-gigawatt-ai-data-center-campus-in-childress-texas
+- id: 2025-coreweave-lancaster
+  name: CoreWeave Lancaster
+  operator: Chirisa Technology Parks / Machine Investment Group
+  tenants:
+    - CoreWeave
+  location:
+    city: Lancaster
+    region: Pennsylvania
+    country: US
+    lat: 40.04
+    lon: -76.31
+  capacity_mw: 300
+  capacity_basis: 100 MW initial, expandable to 300 MW
+  stage: announced
+  announced: "2025-07-15"
+  expected_online: null
+  cooling:
+    liquid: null
+    vendors: []
+    notes: No cooling details reported.
+  power: Blue Owl-led JV to fund ~$200M in local grid upgrades (Bisnow)
+  sources:
+    - publisher: CoreWeave
+      url: >-
+        https://investors.coreweave.com/news/news-details/2025/CoreWeave-Announces-Multi-Billion-Dollar-Commitment-to-AI-Infrastructure-in-Pennsylvania/default.aspx
+    - publisher: ENR
+      url: https://www.enr.com/articles/61102-turner-wohlsen-jv-will-build-6b-pennsylvania-data-center-for-startup-coreweave
+- id: 2025-crusoe-tallgrass-cheyenne
+  name: Crusoe/Tallgrass Cheyenne campus
+  operator: Crusoe / Tallgrass
+  tenants: []
+  location:
+    city: Cheyenne
+    region: Wyoming
+    country: US
+    lat: 41.14
+    lon: -104.82
+  capacity_mw: 1800
+  capacity_basis: initial 1.8 GW, scalable to 10 GW
+  stage: announced
+  announced: "2025-07-01"
+  expected_online: null
+  cooling:
+    liquid: null
+    vendors: []
+    notes: No cooling details reported.
+  power: Dedicated gas generation plus renewables; near Tallgrass CO2 sequestration hub
+  sources:
+    - publisher: DatacenterDynamics
+      url: https://www.datacenterdynamics.com/en/news/crusoe-plans-18gw-data-center-campus-in-wyoming/
+    - publisher: AP via KSAT
+      url: https://www.ksat.com/business/2025/07/28/cheyenne-to-host-massive-ai-data-center-using-more-electricity-than-all-wyoming-homes-combined/
+- id: 2025-applied-digital-polaris-forge-1
+  name: Polaris Forge 1
+  operator: Applied Digital
+  tenants:
+    - CoreWeave
+  location:
+    city: Ellendale
+    region: North Dakota
+    country: US
+    lat: 46
+    lon: -98.53
+  capacity_mw: 400
+  capacity_basis: leased critical IT under three 15-year CoreWeave leases
+  stage: under-construction
+  announced: null
+  expected_online: 2025-10
+  cooling:
+    liquid: true
+    vendors:
+      - BASX
+    notes: "Applied Digital: closed-loop, waterless direct-to-chip cooling, projected PUE 1.18; BASX supplied custom thermal systems (RCR Wireless)."
+  power: null
+  sources:
+    - publisher: Applied Digital
+      url: >-
+        https://ir.applieddigital.com/_assets/_1bb24339cb16920d1911758b44cc2380/appliedblockchaininc/news/2025-10-27_Applied_Digital_Achieves_Ready_for_Service_for_133.pdf
+    - publisher: Applied Digital
+      url: https://ir.applieddigital.com/news-events/press-releases/detail/124/2-7-billion-in-data-center-savings-new-applied-digital
+    - publisher: RCR Wireless
+      url: https://rcrwireless.com/20250701/ai-infrastructure/basx-ai-dc
+- id: 2025-nebius-vineland
+  name: Nebius Vineland
+  operator: Nebius / DataOne
+  tenants:
+    - Microsoft
+  location:
+    city: Vineland
+    region: New Jersey
+    country: US
+    lat: 39.49
+    lon: -75.03
+  capacity_mw: 300
+  capacity_basis: design IT load, six buildings
+  stage: under-construction
+  announced: "2025-09-08"
+  expected_online: null
+  cooling:
+    liquid: null
+    vendors: []
+    notes: No operator cooling statement; Epoch AI satellite analysis lists air-cooled chillers (estimate, not a disclosure).
+  power: Behind-the-meter generation planned, air permit pending (Cleanview)
+  sources:
+    - publisher: City of Vineland
+      url: https://www.vinelandcity.org/wp-content/uploads/2025/09/9.8.25-Nebius-Secures-17.4B-Microsoft-Deal-for-AI-Infrastructure-in-NJ.pdf
+    - publisher: Epoch AI
+      url: https://epoch.ai/data/ai-data-centers/directory/microsoft-nebius-new-jersey
+- id: 2026-aligned-caprock
+  name: Aligned Project Caprock
+  operator: Aligned Data Centers
+  tenants: []
+  location:
+    city: Abernathy (Hale County)
+    region: Texas
+    country: US
+    lat: 33.83
+    lon: -101.84
+  capacity_mw: 540
+  capacity_basis: planned campus total, six buildings
+  stage: under-construction
+  announced: "2026-04-01"
+  expected_online: 2027-Q1
+  cooling:
+    liquid: true
+    vendors:
+      - Aligned DeltaFlow
+    notes: "W.Media: campus will use Aligned's DeltaFlow liquid cooling with air-cooled heat rejection in a closed loop."
+  power: Aligned building and funding dedicated electrical infrastructure
+  sources:
+    - publisher: W.Media
+      url: https://w.media/project-caprock-aligned-data-centers-breaks-ground-on-540-mw-dc-campus-in-texas/
+    - publisher: DatacenterDynamics
+      url: https://www.datacenterdynamics.com/en/news/aligned-breaks-ground-on-540mw-data-center-campus-in-texas
+- id: 2025-fermi-project-matador
+  name: Fermi America Project Matador (HyperGrid)
+  operator: Fermi America
+  tenants: []
+  location:
+    city: Amarillo
+    region: Texas
+    country: US
+    lat: 35.22
+    lon: -101.83
+  capacity_mw: 11000
+  capacity_basis: planned private power generation (~6 GW permitted), not IT load
+  stage: under-construction
+  announced: null
+  expected_online: null
+  cooling:
+    liquid: null
+    vendors: []
+    notes: No cooling details reported.
+  power: Private gas-fired grid; TCEQ ~6 GW air permit granted 2026-02-25; additional ~5 GW permit filed 2026-03-27
+  sources:
+    - publisher: Fermi Inc. (SEC 8-K)
+      url: https://www.sec.gov/Archives/edgar/data/0002071778/000207177826000027/fermi1q26erex_991.htm
+    - publisher: KFDA NewsChannel 10
+      url: https://www.newschannel10.com/2026/02/25/fermi-america-receives-nations-second-largest-clean-air-permit-project-matador/
+    - publisher: KCBD Fox34
+      url: https://www.fox34.com/2026/02/06/project-matador-construction-paused-fermi-america-awaits-clean-air-permit/
+- id: 2025-homer-city-energy-campus
+  name: Homer City Energy Campus
+  operator: Homer City Redevelopment
+  tenants: []
+  location:
+    city: Homer City
+    region: Pennsylvania
+    country: US
+    lat: 40.54
+    lon: -79.16
+  capacity_mw: 4500
+  capacity_basis: planned onsite gas generation, not IT load
+  stage: permitting
+  announced: "2025-04-01"
+  expected_online: "2027"
+  cooling:
+    liquid: null
+    vendors: []
+    notes: No cooling details reported.
+  power: Seven GE Vernova gas turbines, Kiewit EPC, on former coal plant site; first power targeted Q4 2027
+  sources:
+    - publisher: ENR
+      url: https://www.enr.com/articles/60531-kiewit-to-build-record-45-gw-gas-power-plant-for-pa-data-center-complex
+    - publisher: Utility Dive
+      url: https://www.utilitydive.com/news/homer-city-gas-fired-power-station-data-center-firstenergy/744332/
+- id: 2025-microsoft-caledonia
+  name: Microsoft Caledonia ("Project Nova")
+  operator: Microsoft
+  tenants:
+    - Microsoft
+  location:
+    city: Caledonia
+    region: Wisconsin
+    country: US
+    lat: 42.81
+    lon: -87.92
+  capacity_mw: null
+  capacity_basis: 244 acres, three buildings; MW not disclosed
+  stage: cancelled
+  announced: "2025-08-01"
+  expected_online: null
+  cooling:
+    liquid: null
+    vendors: []
+    notes: No cooling details reported.
+  power: null
+  sources:
+    - publisher: DatacenterDynamics
+      url: https://www.datacenterdynamics.com/en/news/microsoft-cancels-plans-for-data-center-caledonia-wisconsin/
+    - publisher: WISN
+      url: https://www.wisn.com/article/microsoft-drops-caledonia-data-center-after-community-pushback/68905827
+- id: 2024-microsoft-licking-county
+  name: Microsoft Licking County sites (New Albany/Heath/Hebron)
+  operator: Microsoft
+  tenants:
+    - Microsoft
+  location:
+    city: Licking County
+    region: Ohio
+    country: US
+    lat: 40.02
+    lon: -82.44
+  capacity_mw: null
+  capacity_basis: $1B, three campuses; MW not disclosed
+  stage: paused
+  announced: null
+  expected_online: null
+  cooling:
+    liquid: null
+    vendors: []
+    notes: No cooling details reported.
+  power: null
+  sources:
+    - publisher: DatacenterDynamics
+      url: https://www.datacenterdynamics.com/en/news/microsoft-backs-away-from-1bn-data-center-plans-in-licking-county-ohio/
+    - publisher: Fortune
+      url: https://fortune.com/2025/04/09/microsoft-ohio-ai-data-center-openai-licking-county
+- id: 2025-beale-project-blue-tucson
+  name: Project Blue
+  operator: Beale Infrastructure
+  tenants: []
+  location:
+    city: Tucson (Pima County)
+    region: Arizona
+    country: US
+    lat: 32.22
+    lon: -110.97
+  capacity_mw: null
+  capacity_basis: 290 acres; MW not confirmed by tier-1/2 source
+  stage: permitting
+  announced: null
+  expected_online: null
+  cooling:
+    liquid: null
+    vendors: []
+    notes: "KJZZ: revived plan 'will use electricity to cool itself, rather than water, making it a closed-loop system'; original plan used city water."
+  power: New agreement with Tucson Electric Power being pursued after city rejection
+  sources:
+    - publisher: DatacenterDynamics
+      url: https://www.datacenterdynamics.com/en/news/residents-cheer-as-tucson-rejects-amazons-massive-project-blue-data-center-campus-in-arizona/
+    - publisher: KJZZ
+      url: https://www.kjzz.org/fronteras-desk/2025-09-19/developer-plans-to-revive-project-blue-data-center-in-pima-county-with-new-utility-deal
+- id: 2024-qts-cambois
+  name: QTS Cambois campus
+  operator: QTS (Blackstone)
+  tenants: []
+  location:
+    city: Cambois (Northumberland)
+    region: England
+    country: GB
+    lat: 55.16
+    lon: -1.53
+  capacity_mw: 1100
+  capacity_basis: up to 1.1 GW per planning application, 10 buildings
+  stage: under-construction
+  announced: "2024-12-01"
+  expected_online: null
+  cooling:
+    liquid: null
+    vendors: []
+    notes: "DCD: application describes waterless free-cooling chillers; no liquid-to-chip statement."
+  power: null
+  sources:
+    - publisher: Northumberland County Council
+      url: https://www.northumberland.gov.uk/News/2025/Mar/Multi-billion-pound-data-centre-campus-gets-green.aspx
+    - publisher: DatacenterDynamics
+      url: https://www.datacenterdynamics.com/en/news/qts-files-to-build-11gw-data-center-campus-in-northumberland-uk
+- id: 2025-stargate-uae
+  name: Stargate UAE (UAE-US AI Campus)
+  operator: G42 / Khazna Data Centers
+  tenants:
+    - OpenAI
+    - Oracle
+  location:
+    city: Abu Dhabi
+    region: Abu Dhabi
+    country: AE
+    lat: 24.45
+    lon: 54.38
+  capacity_mw: 1000
+  capacity_basis: 1 GW Stargate cluster within 5 GW campus; first 200 MW phase
+  stage: under-construction
+  announced: "2025-05-22"
+  expected_online: "2026"
+  cooling:
+    liquid: null
+    vendors: []
+    notes: No cooling details reported.
+  power: null
+  sources:
+    - publisher: Intelligent CIO
+      url: https://www.intelligentcio.com/me/2025/05/23/g42-openai-oracle-nvidia-softbank-cisco-launch-stargate-uae-from-uae-us-ai-campus-in-abu-dhabi/
+    - publisher: Gulf News
+      url: https://gulfnews.com/business/markets/stargate-uae-first-phase-of-200mw-to-complete-by-2026-1.500310364
+- id: 2025-xai-humain-saudi
+  name: xAI / HUMAIN Saudi data center
+  operator: HUMAIN
+  tenants:
+    - xAI
+  location:
+    city: null
+    region: null
+    country: SA
+    lat: null
+    lon: null
+  capacity_mw: 500
+  capacity_basis: planned
+  stage: announced
+  announced: "2025-11-19"
+  expected_online: null
+  cooling:
+    liquid: null
+    vendors: []
+    notes: No cooling details reported; site not disclosed.
+  power: null
+  sources:
+    - publisher: Bloomberg
+      url: https://bloomberg.com/news/articles/2025-11-19/musk-s-xai-to-build-500-megawatt-data-center-in-saudi-arabia
+    - publisher: DatacenterDynamics
+      url: https://www.datacenterdynamics.com/en/news/xai-humain-data-center-elon-musk/
+- id: 2025-stargate-norway
+  name: Stargate Norway
+  operator: Nscale / Aker (50/50 JV)
+  tenants:
+    - OpenAI
+  location:
+    city: Narvik
+    region: Nordland
+    country: "NO"
+    lat: 68.44
+    lon: 17.43
+  capacity_mw: 230
+  capacity_basis: initial phase; +290 MW expansion ambition
+  stage: announced
+  announced: "2025-07-31"
+  expected_online: "2026"
+  cooling:
+    liquid: true
+    vendors: []
+    notes: "OpenAI/Nscale: site expected to incorporate closed-loop, direct-to-chip liquid cooling; waste heat offered to local low-carbon businesses."
+  power: Renewable hydropower
+  sources:
+    - publisher: Nscale
+      url: https://www.nscale.com/blog/stargate-norway-laying-the-foundation-for-the-future-of-ai
+    - publisher: eeNews Europe
+      url: https://www.eenewseurope.com/en/nscale-to-build-200bn-openai-nvidia-ai-datacentre-in-norway/
+- id: 2025-start-campus-sines
+  name: Start Campus SINES
+  operator: Start Campus
+  tenants:
+    - Microsoft
+    - Nscale
+  location:
+    city: Sines
+    region: Setúbal
+    country: PT
+    lat: 37.96
+    lon: -8.87
+  capacity_mw: 1200
+  capacity_basis: planned full build by 2030; SIN01 is 26 MW
+  stage: under-construction
+  announced: "2025-11-01"
+  expected_online: "2030"
+  cooling:
+    liquid: null
+    vendors: []
+    notes: Seawater cooling reusing former coal plant intake (Construction Digital); no direct-to-chip statement found.
+  power: null
+  sources:
+    - publisher: Business Wire (Start Campus)
+      url: https://www.businesswire.com/news/home/20250408371738/en
+    - publisher: Construction Digital
+      url: https://constructiondigital.com/news/start-campus-coal-site-to-1-2-gw-data-campus-in-portugal
+    - publisher: heise
+      url: https://heise.de/-11074771
+- id: 2025-campus-ia-france
+  name: Campus IA (MGX/Bpifrance/Mistral/Nvidia)
+  operator: Campus IA JV (MGX, Bpifrance, Mistral AI, Nvidia)
+  tenants:
+    - Mistral AI
+  location:
+    city: null
+    region: Île-de-France
+    country: FR
+    lat: null
+    lon: null
+  capacity_mw: 1400
+  capacity_basis: up to 1.4 GW planned
+  stage: announced
+  announced: "2025-05-19"
+  expected_online: "2028"
+  cooling:
+    liquid: null
+    vendors: []
+    notes: No cooling details reported.
+  power: RTE (French TSO) a partner; low-carbon grid
+  sources:
+    - publisher: Abu Dhabi Media Office
+      url: https://www.mediaoffice.abudhabi/en/technology/mgx-partners-with-bpifrance-mistral-ai-and-nvidia-to-build-europes-largest-ai-campus-in-france/
+    - publisher: DatacenterDynamics
+      url: https://www.datacenterdynamics.com/es/noticias/mgx-bpifrance-nvidia-y-mistral-ai-planean-un-campus-de-centro-de-datos-de-14-gw-en-par%C3%ADs/
+- id: 2025-google-visakhapatnam
+  name: Google AI Hub Visakhapatnam
+  operator: AdaniConneX
+  tenants:
+    - Google
+  location:
+    city: Visakhapatnam
+    region: Andhra Pradesh
+    country: IN
+    lat: 17.69
+    lon: 83.22
+  capacity_mw: 1000
+  capacity_basis: gigawatt-scale campus as reported
+  stage: announced
+  announced: "2025-10-14"
+  expected_online: null
+  cooling:
+    liquid: null
+    vendors: []
+    notes: No cooling details reported.
+  power: Co-investment in new transmission, clean generation and storage in Andhra Pradesh
+  sources:
+    - publisher: W.Media
+      url: https://w.media/adani-and-google-partner-to-build-indias-largest-data-center-campus-in-vishakhapatnam/
+    - publisher: Telco Magazine
+      url: https://telcomagazine.com/news/behind-googles-us-15bn-funding-in-indias-first-ai-data-hub
+- id: 2026-reliance-meta-jamnagar
+  name: Reliance–Meta Jamnagar AI data centre
+  operator: Reliance Industries
+  tenants:
+    - Meta
+  location:
+    city: Jamnagar
+    region: Gujarat
+    country: IN
+    lat: 22.47
+    lon: 70.06
+  capacity_mw: 168
+  capacity_basis: initial, with option to scale
+  stage: announced
+  announced: "2026-06-09"
+  expected_online: "2028"
+  cooling:
+    liquid: null
+    vendors: []
+    notes: "Companies: to be cooled with desalinated seawater; no direct-to-chip statement."
+  power: Renewable energy
+  sources:
+    - publisher: Bloomberg Law
+      url: https://news.bloomberglaw.com/artificial-intelligence/meta-partners-with-reliance-on-first-india-ai-data-center-1
+- id: 2025-nextdc-s7-eastern-creek
+  name: NEXTDC S7 (OpenAI for Australia)
+  operator: NEXTDC
+  tenants:
+    - OpenAI
+  location:
+    city: Eastern Creek (Sydney)
+    region: New South Wales
+    country: AU
+    lat: -33.8
+    lon: 150.85
+  capacity_mw: 612
+  capacity_basis: up to 612 MW per 2026 planning documents (550 MW earlier)
+  stage: permitting
+  announced: "2025-12-01"
+  expected_online: "2027"
+  cooling:
+    liquid: true
+    vendors: []
+    notes: "The Urban Developer: 'closed-loop high-density liquid cooling for ultra-high-density GPU clusters', no ongoing potable water."
+  power: Long-term renewable PPAs (wind, solar, batteries)
+  sources:
+    - publisher: The Urban Developer
+      url: https://www.theurbandeveloper.com/articles/eastern-creek-data-centre-550mw-openai-nextdc
+    - publisher: DatacenterDynamics
+      url: https://www.datacenterdynamics.com/en/news/australian-stargate-data-center-in-sydney-will-offer-612mw-of-capacity/
+- id: 2025-airtrunk-jhb2
+  name: AirTrunk JHB2
+  operator: AirTrunk
+  tenants: []
+  location:
+    city: Iskandar Puteri
+    region: Johor
+    country: MY
+    lat: 1.42
+    lon: 103.65
+  capacity_mw: 270
+  capacity_basis: scalable to over 270 MW
+  stage: announced
+  announced: "2025-02-01"
+  expected_online: null
+  cooling:
+    liquid: true
+    vendors: []
+    notes: "AirTrunk: JHB2 will use its liquid cooling technology for high-density AI loads, design PUE 1.25."
+  power: null
+  sources:
+    - publisher: MIDA
+      url: https://www.mida.gov.my/mida-news/airtrunk-to-build-second-data-centre-in-johor-combined-cost-of-two-facilities-at-rm9-7bil/
+    - publisher: DatacenterDynamics
+      url: https://datacenterdynamics.com/en/news/airtrunk-announces-second-malaysian-data-center-in-johor
+- id: 2025-sk-aws-ulsan
+  name: SK–AWS Ulsan AI Data Center
+  operator: SK Group
+  tenants:
+    - Amazon Web Services
+  location:
+    city: Ulsan
+    region: Ulsan
+    country: KR
+    lat: 35.54
+    lon: 129.31
+  capacity_mw: 103
+  capacity_basis: initial build (41 MW by Nov 2027); SK aims for 1 GW eventually
+  stage: under-construction
+  announced: "2025-06-01"
+  expected_online: 2027-11
+  cooling:
+    liquid: null
+    vendors: []
+    notes: No cooling details reported.
+  power: Adjacent SK Gas LNG combined-cycle plant
+  sources:
+    - publisher: RCR Wireless
+      url: https://www.rcrwireless.com/20250618/ai-infrastructure/sk-group-aws-korea
+    - publisher: KED Global
+      url: https://m.kedglobal.com/tech,-media-telecom/newsView/ked202506160002
+- id: 2025-stargate-argentina
+  name: Stargate Argentina
+  operator: Sur Energy
+  tenants:
+    - OpenAI
+  location:
+    city: null
+    region: Patagonia
+    country: AR
+    lat: null
+    lon: null
+  capacity_mw: 500
+  capacity_basis: planned (letter of intent)
+  stage: announced
+  announced: "2025-10-01"
+  expected_online: null
+  cooling:
+    liquid: null
+    vendors: []
+    notes: No cooling details reported.
+  power: Reported to run on renewable energy
+  sources:
+    - publisher: Buenos Aires Times
+      url: https://batimes.com.ar/news/economy/openai-sur-energy-to-build-massive-ai-data-centre-in-patagonia.phtml
+    - publisher: TechRepublic
+      url: https://www.techrepublic.com/article/news-openai-data-center-argentina/
+- id: 2025-scala-ai-city
+  name: Scala AI City
+  operator: Scala Data Centers
+  tenants: []
+  location:
+    city: Eldorado do Sul
+    region: Rio Grande do Sul
+    country: BR
+    lat: -30.08
+    lon: -51.62
+  capacity_mw: 4750
+  capacity_basis: full build-out power; phase 1 is 54 MW IT
+  stage: permitting
+  announced: null
+  expected_online: null
+  cooling:
+    liquid: true
+    vendors: []
+    notes: "Telco Magazine: 'advanced liquid cooling technology' with zero water use in cooling systems."
+  power: 5 GW grid connection authorised by Brazil's Ministry of Mines and Energy (May 2025)
+  sources:
+    - publisher: Telco Magazine
+      url: https://telcomagazine.com/news/scala-data-centers-ai-city-secures-5-gw-approval-in-brazil
+    - publisher: Olhar Digital
+      url: https://olhardigital.com.br/2026/03/25/pro/rs-se-prepara-para-ter-verdadeira-cidade-de-data-centers-conheca/
+- id: 2025-bytedance-pecem
+  name: ByteDance Pecém data center
+  operator: Omnia / Casa dos Ventos
+  tenants:
+    - ByteDance
+  location:
+    city: São Gonçalo do Amarante (Pecém)
+    region: Ceará
+    country: BR
+    lat: -3.55
+    lon: -38.85
+  capacity_mw: 300
+  capacity_basis: initial phase discussed in 2025 talks (up to 900 MW second phase)
+  stage: announced
+  announced: "2025-04-01"
+  expected_online: null
+  cooling:
+    liquid: null
+    vendors: []
+    notes: No cooling details reported.
+  power: Wind power from Casa dos Ventos; grid access initially denied by ONS
+  sources:
+    - publisher: South China Morning Post (Reuters)
+      url: https://www.scmp.com/tech/big-tech/article/3308014/tiktok-owner-bytedance-weighs-data-centre-project-brazil-sources-say
