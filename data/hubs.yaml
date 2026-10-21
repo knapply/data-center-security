@@ -1,0 +1,44 @@
+# Major data center hubs, used for the heat and water watch.
+# Coordinates are metro-level (2 decimals). water_stress is the WRI Aqueduct 4.0 baseline water stress category
+# (low | low-medium | medium-high | high | extremely high | arid and low water use) for the sub-basin containing
+# the hub point, from WRI's public Aqueduct 4.0 indicator table. Don't mix in Aqueduct 3.0 values: many differ.
+# A null water_note means the hub hasn't been researched in depth, not that it has no water issue.
+
+- {id: nova, name: Northern Virginia, country: US, lat: 39.04, lon: -77.49, water_stress: low, water_source_url: "https://wri-rw.carto.com/tables/water_risk_indicators_annual_aqueduct40/public",
+   water_note: "Loudoun Water reports data-center potable use rising alongside reclaimed-water deliveries; Virginia will require quarterly public reporting of data-center water use from 2027.", water_note_url: "https://www.loudoun.gov/6402/Water-Considerations"}
+- {id: dallas, name: Dallas–Fort Worth, country: US, lat: 32.78, lon: -96.80, water_stress: low-medium, water_source_url: "https://wri-rw.carto.com/tables/water_risk_indicators_annual_aqueduct40/public"}
+- {id: phoenix, name: Phoenix, country: US, lat: 33.45, lon: -112.07, water_stress: extremely high, water_source_url: "https://wri-rw.carto.com/tables/water_risk_indicators_annual_aqueduct40/public",
+   water_note: "Chandler limits data centers to 115 gal/day per 1,000 sq ft and has required water-free cooling in recent rezonings.", water_note_url: "https://www.circleofblue.org/2025/supply/data-centers-a-small-but-growing-factor-in-arizonas-water-budget/"}
+- {id: chicago, name: Chicago, country: US, lat: 41.88, lon: -87.63, water_stress: high, water_source_url: "https://wri-rw.carto.com/tables/water_risk_indicators_annual_aqueduct40/public"}
+- {id: silicon-valley, name: Silicon Valley, country: US, lat: 37.35, lon: -121.96, water_stress: low-medium, water_source_url: "https://wri-rw.carto.com/tables/water_risk_indicators_annual_aqueduct40/public"}
+- {id: atlanta, name: Atlanta, country: US, lat: 33.75, lon: -84.39, water_stress: high, water_source_url: "https://wri-rw.carto.com/tables/water_risk_indicators_annual_aqueduct40/public"}
+- {id: columbus, name: Columbus, Ohio, country: US, lat: 39.96, lon: -83.00, water_stress: medium-high, water_source_url: "https://wri-rw.carto.com/tables/water_risk_indicators_annual_aqueduct40/public"}
+- {id: hillsboro, name: Hillsboro, Oregon, country: US, lat: 45.52, lon: -122.99, water_stress: low, water_source_url: "https://wri-rw.carto.com/tables/water_risk_indicators_annual_aqueduct40/public"}
+- {id: des-moines, name: Des Moines, country: US, lat: 41.59, lon: -93.62, water_stress: low-medium, water_source_url: "https://wri-rw.carto.com/tables/water_risk_indicators_annual_aqueduct40/public",
+   water_note: "West Des Moines Water Works said it would consider future data centers only if they cut peak water use, after Microsoft's summer usage drew scrutiny.", water_note_url: "https://gizmodo.com/microsoft-water-usage-ai-iowa-data-center-1850826419"}
+- {id: reno, name: Reno, country: US, lat: 39.53, lon: -119.81, water_stress: high, water_source_url: "https://wri-rw.carto.com/tables/water_risk_indicators_annual_aqueduct40/public"}
+- {id: queretaro, name: Querétaro, country: MX, lat: 20.59, lon: -100.39, water_stress: extremely high, water_source_url: "https://wri-rw.carto.com/tables/water_risk_indicators_annual_aqueduct40/public",
+   water_note: "Hyperscale data centres in drought-hit Colón have drawn protests because companies and the state have not disclosed how much water they use.", water_note_url: "https://www.context.news/ai/long-read/resistance-blooms-in-mexicos-data-centre-valley"}
+- {id: sao-paulo, name: São Paulo, country: BR, lat: -23.55, lon: -46.63, water_stress: medium-high, water_source_url: "https://wri-rw.carto.com/tables/water_risk_indicators_annual_aqueduct40/public"}
+- {id: london, name: London, country: GB, lat: 51.51, lon: -0.13, water_stress: high, water_source_url: "https://wri-rw.carto.com/tables/water_risk_indicators_annual_aqueduct40/public"}
+- {id: dublin, name: Dublin, country: IE, lat: 53.35, lon: -6.26, water_stress: low-medium, water_source_url: "https://wri-rw.carto.com/tables/water_risk_indicators_annual_aqueduct40/public"}
+- {id: amsterdam, name: Amsterdam, country: NL, lat: 52.37, lon: 4.90, water_stress: low, water_source_url: "https://wri-rw.carto.com/tables/water_risk_indicators_annual_aqueduct40/public"}
+- {id: frankfurt, name: Frankfurt, country: DE, lat: 50.11, lon: 8.68, water_stress: high, water_source_url: "https://wri-rw.carto.com/tables/water_risk_indicators_annual_aqueduct40/public"}
+- {id: paris, name: Paris, country: FR, lat: 48.86, lon: 2.35, water_stress: low-medium, water_source_url: "https://wri-rw.carto.com/tables/water_risk_indicators_annual_aqueduct40/public"}
+- {id: madrid, name: Madrid, country: ES, lat: 40.42, lon: -3.70, water_stress: extremely high, water_source_url: "https://wri-rw.carto.com/tables/water_risk_indicators_annual_aqueduct40/public"}
+- {id: stockholm, name: Stockholm, country: SE, lat: 59.33, lon: 18.07, water_stress: low, water_source_url: "https://wri-rw.carto.com/tables/water_risk_indicators_annual_aqueduct40/public"}
+- {id: johannesburg, name: Johannesburg, country: ZA, lat: -26.20, lon: 28.05, water_stress: extremely high, water_source_url: "https://wri-rw.carto.com/tables/water_risk_indicators_annual_aqueduct40/public"}
+- {id: riyadh, name: Riyadh, country: SA, lat: 24.71, lon: 46.68, water_stress: extremely high, water_source_url: "https://wri-rw.carto.com/tables/water_risk_indicators_annual_aqueduct40/public"}
+- {id: dubai, name: Dubai, country: AE, lat: 25.20, lon: 55.27, water_stress: extremely high, water_source_url: "https://wri-rw.carto.com/tables/water_risk_indicators_annual_aqueduct40/public"}
+- {id: mumbai, name: Mumbai, country: IN, lat: 19.08, lon: 72.88, water_stress: low-medium, water_source_url: "https://wri-rw.carto.com/tables/water_risk_indicators_annual_aqueduct40/public"}
+- {id: chennai, name: Chennai, country: IN, lat: 13.08, lon: 80.27, water_stress: extremely high, water_source_url: "https://wri-rw.carto.com/tables/water_risk_indicators_annual_aqueduct40/public"}
+- {id: singapore, name: Singapore, country: SG, lat: 1.35, lon: 103.82, water_stress: low, water_source_url: "https://wri-rw.carto.com/tables/water_risk_indicators_annual_aqueduct40/public",
+   water_note: "The Green Data Centre Roadmap targets a median WUE of 2.0 m³/MWh or lower; PUB's water-efficiency rules apply to sites using 60,000 m³ a year or more.", water_note_url: "https://www.mayerbrown.com/en/insights/publications/2024/08/singapores-green-data-centre-roadmap-representing-a-necessary-intersection-between-digital-infrastructure-and-sustainability"}
+- {id: johor, name: Johor Bahru, country: MY, lat: 1.49, lon: 103.74, water_stress: low, water_source_url: "https://wri-rw.carto.com/tables/water_risk_indicators_annual_aqueduct40/public",
+   water_note: "In Nov 2025 Johor stopped approving water-intensive Tier 1 and 2 data centres and required reclaimed water instead of SAJ supply.", water_note_url: "https://www.nst.com.my/amp/news/nation/2025/11/1324188/johor-tightens-approvals-data-centres"}
+- {id: jakarta, name: Jakarta, country: ID, lat: -6.21, lon: 106.85, water_stress: high, water_source_url: "https://wri-rw.carto.com/tables/water_risk_indicators_annual_aqueduct40/public"}
+- {id: hong-kong, name: Hong Kong, country: HK, lat: 22.32, lon: 114.17, water_stress: low-medium, water_source_url: "https://wri-rw.carto.com/tables/water_risk_indicators_annual_aqueduct40/public"}
+- {id: tokyo, name: Tokyo, country: JP, lat: 35.68, lon: 139.69, water_stress: medium-high, water_source_url: "https://wri-rw.carto.com/tables/water_risk_indicators_annual_aqueduct40/public"}
+- {id: osaka, name: Osaka, country: JP, lat: 34.69, lon: 135.50, water_stress: low-medium, water_source_url: "https://wri-rw.carto.com/tables/water_risk_indicators_annual_aqueduct40/public"}
+- {id: seoul, name: Seoul, country: KR, lat: 37.57, lon: 126.98, water_stress: medium-high, water_source_url: "https://wri-rw.carto.com/tables/water_risk_indicators_annual_aqueduct40/public"}
+- {id: sydney, name: Sydney, country: AU, lat: -33.87, lon: 151.21, water_stress: high, water_source_url: "https://wri-rw.carto.com/tables/water_risk_indicators_annual_aqueduct40/public"}

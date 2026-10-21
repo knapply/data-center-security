@@ -24,6 +24,9 @@
       <a href="#map">Map</a>
       <a href="#timeline">Timeline</a>
       <a href="#markets">Markets</a>
+      <a href="#radar">Radar</a>
+      <a href="#heat-water">Heat &amp; water</a>
+      <a href="#vendors">Cooling vendors</a>
       <a href="#supply">Supply chain</a>
       <a href="#impact">Impact</a>
       <a href="#incidents">Incidents</a>
@@ -81,6 +84,7 @@
       <div class="panel-head">
         <h2>Incident map</h2>
         <span class="muted small" id="unmapped"></span>
+        <label class="toggle"><input type="checkbox" id="show-campuses"> Show campuses</label>
         <div class="seg" role="group" aria-label="Map view">
           <button id="view-flat" aria-pressed="true">Flat map</button>
           <button id="view-globe" aria-pressed="false">3D globe</button>
@@ -131,6 +135,69 @@
 {"colorTheme":"dark","dateRange":"1M","showChart":true,"locale":"en","largeChartUrl":"","isTransparent":false,"showSymbolLogo":true,"showFloatingTooltip":true,"width":"100%","height":"560","plotLineColorGrowing":"rgba(61, 220, 151, 1)","plotLineColorFalling":"rgba(255, 84, 104, 1)","gridLineColor":"rgba(148, 170, 200, 0.08)","scaleFontColor":"rgba(133, 147, 166, 1)","belowLineFillColorGrowing":"rgba(61, 220, 151, 0.12)","belowLineFillColorFalling":"rgba(255, 84, 104, 0.12)","belowLineFillColorGrowingBottom":"rgba(61, 220, 151, 0)","belowLineFillColorFallingBottom":"rgba(255, 84, 104, 0)","symbolActiveColor":"rgba(56, 182, 255, 0.12)","tabs":[{"title":"AI & cloud","symbols":[{"s":"NASDAQ:MSFT","d":"Microsoft"},{"s":"NASDAQ:GOOGL","d":"Alphabet"},{"s":"NASDAQ:AMZN","d":"Amazon"},{"s":"NASDAQ:META","d":"Meta"},{"s":"NYSE:ORCL","d":"Oracle"},{"s":"NASDAQ:CRWV","d":"CoreWeave"},{"s":"NASDAQ:NBIS","d":"Nebius"}],"originalTitle":"AI & cloud"},{"title":"GPUs & chips","symbols":[{"s":"NASDAQ:NVDA","d":"NVIDIA"},{"s":"NASDAQ:AMD","d":"AMD"},{"s":"NASDAQ:AVGO","d":"Broadcom"},{"s":"NYSE:TSM","d":"TSMC"},{"s":"NASDAQ:MU","d":"Micron"},{"s":"NASDAQ:MRVL","d":"Marvell"},{"s":"NASDAQ:ASML","d":"ASML"},{"s":"NASDAQ:ARM","d":"Arm"},{"s":"NASDAQ:INTC","d":"Intel"}],"originalTitle":"GPUs & chips"},{"title":"Cooling & thermal","symbols":[{"s":"NYSE:VRT","d":"Vertiv"},{"s":"EURONEXT:SU","d":"Schneider Electric"},{"s":"NYSE:JCI","d":"Johnson Controls"},{"s":"NYSE:TT","d":"Trane Technologies"},{"s":"NYSE:CARR","d":"Carrier"},{"s":"NYSE:MOD","d":"Modine"},{"s":"NYSE:NVT","d":"nVent"},{"s":"TSE:6367","d":"Daikin"}],"originalTitle":"Cooling & thermal"},{"title":"Power & energy","symbols":[{"s":"NYSE:GEV","d":"GE Vernova"},{"s":"NYSE:ETN","d":"Eaton"},{"s":"NASDAQ:CEG","d":"Constellation"},{"s":"NYSE:VST","d":"Vistra"},{"s":"NASDAQ:TLN","d":"Talen"},{"s":"NYSE:NRG","d":"NRG"},{"s":"NYSE:NEE","d":"NextEra"},{"s":"NYSE:BE","d":"Bloom Energy"},{"s":"NYSE:OKLO","d":"Oklo"},{"s":"NYSE:SMR","d":"NuScale"}],"originalTitle":"Power & energy"},{"title":"Planning & construction","symbols":[{"s":"NYSE:PWR","d":"Quanta Services"},{"s":"NYSE:EME","d":"EMCOR"},{"s":"NYSE:FIX","d":"Comfort Systems"},{"s":"NYSE:MTZ","d":"MasTec"},{"s":"NASDAQ:STRL","d":"Sterling"},{"s":"NYSE:J","d":"Jacobs"},{"s":"NYSE:ACM","d":"AECOM"},{"s":"NYSE:FLR","d":"Fluor"},{"s":"NYSE:HUBB","d":"Hubbell"}],"originalTitle":"Planning & construction"},{"title":"Operators & REITs","symbols":[{"s":"NASDAQ:EQIX","d":"Equinix"},{"s":"NYSE:DLR","d":"Digital Realty"},{"s":"NYSE:IRM","d":"Iron Mountain"},{"s":"NASDAQ:APLD","d":"Applied Digital"}],"originalTitle":"Operators & REITs"},{"title":"Networking & servers","symbols":[{"s":"NYSE:ANET","d":"Arista"},{"s":"NASDAQ:CSCO","d":"Cisco"},{"s":"NYSE:CIEN","d":"Ciena"},{"s":"NASDAQ:CRDO","d":"Credo"},{"s":"NASDAQ:SMCI","d":"Supermicro"},{"s":"NYSE:DELL","d":"Dell"},{"s":"NYSE:HPE","d":"HPE"}],"originalTitle":"Networking & servers"}],"backgroundColor":"rgba(14, 20, 29, 1)"}
         </script>
       </div>
+    </section>
+
+    <section class="panel reveal" id="radar">
+      <div class="panel-head">
+        <h2>Opportunity radar</h2>
+        <span class="muted small" id="radar-count"></span>
+      </div>
+      <div class="radar-summary" id="radar-summary"></div>
+      <div class="radar-controls">
+        <label class="select"><span>Stage</span>
+          <select id="radar-stage">
+            <option value="active">Active pipeline</option>
+            <option value="all">All stages</option>
+            <option value="announced">Announced</option>
+            <option value="permitting">Permitting</option>
+            <option value="under-construction">Under construction</option>
+            <option value="operational">Operational</option>
+            <option value="paused">Paused</option>
+            <option value="cancelled">Cancelled</option>
+          </select>
+        </label>
+        <label class="select"><span>Region</span><select id="radar-region"><option value="all">All regions</option></select></label>
+        <label class="select"><span>Size</span>
+          <select id="radar-mw">
+            <option value="0">Any size</option>
+            <option value="100">100 MW+</option>
+            <option value="300">300 MW+</option>
+            <option value="1000">1 GW+</option>
+          </select>
+        </label>
+        <label class="toggle"><input type="checkbox" id="radar-liquid"> Liquid cooling confirmed</label>
+      </div>
+      <div class="table-wrap"><table class="radar-table" id="radar-table"></table></div>
+    </section>
+
+    <section class="panel reveal" id="heat-water">
+      <div class="panel-head">
+        <h2>Heat and water watch</h2>
+        <span class="muted small">7-day peak temperature, water stress, cooling-failure history and active build pipeline within 300 km of each hub</span>
+      </div>
+      <div class="table-wrap"><table class="hw-table" id="hw-table"><tbody><tr><td class="muted">Loading forecasts…</td></tr></tbody></table></div>
+      <p class="muted small attribution">Weather: <a href="https://open-meteo.com/" target="_blank" rel="noopener">Open-Meteo.com</a> (CC BY 4.0). Water stress: <a href="https://www.wri.org/aqueduct" target="_blank" rel="noopener">WRI Aqueduct</a> baseline categories, where sourced.</p>
+    </section>
+
+    <section class="panel reveal" id="vendors">
+      <div class="panel-head">
+        <h2>Cooling vendor tracker</h2>
+        <span class="muted small">Tracked moves by the major data center cooling suppliers. Click a vendor for its brief.</span>
+      </div>
+      <div class="vendor-grid" id="vendor-grid"></div>
+    </section>
+
+    <section class="panel reveal" id="briefs">
+      <div class="panel-head">
+        <h2>Operator briefs</h2>
+        <span class="muted small">Everything tracked about one company on a single page</span>
+      </div>
+      <div class="brief-picker">
+        <input id="brief-search" list="brief-names" placeholder="Type a company: Microsoft, Equinix, Vertiv…" aria-label="Company for the brief">
+        <datalist id="brief-names"></datalist>
+        <button class="chip" id="brief-open" style="--c:var(--accent)">Open brief</button>
+      </div>
+      <div class="brief-quick" id="brief-quick"></div>
     </section>
 
     <section class="panel reveal" id="supply">
@@ -205,6 +272,11 @@
     </section>
   </main>
 
+  <dialog class="brief" id="brief" aria-labelledby="brief-title">
+    <button class="close" id="brief-close" aria-label="Close">×</button>
+    <div id="brief-body"></div>
+  </dialog>
+
   <div class="tooltip" id="tooltip" hidden></div>
 
   <script src="https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.js"></script>
@@ -212,5 +284,6 @@
   <script src="https://cdn.jsdelivr.net/npm/d3-sankey@0.12.3/dist/d3-sankey.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/globe.gl@2.46.2/dist/globe.gl.min.js" defer></script>
   <script type="module" src="app.js"></script>
+  <script data-goatcounter="https://data-center-watch.goatcounter.com/count" async src="https://gc.zgo.at/count.js"></script>
 </body>
 </html>

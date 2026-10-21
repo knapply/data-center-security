@@ -12,6 +12,8 @@ const vocab = load('vocabulary.yaml');
 const incidents = load('incidents.yaml') ?? [];
 const supply = load('supply-chain.yaml');
 const headlines = load('headlines.yaml') ?? [];
+const campuses = load('campuses.yaml') ?? [];
+const hubs = load('hubs.yaml') ?? [];
 
 const errors = [];
 const err = (where, msg) => errors.push(`${where}: ${msg}`);
@@ -97,6 +99,32 @@ for (const [i, c] of (supply?.components ?? []).entries()) {
   if (!['up', 'flat', 'down'].includes(c.trend)) err(at, 'trend must be up, flat or down');
   for (const r of c.related_incidents ?? []) if (!ids.has(r)) err(at, `unknown incident ${r}`);
 }
+const STAGES = ['announced', 'permitting', 'under-construction', 'operational', 'paused', 'cancelled'];
+const twoDp = (v) => typeof v === 'number' && (String(v).split('.')[1] ?? '').length <= 2;
+const campusIds = new Set();
+for (const [i, c] of campuses.entries()) {
+  const at = `campuses[${i}] ${c.id ?? '(no id)'}`;
+  for (const k of ['id', 'name', 'operator', 'location', 'stage', 'sources']) if (c[k] == null || c[k] === '') err(at, `missing ${k}`);
+  if (c.id && !/^\d{4}-[a-z0-9-]+$/.test(c.id)) err(at, 'id must look like YYYY-short-slug');
+  if (campusIds.has(c.id)) err(at, 'duplicate id');
+  campusIds.add(c.id);
+  if (c.stage && !STAGES.includes(c.stage)) err(at, `stage must be one of ${STAGES.join(', ')}`);
+  if (c.capacity_mw != null && !(typeof c.capacity_mw === 'number' && c.capacity_mw > 0)) err(at, 'capacity_mw must be a positive number or null');
+  if (c.announced != null && !isDate(c.announced)) err(at, 'announced must be YYYY-MM-DD');
+  // A campus with an undisclosed site keeps its country but null coordinates, and stays off the map.
+  const unsited = c.location && c.location.lat == null && c.location.lon == null;
+  if (c.location && !unsited && !(twoDp(c.location.lat) && twoDp(c.location.lon))) err(at, 'location needs lat/lon with at most 2 decimals, or both null');
+  if (c.cooling && ![true, false, null, undefined].includes(c.cooling.liquid)) err(at, 'cooling.liquid must be true, false or null');
+  if (!Array.isArray(c.sources) || !c.sources.some((s) => /^https:\/\//.test(s?.url ?? ''))) err(at, 'needs at least one https source url');
+}
+const WATER = ['low', 'low-medium', 'medium-high', 'high', 'extremely high', 'arid and low water use'];
+for (const [i, h] of hubs.entries()) {
+  const at = `hubs[${i}] ${h.id}`;
+  if (!h.id || !h.name || !twoDp(h.lat) || !twoDp(h.lon)) err(at, 'needs id, name and 2-decimal lat/lon');
+  if (h.water_stress != null && !WATER.includes(h.water_stress)) err(at, `water_stress must be one of ${WATER.join(', ')} or null`);
+  if (h.water_stress != null && !/^https:\/\//.test(h.water_source_url ?? '')) err(at, 'water_stress needs a water_source_url');
+}
+
 for (const [i, h] of headlines.entries()) {
   const at = `headlines[${i}]`;
   if (!h.title || !h.url || !isDate(h.date)) err(at, 'needs date, title and url');
@@ -133,6 +161,8 @@ const components = supply.components.map((c) => ({
 }));
 write('supply-chain.json', { ...supply, as_of: iso(supply.as_of), components });
 write('headlines.json', headlines.map((h) => ({ ...h, date: iso(h.date) })));
+write('campuses.json', campuses.map((c) => ({ ...c, announced: c.announced ? iso(c.announced) : null })));
+write('hubs.json', hubs);
 write('vocabulary.json', vocab);
 
 // Atom feed of incidents, newest first, for feed readers and SOC tooling.
