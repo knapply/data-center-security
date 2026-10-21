@@ -1,5 +1,5 @@
 # Component risk tracker. level: normal | elevated | high. trend: up | flat | down.
-# Seed assessment (seed: true) — replace with sourced reasoning on the first weekly pass.
+# seed: true stays until every note is backed by a cited source (see the PR history).
 
 as_of: 2026-10-20
 seed: true
@@ -8,41 +8,43 @@ components:
     name: GPUs and accelerators
     level: high
     trend: flat
-    note: Export controls and concentrated advanced packaging capacity.
+    note: US export controls still restrict sales to China; advanced packaging and HBM capacity remain bottlenecks.
     related_incidents: [2022-us-chip-export-controls]
   - id: transformers
     name: Large power transformers
     level: high
     trend: flat
-    note: Multi-year lead times for grid and substation equipment.
+    note: Power transformer lead times run about 2–4 years, with Wood Mackenzie estimating a 30% US supply deficit.
     related_incidents: []
   - id: switchgear
     name: Switchgear and generators
     level: elevated
     trend: flat
-    note: Demand from new builds outpacing manufacturing capacity.
+    note: Demand from new builds outpacing manufacturing capacity (not yet backed by a tier-1 or tier-2 source).
     related_incidents: []
   - id: batteries
     name: UPS and lithium-ion batteries
     level: elevated
     trend: flat
-    note: Repeated battery-room fires; cell supply concentrated in few countries.
-    related_incidents: [2021-ovh-sbg-fire, 2022-kakao-pangyo-fire, 2024-digital-realty-sg-fire]
+    note: >-
+      Battery-room fires keep recurring (Daejeon 2025, London 2026), and China's suspended
+      licensing of lithium-ion cell and graphite anode exports is due to lapse on 2026-11-10.
+    related_incidents: [2021-ovh-sbg-fire, 2022-kakao-pangyo-fire, 2023-gcp-paris-water-fire, 2024-digital-realty-sg-fire]
   - id: cooling
     name: Chillers and liquid cooling
     level: elevated
     trend: up
-    note: High-density AI racks driving demand for CDUs and chillers.
-    related_incidents: [2022-london-heatwave-cooling, 2023-equinix-sg-cooling]
+    note: AI racks at 100 kW and above are driving record orders and backlogs for CDUs, pumps and chillers.
+    related_incidents: [2022-london-heatwave-cooling, 2023-equinix-sg-cooling, 2023-azure-sydney-chillers]
   - id: firmware
     name: BMC and server firmware
     level: elevated
     trend: flat
-    note: Shared firmware supply chain means one flaw spans many server brands.
+    note: Shared AMI and OpenBMC firmware means one flaw, such as KEV-listed CVE-2024-54085, spans many server brands; BMC advisories continued through 2026.
     related_incidents: [2025-ami-megarac-bmc]
   - id: subsea
     name: Subsea cable capacity
     level: elevated
     trend: flat
-    note: Cable damage incidents and limited repair ship availability.
+    note: Repeated Red Sea and Baltic cable damage meets an ageing, thin repair fleet, so repairs can take weeks to months.
     related_incidents: [2024-red-sea-cable-cuts, 2024-baltic-cable-cuts]
