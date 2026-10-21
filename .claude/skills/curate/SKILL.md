@@ -13,6 +13,7 @@ Follow every rule in `CLAUDE.md`. This skill is the procedure.
    - CISA ICS advisories and KEV additions that touch UPS, PDU, BMS, cooling, access control, BMC, or server firmware vendors (Schneider Electric/APC, Vertiv, Eaton, Siemens, Johnson Controls, Honeywell, Rockwell, AMI, Supermicro, Dell iDRAC, HPE iLO).
    - Trade press: DatacenterDynamics, Data Center Knowledge, The Register.
    - News searches: data center fire, outage power, cooling failure, subsea cable cut, data center attack, export controls chips, transformer shortage.
+   - Industry: data center power purchase agreement, nuclear data center deal, gigawatt campus announced, data center moratorium or permit denied, data center acquisition or financing, hyperscaler capex guidance, liquid cooling contract. Sources: Data Center Frontier, Utility Dive, company press releases and SEC filings.
 4. **Triage** each item against the scope and source rules. Group reports about the same event.
 5. **Write changes.**
    - New qualifying events go into `incidents.yaml` (keep the file in date order).

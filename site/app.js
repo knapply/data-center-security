@@ -2,7 +2,12 @@ const CATS = [
   { id: 'physical', label: 'Physical' },
   { id: 'it-ot', label: 'IT / OT / SCADA' },
   { id: 'supply-chain', label: 'Supply chain' },
+  { id: 'energy', label: 'Energy' },
+  { id: 'capacity', label: 'Capacity' },
+  { id: 'market', label: 'Market' },
+  { id: 'regulation', label: 'Regulation' },
 ];
+const SECURITY = new Set(['physical', 'it-ot', 'supply-chain']);
 const SEV = { low: 0, medium: 1, high: 2, critical: 3 };
 const SEV_PX = { low: 12, medium: 15, high: 19, critical: 24 };
 const DAY = 864e5;
@@ -184,8 +189,8 @@ function renderStats(list) {
   const n = (c) => list.filter((i) => i.category.includes(c)).length;
   const countries = new Set(list.filter((i) => i.location).map((i) => i.location.country)).size;
   const cards = [
-    ['Tracked incidents', list.length, `${n('physical')} physical · ${n('it-ot')} IT/OT · ${n('supply-chain')} supply`, css('--accent')],
-    ['Critical or high', list.filter((i) => SEV[i.severity] >= 2).length, 'Multi-hour outages or remote takeover', css('--critical')],
+    ['Tracked events', list.length, `${list.filter((i) => i.category.some((c) => SECURITY.has(c))).length} security · ${list.filter((i) => i.category.some((c) => !SECURITY.has(c))).length} industry`, css('--accent')],
+    ['Critical or high', list.filter((i) => SEV[i.severity] >= 2).length, 'Most severe incidents and most significant moves', css('--critical')],
     ['Countries hit', countries, 'Plus global advisories and policy', css('--party')],
     ['Root causes traced', list.filter((i) => i.root_cause && i.root_cause.confidence !== 'unknown').length, 'Failed part identified from sources', css('--ok')],
   ];
@@ -753,8 +758,8 @@ function render() {
 }
 renderSupply();
 readUrl();
-// Globe by default; the flat map on phones (a globe there traps page scrolling) or without WebGL.
-setView(matchMedia('(max-width: 700px)').matches ? 'flat' : 'globe');
+// The flat map is the default; the 3D globe is one click away.
+setView('flat');
 render();
 // A shared link to one incident: open its details and scroll to it once the page has laid out.
 const linked = byId.get(decodeURIComponent(location.hash.slice(1)));

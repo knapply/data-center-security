@@ -3,8 +3,8 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Data Center Security Watch</title>
-  <meta name="description" content="A curated tracker of physical, IT/OT and supply-chain security incidents affecting data centers worldwide.">
+  <title>Data Center Watch</title>
+  <meta name="description" content="Curated security incidents and industry developments across data centers and digital infrastructure: threats, energy, capacity, markets and regulation.">
   <meta name="theme-color" content="#070b11">
   <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Cpath d='M16 2 4 7v8c0 7.5 5 13 12 15 7-2 12-7.5 12-15V7z' fill='%23ff4d6a'/%3E%3Crect x='10' y='11' width='12' height='3' rx='1' fill='%23070b11'/%3E%3Crect x='10' y='16' width='12' height='3' rx='1' fill='%23070b11'/%3E%3C/svg%3E">
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -12,17 +12,18 @@
   <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.css">
   <link rel="stylesheet" href="style.css">
-  <link rel="alternate" type="application/atom+xml" title="Data Center Security Watch: new incidents" href="feed.xml">
+  <link rel="alternate" type="application/atom+xml" title="Data Center Watch: new events" href="feed.xml">
 </head>
 <body>
   <header class="top">
     <a class="brand" href="./">
       <svg class="brand-mark" viewBox="0 0 32 32" aria-hidden="true"><path d="M16 2 4 7v8c0 7.5 5 13 12 15 7-2 12-7.5 12-15V7z"/><rect x="10" y="11" width="12" height="3" rx="1"/><rect x="10" y="16" width="12" height="3" rx="1"/></svg>
-      <span>Data Center <b>Security Watch</b></span>
+      <span>Data Center <b>Watch</b></span>
     </a>
     <nav>
       <a href="#map">Map</a>
       <a href="#timeline">Timeline</a>
+      <a href="#markets">Markets</a>
       <a href="#supply">Supply chain</a>
       <a href="#impact">Impact</a>
       <a href="#incidents">Incidents</a>
@@ -33,6 +34,13 @@
     <div class="status"><span class="pulse-dot"></span><span id="status-text">Monitoring</span></div>
   </header>
 
+  <div class="market-tape tradingview-widget-container" aria-label="Stock ticker for data center and AI companies">
+    <div class="tradingview-widget-container__widget"></div>
+    <script type="text/javascript" src="https://s3.tradingview.com/external-embedding/embed-widget-ticker-tape.js" async>
+{"symbols":[{"proName":"NASDAQ:NVDA","title":"NVIDIA"},{"proName":"NASDAQ:MSFT","title":"Microsoft"},{"proName":"NASDAQ:GOOGL","title":"Alphabet"},{"proName":"NASDAQ:AMZN","title":"Amazon"},{"proName":"NASDAQ:META","title":"Meta"},{"proName":"NYSE:ORCL","title":"Oracle"},{"proName":"NASDAQ:CRWV","title":"CoreWeave"},{"proName":"NASDAQ:AMD","title":"AMD"},{"proName":"NASDAQ:AVGO","title":"Broadcom"},{"proName":"NYSE:TSM","title":"TSMC"},{"proName":"NYSE:VRT","title":"Vertiv"},{"proName":"EURONEXT:SU","title":"Schneider"},{"proName":"NYSE:ETN","title":"Eaton"},{"proName":"NYSE:JCI","title":"Johnson Controls"},{"proName":"NYSE:TT","title":"Trane"},{"proName":"NYSE:GEV","title":"GE Vernova"},{"proName":"NASDAQ:CEG","title":"Constellation"},{"proName":"NYSE:VST","title":"Vistra"},{"proName":"NYSE:PWR","title":"Quanta"},{"proName":"NYSE:EME","title":"EMCOR"},{"proName":"NASDAQ:EQIX","title":"Equinix"},{"proName":"NYSE:DLR","title":"Digital Realty"},{"proName":"NYSE:ANET","title":"Arista"},{"proName":"NASDAQ:SMCI","title":"Supermicro"}],"showSymbolLogo":true,"isTransparent":true,"displayMode":"adaptive","colorTheme":"dark","locale":"en"}
+    </script>
+  </div>
+
   <div class="ticker" aria-label="Latest headlines">
     <span class="ticker-label"><span class="pulse-dot"></span>Latest</span>
     <div class="ticker-track"><div class="ticker-items" id="ticker"></div></div>
@@ -40,9 +48,9 @@
 
   <section class="hero">
     <div class="hero-text">
-      <p class="eyebrow">Global threat tracker</p>
-      <h1>Fires, cyberattacks, cut cables, and chip shortages: the threats hitting the world's data centers.</h1>
-      <p class="lede">Every incident is researched from public sources, traced to its root cause, and linked to the supply chain behind it.</p>
+      <p class="eyebrow">Data center intelligence</p>
+      <h1>Fires, cyberattacks, power deals, gigawatt campuses, and chip shortages: what's moving the world's data centers.</h1>
+      <p class="lede">Security incidents and industry developments, researched from public sources, traced to root causes, and tied to the supply chain and markets behind them.</p>
     </div>
     <div class="kpis" id="stats"></div>
   </section>
@@ -74,19 +82,23 @@
         <h2>Incident map</h2>
         <span class="muted small" id="unmapped"></span>
         <div class="seg" role="group" aria-label="Map view">
-          <button id="view-globe" aria-pressed="true">3D globe</button>
-          <button id="view-flat" aria-pressed="false">Flat map</button>
+          <button id="view-flat" aria-pressed="true">Flat map</button>
+          <button id="view-globe" aria-pressed="false">3D globe</button>
         </div>
       </div>
       <div class="map-wrap">
-        <div id="globe"></div>
-        <div id="leaflet" hidden></div>
-        <div class="globe-hint" id="globe-hint">Drag to spin · scroll to zoom · click a pulse · arcs link incidents that share a company</div>
+        <div id="globe" hidden></div>
+        <div id="leaflet"></div>
+        <div class="globe-hint" id="globe-hint" hidden>Drag to spin · scroll to zoom · click a pulse · arcs link incidents that share a company</div>
         <aside class="map-detail" id="map-detail" hidden></aside>
         <div class="map-legend">
           <span><i style="background:var(--physical)"></i>Physical</span>
           <span><i style="background:var(--it-ot)"></i>IT / OT</span>
           <span><i style="background:var(--supply-chain)"></i>Supply chain</span>
+          <span><i style="background:var(--energy)"></i>Energy</span>
+          <span><i style="background:var(--capacity)"></i>Capacity</span>
+          <span><i style="background:var(--market)"></i>Market</span>
+          <span><i style="background:var(--regulation)"></i>Regulation</span>
           <span class="muted">Size = severity</span>
         </div>
         <div class="playback">
@@ -105,6 +117,20 @@
         <span class="muted small">Each dot is an incident. Hover for details, click to jump to it.</span>
       </div>
       <svg id="beeswarm" role="img" aria-label="Timeline of incidents by date, colored by category"></svg>
+    </section>
+
+    <section class="panel reveal" id="markets">
+      <div class="panel-head">
+        <h2>Market watch</h2>
+        <span class="muted small">The public companies behind data centers and AI, by segment. OpenAI, Anthropic and xAI are private and not listed.</span>
+      </div>
+      <div class="tradingview-widget-container market-overview">
+        <div class="tradingview-widget-container__widget"></div>
+        <div class="tradingview-widget-copyright"><a href="https://www.tradingview.com/" rel="noopener nofollow" target="_blank">Market data by TradingView</a></div>
+        <script type="text/javascript" src="https://s3.tradingview.com/external-embedding/embed-widget-market-overview.js" async>
+{"colorTheme":"dark","dateRange":"1M","showChart":true,"locale":"en","largeChartUrl":"","isTransparent":false,"showSymbolLogo":true,"showFloatingTooltip":true,"width":"100%","height":"560","plotLineColorGrowing":"rgba(61, 220, 151, 1)","plotLineColorFalling":"rgba(255, 84, 104, 1)","gridLineColor":"rgba(148, 170, 200, 0.08)","scaleFontColor":"rgba(133, 147, 166, 1)","belowLineFillColorGrowing":"rgba(61, 220, 151, 0.12)","belowLineFillColorFalling":"rgba(255, 84, 104, 0.12)","belowLineFillColorGrowingBottom":"rgba(61, 220, 151, 0)","belowLineFillColorFallingBottom":"rgba(255, 84, 104, 0)","symbolActiveColor":"rgba(56, 182, 255, 0.12)","tabs":[{"title":"AI & cloud","symbols":[{"s":"NASDAQ:MSFT","d":"Microsoft"},{"s":"NASDAQ:GOOGL","d":"Alphabet"},{"s":"NASDAQ:AMZN","d":"Amazon"},{"s":"NASDAQ:META","d":"Meta"},{"s":"NYSE:ORCL","d":"Oracle"},{"s":"NASDAQ:CRWV","d":"CoreWeave"},{"s":"NASDAQ:NBIS","d":"Nebius"}],"originalTitle":"AI & cloud"},{"title":"GPUs & chips","symbols":[{"s":"NASDAQ:NVDA","d":"NVIDIA"},{"s":"NASDAQ:AMD","d":"AMD"},{"s":"NASDAQ:AVGO","d":"Broadcom"},{"s":"NYSE:TSM","d":"TSMC"},{"s":"NASDAQ:MU","d":"Micron"},{"s":"NASDAQ:MRVL","d":"Marvell"},{"s":"NASDAQ:ASML","d":"ASML"},{"s":"NASDAQ:ARM","d":"Arm"},{"s":"NASDAQ:INTC","d":"Intel"}],"originalTitle":"GPUs & chips"},{"title":"Cooling & thermal","symbols":[{"s":"NYSE:VRT","d":"Vertiv"},{"s":"EURONEXT:SU","d":"Schneider Electric"},{"s":"NYSE:JCI","d":"Johnson Controls"},{"s":"NYSE:TT","d":"Trane Technologies"},{"s":"NYSE:CARR","d":"Carrier"},{"s":"NYSE:MOD","d":"Modine"},{"s":"NYSE:NVT","d":"nVent"},{"s":"TSE:6367","d":"Daikin"}],"originalTitle":"Cooling & thermal"},{"title":"Power & energy","symbols":[{"s":"NYSE:GEV","d":"GE Vernova"},{"s":"NYSE:ETN","d":"Eaton"},{"s":"NASDAQ:CEG","d":"Constellation"},{"s":"NYSE:VST","d":"Vistra"},{"s":"NASDAQ:TLN","d":"Talen"},{"s":"NYSE:NRG","d":"NRG"},{"s":"NYSE:NEE","d":"NextEra"},{"s":"NYSE:BE","d":"Bloom Energy"},{"s":"NYSE:OKLO","d":"Oklo"},{"s":"NYSE:SMR","d":"NuScale"}],"originalTitle":"Power & energy"},{"title":"Planning & construction","symbols":[{"s":"NYSE:PWR","d":"Quanta Services"},{"s":"NYSE:EME","d":"EMCOR"},{"s":"NYSE:FIX","d":"Comfort Systems"},{"s":"NYSE:MTZ","d":"MasTec"},{"s":"NASDAQ:STRL","d":"Sterling"},{"s":"NYSE:J","d":"Jacobs"},{"s":"NYSE:ACM","d":"AECOM"},{"s":"NYSE:FLR","d":"Fluor"},{"s":"NYSE:HUBB","d":"Hubbell"}],"originalTitle":"Planning & construction"},{"title":"Operators & REITs","symbols":[{"s":"NASDAQ:EQIX","d":"Equinix"},{"s":"NYSE:DLR","d":"Digital Realty"},{"s":"NYSE:IRM","d":"Iron Mountain"},{"s":"NASDAQ:APLD","d":"Applied Digital"}],"originalTitle":"Operators & REITs"},{"title":"Networking & servers","symbols":[{"s":"NYSE:ANET","d":"Arista"},{"s":"NASDAQ:CSCO","d":"Cisco"},{"s":"NYSE:CIEN","d":"Ciena"},{"s":"NASDAQ:CRDO","d":"Credo"},{"s":"NASDAQ:SMCI","d":"Supermicro"},{"s":"NYSE:DELL","d":"Dell"},{"s":"NYSE:HPE","d":"HPE"}],"originalTitle":"Networking & servers"}],"backgroundColor":"rgba(14, 20, 29, 1)"}
+        </script>
+      </div>
     </section>
 
     <section class="panel reveal" id="supply">
@@ -172,7 +198,8 @@
 
     <section class="panel about" id="about">
       <h2>About</h2>
-      <p>This tracker covers security events that affect data centers: physical threats (fire, power, cooling, sabotage, cable cuts), IT/OT/SCADA vulnerabilities in facility and server infrastructure, and supply-chain risk for the components data centers depend on.</p>
+      <p>This tracker covers the data center industry end to end. On the security side: physical threats (fire, power, cooling, sabotage, cable cuts), IT/OT/SCADA vulnerabilities in facility and server infrastructure, and supply-chain risk. On the industry side: energy deals and grid limits, new capacity and construction, market moves, and regulation.</p>
+      <p class="muted small">Market data comes from TradingView widgets and may be delayed. It is shown for context, not as investment advice.</p>
       <p>Every entry is curated: drafted from public sources, checked against an editorial rubric, and reviewed before publishing. Locations are shown at city or region level only. Where no source names the maker of a failed part, any best guess is labeled as one, with its evidence.</p>
       <p class="muted small">Data and methodology live in the <a href="https://github.com/knapply/data-center-security">GitHub repository</a>.</p>
     </section>

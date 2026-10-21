@@ -54,7 +54,8 @@ for (const [i, inc] of incidents.entries()) {
 
   // What failed, who made it, and how the supply chain contributed.
   const rc = inc.root_cause;
-  if (!rc && !inc.seed) err(at, 'missing root_cause (use confidence: unknown if nothing is published)');
+  // Root causes apply to things that went wrong, not to industry developments.
+  if (!rc && !inc.seed && ['incident', 'vulnerability'].includes(inc.type)) err(at, 'missing root_cause (use confidence: unknown if nothing is published)');
   if (rc) {
     if (!rc.summary) err(at, 'root_cause.summary is required');
     if (!vocab.confidence.includes(rc.confidence)) err(at, `root_cause.confidence must be one of ${vocab.confidence.join(', ')}`);
@@ -153,13 +154,13 @@ const entries = sorted.slice(0, 50).map((i) => {
 });
 fs.writeFileSync(path.join(out, 'feed.xml'), `<?xml version="1.0" encoding="utf-8"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
-  <title>Data Center Security Watch</title>
-  <subtitle>Curated physical, IT/OT and supply-chain security incidents affecting data centers</subtitle>
+  <title>Data Center Watch</title>
+  <subtitle>Curated security incidents and industry developments across data centers and digital infrastructure</subtitle>
   <id>${SITE}</id>
   <link href="${SITE}"/>
   <link rel="self" href="${SITE}feed.xml"/>
   <updated>${stamp(sorted[0]?.date ?? iso(new Date()))}</updated>
-  <author><name>Data Center Security Watch</name></author>
+  <author><name>Data Center Watch</name></author>
 ${entries.join('\n')}
 </feed>
 `);
