@@ -334,3 +334,59 @@ button.kpi:hover .kpi-go, button.kpi:focus-visible .kpi-go { opacity: 1; transfo
 .tradingview-widget-copyright { font-size: 12px; margin-top: 6px; text-align: right; }
 .tradingview-widget-copyright a { color: var(--muted); }
 @media print { .market-tape, #markets { display: none !important; } }
+
+/* ---------- Opportunity radar ---------- */
+.radar-summary { margin-bottom: 16px; }
+.radar-controls { display: flex; flex-wrap: wrap; gap: 10px 18px; align-items: center; margin-bottom: 12px; }
+.toggle { display: inline-flex; align-items: center; gap: 6px; font-size: 13px; color: var(--muted); cursor: pointer; }
+.toggle input { accent-color: var(--accent); }
+.panel-head .toggle { margin-left: auto; }
+.panel-head .toggle + .seg { margin-left: 8px; }
+.table-wrap { overflow-x: auto; }
+.radar-table, .hw-table { width: 100%; border-collapse: collapse; font-size: 13.5px; }
+.radar-table th, .hw-table th { text-align: left; font: 600 11px var(--mono); color: var(--muted); text-transform: uppercase; letter-spacing: .06em; padding: 8px 10px; border-bottom: 1px solid var(--border-strong); white-space: nowrap; }
+.radar-table td, .hw-table td { padding: 10px; border-bottom: 1px solid var(--border); vertical-align: top; }
+.radar-table tr:hover td, .hw-table tr:hover td { background: var(--surface-2); }
+.num { text-align: right; } .nowrap { white-space: nowrap; } .mono { font-family: var(--mono); }
+.stage { display: inline-block; font: 600 11px var(--mono); text-transform: uppercase; letter-spacing: .04em; padding: 2px 8px; border-radius: 999px; color: var(--sc); border: 1px solid color-mix(in srgb, var(--sc) 55%, transparent); background: color-mix(in srgb, var(--sc) 12%, transparent); white-space: nowrap; }
+.linkish { background: none; border: 0; padding: 0; color: var(--accent); font: inherit; cursor: pointer; text-align: left; }
+.linkish:hover { text-decoration: underline; }
+.campus-pin { transform: rotate(45deg); border-radius: 3px; background: color-mix(in srgb, var(--sc) 35%, transparent); border: 2px solid var(--sc); box-shadow: 0 0 12px var(--sc); }
+
+/* ---------- Heat and water watch ---------- */
+.temp { font: 700 16px var(--display); }
+.temp small { font: 11px var(--mono); color: var(--muted); }
+.temp.hot1 { color: var(--medium); }
+.temp.hot2 { color: var(--critical); text-shadow: 0 0 12px color-mix(in srgb, var(--critical) 60%, transparent); }
+.water { font: 600 11px var(--mono); text-transform: uppercase; padding: 2px 8px; border-radius: 4px; border: 1px solid; }
+.water.w0, .water.w1 { color: var(--ok); } .water.w2 { color: var(--medium); } .water.w3, .water.w4 { color: var(--critical); }
+.attribution { margin: 10px 0 0; }
+
+/* ---------- Cooling vendors ---------- */
+.vendor-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 260px), 1fr)); gap: 10px; }
+.vendor { display: flex; flex-direction: column; gap: 4px; text-align: left; background: linear-gradient(180deg, var(--surface-2), var(--surface)); border: 1px solid var(--border); border-radius: 12px; padding: 12px 14px; color: var(--text); font: inherit; cursor: pointer; transition: transform .2s, border-color .2s; }
+.vendor:hover { transform: translateY(-2px); border-color: var(--it-ot); }
+.v-top { display: flex; justify-content: space-between; gap: 8px; font-size: 15px; }
+.v-stats { font-size: 13px; color: var(--muted); } .v-stats b { color: var(--text); }
+.v-latest { font-size: 12.5px; line-height: 1.4; }
+
+/* ---------- Operator briefs ---------- */
+.brief-picker { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 12px; }
+.brief-picker input { flex: 1; min-width: 220px; background: var(--surface); color: var(--text); border: 1px solid var(--border-strong); border-radius: 8px; padding: 8px 10px; font: inherit; }
+.brief-quick { display: flex; flex-wrap: wrap; gap: 6px; }
+dialog.brief { width: min(860px, calc(100% - 24px)); max-height: calc(100vh - 40px); background: var(--surface); color: var(--text); border: 1px solid var(--border-strong); border-radius: 16px; padding: 24px 26px; box-shadow: 0 30px 80px rgba(0,0,0,.6); }
+dialog.brief::backdrop { background: rgba(3, 6, 10, .72); backdrop-filter: blur(4px); }
+dialog.brief h2 { font-size: 26px; margin: 0 0 12px; }
+dialog.brief h3 { font: 600 15px var(--display); margin: 18px 0 6px; }
+dialog.brief .close { position: absolute; top: 10px; right: 14px; background: none; border: 0; color: var(--muted); font-size: 26px; cursor: pointer; }
+.key-points li { margin: 6px 0; color: #c5d0dc; }
+.brief-list { padding-left: 18px; font-size: 14px; }
+.brief-list li { margin: 4px 0; }
+.brief-quote { margin-top: 14px; min-height: 80px; }
+.brief-actions { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 18px; }
+@media print {
+  body.print-brief > *:not(dialog) { display: none !important; }
+  body.print-brief dialog.brief { position: static; display: block; width: auto; max-height: none; border: 0; box-shadow: none; background: #fff; color: #111; }
+  body.print-brief .brief-actions, body.print-brief .close, body.print-brief .brief-quote { display: none !important; }
+  #radar, #heat-water, #vendors, #briefs { display: none !important; }
+}

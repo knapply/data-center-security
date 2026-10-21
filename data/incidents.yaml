@@ -736,3 +736,820 @@
         brands and each OEM ships its own fix on its own schedule.
       component: firmware
       confidence: confirmed
+
+# Cooling vendor developments (researched 2026-10-21)
+- id: 2025-eaton-boyd-thermal
+  date: 2025-11-03T00:00:00.000Z
+  title: Eaton agrees to buy Boyd Thermal for $9.5B in liquid cooling push
+  type: development
+  category:
+    - market
+  status: confirmed
+  severity: high
+  location: null
+  affects:
+    - cooling
+  impacts:
+    - investment
+  operators: []
+  vendors:
+    - Eaton
+    - Boyd
+  summary: >
+    Eaton agreed to buy Boyd Thermal from Goldman Sachs Asset Management for $9.5B, or 22.5x Boyd's estimated 2026 adjusted EBITDA. Boyd
+    Thermal projected 2026 sales of $1.7B, of which $1.5B is liquid cooling. The deal closed on March 12, 2026, and Eaton is selling it with
+    its power equipment as a "grid-to-chip" offer.
+  sources:
+    - publisher: Business Wire (Eaton)
+      url: >-
+        https://www.businesswire.com/news/home/20251103856036/en/Eaton-Signs-Agreement-to-Acquire-Boyd-Thermal-Expanding-Solutions-for-Data-Center-Customers-to-Include-Critical-Liquid-Cooling-Technology
+    - publisher: Business Wire (Eaton closing)
+      url: https://www.businesswire.com/news/home/20260312582488/en
+    - publisher: Eaton 10-Q
+      url: https://www.sec.gov/Archives/edgar/data/0001551182/000155118226000013/etn-20260331.htm
+- id: 2026-ecolab-coolit
+  date: 2026-03-20T00:00:00.000Z
+  title: Ecolab to acquire CoolIT Systems from KKR for $4.75B
+  type: development
+  category:
+    - market
+  status: confirmed
+  severity: high
+  location: null
+  affects:
+    - cooling
+  impacts:
+    - investment
+  operators: []
+  vendors:
+    - Ecolab
+    - CoolIT Systems
+  summary: >
+    Ecolab agreed to buy CoolIT Systems, a Calgary maker of CDUs and direct-to-chip cold plates, from KKR funds for about $4.75B in cash.
+    Ecolab expects CoolIT to generate about $550M in sales over the next 12 months. Trade press reported in early July 2026 that the deal
+    had closed.
+  sources:
+    - publisher: Business Wire (Ecolab)
+      url: >-
+        https://www.businesswire.com/news/home/20260319353197/en/Ecolab-to-Acquire-CoolIT-Systems,-a-Global-Leader-in-Advanced-Liquid-Cooling-for-Next-Gen-AI-Data-Centers
+    - publisher: CoolIT Systems
+      url: https://www.coolitsystems.com/resources/news/ecolab-to-acquire-coolit-systems/
+    - publisher: IT Brief
+      url: https://itbrief.co.uk/story/ecolab-completes-usd-4-75-billion-coolit-takeover
+- id: 2025-vertiv-purgerite
+  date: 2025-11-03T00:00:00.000Z
+  title: Vertiv agrees to buy PurgeRite for ~$1B to expand liquid cooling services
+  type: development
+  category:
+    - market
+  status: confirmed
+  severity: high
+  location: null
+  affects:
+    - cooling
+  impacts:
+    - investment
+  operators: []
+  vendors:
+    - Vertiv
+    - PurgeRite
+  summary: >
+    Vertiv agreed to buy PurgeRite, a Houston firm that flushes, purges and filters data center fluid systems, from Milton Street Capital.
+    The price is about $1B in cash, plus up to $250M more tied to 2026 performance. The deal closed on December 4, 2025, and Vertiv's FY2025
+    10-K puts gross consideration at $1,152.7M.
+  sources:
+    - publisher: Vertiv FY2025 10-K
+      url: https://www.sec.gov/Archives/edgar/data/1674101/000167410126000008/vrt-20251231.htm
+    - publisher: Reuters (via TradingView)
+      url: >-
+        https://kr.tradingview.com/news/reuters.com%2C2025%3Anewsml_L4N3WF0UY%3A0-vertiv-to-acquire-purgerite-for-about-1-billion-to-boost-its-liquid-cooling-portfolio
+- id: 2024-schneider-motivair
+  date: 2024-10-17T00:00:00.000Z
+  title: Schneider Electric agrees to acquire 75% stake in Motivair for $850M
+  type: development
+  category:
+    - market
+  status: confirmed
+  severity: high
+  location: null
+  affects:
+    - cooling
+  impacts:
+    - investment
+  operators: []
+  vendors:
+    - Schneider Electric
+    - Motivair
+  summary: >
+    Schneider Electric agreed to buy a 75% controlling stake in Motivair, a Buffalo, NY liquid cooling specialist, for $850M in cash.
+    Schneider expects to buy the remaining 25% in 2028. The majority stake closed in late February 2025.
+  sources:
+    - publisher: DatacenterDynamics
+      url: https://www.datacenterdynamics.com/en/news/schneider-electric-acquires-majority-stake-in-cooling-company-motivair-corp/
+    - publisher: Option Finance (closing)
+      url: >-
+        https://www.optionfinance.fr/info-financiere-en-continu/d/2025-02-28-schneider-electric-finalise-sa-prise-de-participation-majoritaire-dans-motivair.html
+- id: 2026-modine-4b-capacity-agreement
+  date: 2026-05-26T00:00:00.000Z
+  title: Modine signs $4B+ 2027-2029 capacity deal for Airedale data center cooling
+  type: development
+  category:
+    - market
+    - supply-chain
+  status: confirmed
+  severity: high
+  location: null
+  affects:
+    - cooling
+  impacts:
+    - financial
+    - capacity-added
+  operators: []
+  vendors:
+    - Modine
+    - Airedale
+  summary: >
+    Modine signed a long-term capacity agreement to reserve supply of more than $4B of Airedale data center cooling products for an unnamed
+    strategic customer over calendar 2027-2029. The customer paid $165M upfront to fund capacity investment.
+  sources:
+    - publisher: Airedale by Modine
+      url: https://www.airedale.com/?p=17002
+    - publisher: DatacenterDynamics
+      url: >-
+        https://www.datacenterdynamics.com/en/product-news/modine-announces-landmark-4-billion-long-term-capacity-agreement-through-2029-with-strategic-data-center-customer-for-airedale-by-modine-cooling-solutions/
+- id: 2025-schneider-switch-digital-realty
+  date: 2025-11-19T00:00:00.000Z
+  title: Schneider Electric books ~$2.3B in US data center deals with Switch, Digital Realty
+  type: development
+  category:
+    - market
+    - supply-chain
+  status: confirmed
+  severity: high
+  location: null
+  affects:
+    - cooling
+    - power
+  impacts:
+    - financial
+  operators:
+    - Switch
+    - Digital Realty
+  summary: >
+    Schneider Electric announced about $2.3B of US data center supply agreements. About $1.9B is with Switch for power modules and cooling
+    systems, which Reuters called Schneider's largest North American data center cooling deal to date. A $373M Digital Realty deal covers
+    UPS and switchgear. Deliveries are phased across 2025-2026.
+  sources:
+    - publisher: Data Center Frontier
+      url: >-
+        https://www.datacenterfrontier.com/machine-learning/article/55332455/schneider-electrics-23-billion-worth-of-ai-power-and-cooling-deals-sends-message-to-data-center-sector
+    - publisher: Reuters (via Yahoo Finance)
+      url: https://finance.yahoo.com/news/schneider-electric-seals-2-3-153115227.html
+- id: 2026-trane-liquidstack
+  date: 2026-02-18T00:00:00.000Z
+  title: Trane Technologies agrees to acquire LiquidStack
+  type: development
+  category:
+    - market
+  status: confirmed
+  severity: high
+  location: null
+  affects:
+    - cooling
+  impacts:
+    - investment
+  operators: []
+  vendors:
+    - Trane Technologies
+    - LiquidStack
+  summary: >
+    Trane agreed to fully acquire LiquidStack, which makes direct-to-chip CDUs and immersion cooling, building on its 2023 minority stake.
+    Terms were not disclosed. LiquidStack joins Trane's Americas Commercial HVAC unit with its Carrollton, TX and Hong Kong operations, and
+    CEO Joe Capes stays on. A March 2026 report says the deal has closed.
+  sources:
+    - publisher: Trane Technologies
+      url: >-
+        https://www.trane.com/commercial/asia-pacific/sg/en/about-us/press-releases/acquire-liquidstack-end-to-end-data-center-thermal-management-solutions.html
+    - publisher: DatacenterDynamics
+      url: https://www.datacenterdynamics.com/en/news/trane-acquires-cooling-firm-liquidstack/
+- id: 2025-trane-stellar-energy
+  date: 2025-12-02T00:00:00.000Z
+  title: Trane Technologies to acquire Stellar Energy's data center cooling business
+  type: development
+  category:
+    - market
+  status: confirmed
+  severity: medium
+  location: null
+  affects:
+    - cooling
+  impacts:
+    - investment
+  operators: []
+  vendors:
+    - Trane Technologies
+    - Stellar Energy
+  summary: >
+    Trane agreed to buy Stellar Energy's Digital business, a Jacksonville, FL maker of modular chiller plants, central utility plants and
+    CDUs with about 700 employees. Terms were not disclosed. The deal closed on February 18, 2026.
+  sources:
+    - publisher: Nasdaq (Trane press release)
+      url: https://www.nasdaq.com/press-release/trane-technologies-acquire-stellar-energy-digital-business-2025-12-02
+    - publisher: Trane Technologies (closing)
+      url: >-
+        https://investors.tranetechnologies.com/news-and-events/news-releases/news-release-details/2026/Trane-Technologies-Completes-Acquisition-of-Stellar-Energy/default.aspx
+- id: 2025-samsung-flaktgroup
+  date: 2025-05-14T00:00:00.000Z
+  title: Samsung agrees to buy FläktGroup for €1.5B, targeting data center HVAC
+  type: development
+  category:
+    - market
+  status: confirmed
+  severity: high
+  location: null
+  affects:
+    - cooling
+  impacts:
+    - investment
+  operators: []
+  vendors:
+    - Samsung Electronics
+    - FläktGroup
+  summary: >
+    Samsung Electronics agreed to buy all of FläktGroup, a German maker of air handling, precision cooling and data center cooling
+    equipment, from Triton for about €1.5B. Samsung cited AI-driven data center cooling demand. The deal closed in November 2025.
+  sources:
+    - publisher: Samsung Newsroom (closing)
+      url: https://news.samsung.com/global/samsung-electronics-completes-acquisition-of-hvac-company-flaktgroup
+    - publisher: KED Global
+      url: https://www.kedglobal.com/mergers-acquisitions/newsView/ked202505140002
+- id: 2026-vertiv-q4-2025-backlog
+  date: 2026-02-11T00:00:00.000Z
+  title: Vertiv Q4 2025 backlog hits $15.0B on ~252% organic order growth
+  type: development
+  category:
+    - market
+  status: confirmed
+  severity: high
+  location: null
+  affects:
+    - cooling
+    - power
+  impacts:
+    - financial
+  operators: []
+  vendors:
+    - Vertiv
+  summary: >
+    Vertiv reported Q4 2025 organic orders up about 252% year over year and a book-to-bill of about 2.9x. Backlog reached $15.0B, up 109%.
+    Q4 net sales were $2,880M, up 23%. The Americas grew 46% organically while APAC and EMEA declined.
+  sources:
+    - publisher: Vertiv 8-K
+      url: https://www.sec.gov/Archives/edgar/data/1674101/000167410126000006/exhibit991vrt02112026.htm
+- id: 2026-johnson-controls-q3-backlog
+  date: 2026-07-29T00:00:00.000Z
+  title: Johnson Controls backlog reaches record $21.0B on data center demand
+  type: development
+  category:
+    - market
+  status: confirmed
+  severity: high
+  location: null
+  affects:
+    - cooling
+  impacts:
+    - financial
+  operators: []
+  vendors:
+    - Johnson Controls
+  summary: >
+    In fiscal Q3 2026, Johnson Controls' organic orders grew 27% and backlog rose 32% organically to $21.0B. Americas backlog was $15.9B, up
+    40%, led by data center demand. Guidance was raised to adjusted EPS of about $5.05. Management said its CDU pipeline exceeds $1B,
+    according to call coverage.
+  sources:
+    - publisher: Johnson Controls 8-K
+      url: https://www.sec.gov/Archives/edgar/data/0000833444/000083344426000083/q3ex991xq3fy26earningsrele.htm
+    - publisher: MarketBeat (call summary)
+      url: https://www.marketbeat.com/instant-alerts/johnson-controls-international-q3-earnings-call-highlights-2026-07-29/
+- id: 2026-trane-q2-backlog
+  date: 2026-07-30T00:00:00.000Z
+  title: Trane Q2 2026 Applied bookings up 130%; backlog record $12.1B
+  type: development
+  category:
+    - market
+  status: confirmed
+  severity: high
+  location: null
+  affects:
+    - cooling
+  impacts:
+    - financial
+  operators: []
+  vendors:
+    - Trane Technologies
+  summary: >
+    Trane reported Q2 2026 enterprise organic bookings up 37% and Applied bookings up 130%, the fourth straight quarter above 100%. Backlog
+    reached a record $12.1B, up about 70%, with about $6B slated for 2027 and beyond. Four orders above $100M each were booked in the
+    quarter.
+  sources:
+    - publisher: Motley Fool (call transcript)
+      url: https://www.fool.com/earnings/call-transcripts/2026/07/30/trane-technologies-tt-q2-2026-earnings-call-transcript/
+    - publisher: MarketBeat
+      url: https://www.marketbeat.com/instant-alerts/trane-technologies-q2-earnings-call-highlights-2026-07-31/
+- id: 2026-carrier-q2-data-center
+  date: 2026-07-28T00:00:00.000Z
+  title: Carrier raises 2026 data center revenue outlook to ~$2B; DC orders up >300%
+  type: development
+  category:
+    - market
+  status: confirmed
+  severity: high
+  location: null
+  affects:
+    - cooling
+  impacts:
+    - financial
+  operators: []
+  vendors:
+    - Carrier
+  summary: >
+    Carrier's Q2 2026 orders rose about 40%, with data center orders up more than 300%. It raised its full-year data center revenue outlook
+    to about $2B from $1.5B. Total backlog passed $8B.
+  sources:
+    - publisher: Carrier
+      url: https://www.carrier.com/us/en/news/carrierreports-second-quarter-2026-results/
+    - publisher: Carrier 8-K
+      url: https://www.sec.gov/Archives/edgar/data/0001783180/000178318026000030/a99-q22026earningsexhibit.htm
+- id: 2026-vertiv-q2-guidance
+  date: 2026-07-29T00:00:00.000Z
+  title: Vertiv raises 2026 sales outlook to $14B, cites supply chain congestion
+  type: development
+  category:
+    - market
+    - supply-chain
+  status: confirmed
+  severity: high
+  location: null
+  affects:
+    - cooling
+    - power
+  impacts:
+    - financial
+    - capacity-delayed
+  operators: []
+  vendors:
+    - Vertiv
+  summary: >
+    Vertiv's Q2 2026 net sales rose 24% to $3,274M (18% organic), and it raised 2026 guidance to $14B in sales. The company said temporary
+    supply chain congestion and multi-phase project execution shifted some revenue timing, and expects this to resolve in the second half.
+  sources:
+    - publisher: Vertiv 8-K
+      url: https://www.sec.gov/Archives/edgar/data/0001674101/000162828026050323/q22026exhibit991vrt07292026.htm
+- id: 2026-schneider-q3-data-center
+  date: 2026-10-16T00:00:00.000Z
+  title: Schneider Electric Q3 2026 revenue up 16.9%; data center demand triple-digit
+  type: development
+  category:
+    - market
+  status: confirmed
+  severity: medium
+  location: null
+  affects:
+    - cooling
+    - power
+  impacts:
+    - financial
+  operators: []
+  vendors:
+    - Schneider Electric
+  summary: >
+    Schneider posted record Q3 2026 revenue of €11.46B, up 16.9% organically. Energy Management grew 18.8%, with data center demand growing
+    at triple-digit rates. Schneider raised 2026 targets again, to 12-14% organic revenue growth.
+  sources:
+    - publisher: Schneider Electric (press release via webdisclosure)
+      url: https://www.webdisclosure.com/press-release/third-quarter-revenues-2026-odiihfxJLgs
+    - publisher: Utility Dive
+      url: https://www.utilitydive.com/news/schneider-electric-data-center-earnings/833358/
+- id: 2026-nvent-blaine-expansion
+  date: 2026-07-31T00:00:00.000Z
+  title: nVent adds 160,000 sq ft liquid cooling plant; DC sales seen above $2B
+  type: development
+  category:
+    - capacity
+    - market
+  status: confirmed
+  severity: medium
+  location:
+    city: Blaine
+    country: US
+    lat: 45.16
+    lon: -93.23
+  affects:
+    - cooling
+  impacts:
+    - capacity-added
+    - financial
+  operators: []
+  vendors:
+    - nVent
+  summary: >
+    nVent leased a second 160,000 sq ft site in Blaine, MN for liquid cooling production, starting in H1 2027. It is the company's third
+    liquid cooling capacity expansion in three years. With Q2 2026 results, nVent reported a $2.5B backlog, said data center sales should
+    exceed $2B in 2026, and raised its 2026 sales growth outlook to 37-39%.
+  sources:
+    - publisher: Data Center Frontier (nVent release)
+      url: https://www.datacenterfrontier.com/press-releases/article/55397152/nvent-expands-data-center-liquid-cooling-capacity
+    - publisher: MarketBeat
+      url: https://www.marketbeat.com/instant-alerts/nvent-electric-q2-earnings-call-highlights-2026-07-31/
+- id: 2025-nvent-blaine-facility
+  date: 2025-09-03T00:00:00.000Z
+  title: nVent leases 117,000 sq ft Blaine, MN site for data center production
+  type: development
+  category:
+    - capacity
+  status: confirmed
+  severity: medium
+  location:
+    city: Blaine
+    country: US
+    lat: 45.16
+    lon: -93.23
+  affects:
+    - cooling
+  impacts:
+    - capacity-added
+  operators: []
+  vendors:
+    - nVent
+  summary: >
+    nVent leased a 117,000 sq ft facility in Blaine, MN to expand production of data center liquid cooling products. Production was slated
+    to start in early 2026, with more than 175 employees.
+  sources:
+    - publisher: nVent
+      url: >-
+        https://investors.nvent.com/press-releases/press-release-details/2025/nVent-Expands-Data-Center-Solutions-Manufacturing-with-New-U-S--Production-Facility/default.aspx
+- id: 2025-modine-100m-expansion
+  date: 2025-07-29T00:00:00.000Z
+  title: Modine invests $100M to expand US data center cooling capacity
+  type: development
+  category:
+    - capacity
+  status: confirmed
+  severity: medium
+  location: null
+  affects:
+    - cooling
+  impacts:
+    - capacity-added
+    - investment
+  operators: []
+  vendors:
+    - Modine
+    - Airedale
+  summary: >
+    Modine announced $100M over 12-18 months to expand Airedale data center cooling production. The sites are a new Dallas-area facility, an
+    expansion in Grenada, MS, and possible repurposing of plants in Franklin, WI and Jefferson City, MO. Modine says total data center
+    revenue could approach $2B in fiscal 2028.
+  sources:
+    - publisher: Airedale by Modine
+      url: https://www.airedale.com/capex-investment/
+- id: 2025-munters-record-colo-order
+  date: 2025-12-31T00:00:00.000Z
+  title: Munters wins record SEK 2.1bn US colocation data center cooling order
+  type: development
+  category:
+    - market
+  status: confirmed
+  severity: medium
+  location: null
+  affects:
+    - cooling
+  impacts:
+    - financial
+  operators: []
+  vendors:
+    - Munters
+  summary: >
+    Munters received about SEK 2.1bn of orders from an unnamed US colocation operator for chilled-water CRAHs, CDUs and Geoclima chillers,
+    plus commissioning. The equipment will be built in Munters' US plants, with deliveries from Q4 2026 through Q1 2028.
+  sources:
+    - publisher: Munters (MFN)
+      url: >-
+        https://mfn.se/all/a/munters-group/munters-group-ab-munters-wins-record-orders-for-data-center-equipment-with-a-total-value-of-2-1-bsek-e53549e9
+- id: 2025-munters-daleville-expansion
+  date: 2025-03-26T00:00:00.000Z
+  title: Munters expands Daleville, Virginia plant to build chillers in the US
+  type: development
+  category:
+    - capacity
+    - supply-chain
+  status: confirmed
+  severity: medium
+  location:
+    city: Daleville
+    country: US
+    lat: 37.41
+    lon: -79.91
+  affects:
+    - cooling
+  impacts:
+    - capacity-added
+  operators: []
+  vendors:
+    - Munters
+  summary: >
+    Munters is adding 18,580 m² of production space next to its 34,000 m² Daleville, VA data center plant, with a new chiller test lab. The
+    expansion lets it build Geoclima chillers locally for the US, with completion expected by Q2 2026.
+  sources:
+    - publisher: Cooling Post
+      url: https://www.coolingpost.com/world-news/munters-expands-us-data-centre-production/
+- id: 2026-vertiv-thermokey
+  date: 2026-03-23T00:00:00.000Z
+  title: Vertiv to acquire ThermoKey, adding heat rejection and EMEA manufacturing
+  type: development
+  category:
+    - market
+    - capacity
+  status: confirmed
+  severity: medium
+  location:
+    city: Rivarotta
+    country: IT
+    lat: 45.88
+    lon: 12.83
+  affects:
+    - cooling
+  impacts:
+    - investment
+  operators: []
+  vendors:
+    - Vertiv
+    - ThermoKey
+  summary: >
+    Vertiv agreed to buy ThermoKey S.p.A., an Italian maker of dry coolers and microchannel heat exchangers, to expand heat rejection and
+    its EMEA manufacturing. Terms were not disclosed. Vertiv announced completion in June 2026.
+  sources:
+    - publisher: Vertiv
+      url: >-
+        https://www.vertiv.com/en-us/about/news-and-insights/corporate-news/2026/vertiv-to-acquire-thermokey-expanding-heat-rejection-portfolio-for-converged-physical-infrastructure/
+- id: 2026-vertiv-kes
+  date: 2026-09-24T00:00:00.000Z
+  title: Vertiv agrees to acquire King Environmental Services for EMEA fluid services
+  type: development
+  category:
+    - market
+  status: confirmed
+  severity: low
+  location: null
+  affects:
+    - cooling
+  impacts:
+    - investment
+  operators: []
+  vendors:
+    - Vertiv
+    - King Environmental Services
+  summary: >
+    Vertiv agreed to buy King Environmental Services, a European firm that provides fluid management, commissioning and load testing for
+    liquid-cooled data centers. The deal extends its PurgeRite-style services into EMEA. Terms were not disclosed.
+  sources:
+    - publisher: Vertiv
+      url: >-
+        https://www.vertiv.com/en-us/about/news-and-events/corporate-news/2026/vertiv-announces-agreement-to-acquire-king-environmental-services-ltd.-expanding-global-fluid-management-services/
+- id: 2025-vertiv-great-lakes
+  date: 2025-07-17T00:00:00.000Z
+  title: Vertiv to acquire rack maker Great Lakes Data Racks & Cabinets for $200M
+  type: development
+  category:
+    - market
+  status: confirmed
+  severity: low
+  location: null
+  affects:
+    - cooling
+  impacts:
+    - investment
+  operators: []
+  vendors:
+    - Vertiv
+    - Great Lakes Data Racks & Cabinets
+  summary: >
+    Vertiv agreed to buy Great Lakes, an Edinboro, PA maker of custom racks and integration, for $200M, about 11.5x expected 2026 EBITDA
+    including synergies. The deal closed on August 20, 2025.
+  sources:
+    - publisher: Vertiv
+      url: https://investors.vertiv.com/news/news-details/2025/Vertiv-To-Acquire-Custom-Rack-Solutions-Manufacturer/
+    - publisher: DatacenterDynamics
+      url: https://www.datacenterdynamics.com/en/news/vertiv-acquires-rack-maker-great-lakes-for-200-million/
+- id: 2025-daikin-chilldyne
+  date: 2025-11-04T00:00:00.000Z
+  title: Daikin Applied acquires negative-pressure liquid cooling firm Chilldyne
+  type: development
+  category:
+    - market
+  status: confirmed
+  severity: medium
+  location: null
+  affects:
+    - cooling
+  impacts:
+    - investment
+  operators: []
+  vendors:
+    - Daikin
+    - Chilldyne
+  summary: >
+    Daikin Applied Americas acquired Chilldyne, which makes negative-pressure direct-to-chip liquid cooling, including CDUs of up to 300kW.
+    Terms were not disclosed. The deal follows Daikin Applied's August 2025 purchase of DDC Solutions.
+  sources:
+    - publisher: Daikin Applied
+      url: https://daikinapplied.com/news/news/daikin-applied-expands-data-center-offering-with-acquisition-of-chilldyne
+    - publisher: DatacenterDynamics
+      url: https://www.datacenterdynamics.com/en/news/daikin-acquires-liquid-cooling-firm-chilldyne/
+- id: 2025-daikin-ddc-solutions
+  date: 2025-08-05T00:00:00.000Z
+  title: Daikin Applied acquires DDC Solutions, maker of high-density cooling cabinets
+  type: development
+  category:
+    - market
+  status: confirmed
+  severity: low
+  location: null
+  affects:
+    - cooling
+  impacts:
+    - investment
+  operators: []
+  vendors:
+    - Daikin
+    - DDC Solutions
+  summary: >
+    Daikin Applied agreed to buy DDC Solutions, a San Diego maker of hybrid air and liquid high-density cooling cabinets, from Thompson
+    Street Capital Partners. The deal completed on August 18, 2025, and DDC runs as an independent subsidiary.
+  sources:
+    - publisher: Daikin Applied
+      url: https://www.daikinapplied.com/news/news/daikin-applied-completes-acquisitions-of-ddc-solutions
+- id: 2026-jci-alloy-enterprises
+  date: 2026-02-18T00:00:00.000Z
+  title: Johnson Controls acquires direct liquid cooling component maker Alloy Enterprises
+  type: development
+  category:
+    - market
+  status: confirmed
+  severity: low
+  location: null
+  affects:
+    - cooling
+  impacts:
+    - investment
+  operators: []
+  vendors:
+    - Johnson Controls
+    - Alloy Enterprises
+  summary: >
+    Johnson Controls agreed to buy Alloy Enterprises, a Boston maker of single-piece direct liquid cooling components. The deal adds to
+    JCI's Silent-Aire CDU line, which spans 500kW to more than 10MW. Terms were not disclosed, and the deal closed on May 13, 2026.
+  sources:
+    - publisher: Johnson Controls
+      url: >-
+        https://www.johnsoncontrols.com/media-center/news/press-releases/2026/05/13/johnson-controls-completes-acquisition-of-alloy-enterprises
+- id: 2025-vertiv-q3-backlog
+  date: 2025-10-22T00:00:00.000Z
+  title: Vertiv Q3 2025 organic orders up ~60%; backlog $9.5B, guidance raised
+  type: development
+  category:
+    - market
+  status: confirmed
+  severity: medium
+  location: null
+  affects:
+    - cooling
+    - power
+  impacts:
+    - financial
+  operators: []
+  vendors:
+    - Vertiv
+  summary: >
+    Vertiv's Q3 2025 organic orders rose about 60% year over year, with a book-to-bill of about 1.4x and backlog of $9.5B. Net sales grew
+    29% to $2,676M, and full-year 2025 guidance was raised.
+  sources:
+    - publisher: Vertiv 8-K
+      url: https://www.sec.gov/Archives/edgar/data/1674101/000167410125000020/q32025exhibit991vrt10222025.htm
+    - publisher: DatacenterDynamics
+      url: https://www.datacenterdynamics.com/en/news/vertiv-revenue-jumps-29-percent-on-booming-data-center-demand/
+- id: 2024-vertiv-nvidia-gb200-reference
+  date: 2024-10-14T00:00:00.000Z
+  title: Vertiv and NVIDIA co-develop 7MW GB200 NVL72 power and cooling reference design
+  type: development
+  category:
+    - market
+  status: confirmed
+  severity: medium
+  location: null
+  affects:
+    - cooling
+    - power
+  impacts:
+    - investment
+  operators: []
+  vendors:
+    - Vertiv
+    - NVIDIA
+  summary: >
+    Vertiv released a 7MW power and cooling reference architecture, co-developed with NVIDIA, for liquid-cooled GB200 NVL72 racks at up to
+    132kW per rack. The design combines liquid and air cooling and is part of Vertiv's 360AI portfolio.
+  sources:
+    - publisher: Business Wire (Vertiv)
+      url: https://www.businesswire.com/news/home/20241014494536/en
+    - publisher: DatacenterDynamics
+      url: https://www.datacenterdynamics.com/en/news/vertiv-and-nvidia-collab-on-7mw-reference-architecture-for-gb200-nvl72
+- id: 2026-motivair-2-5mw-cdu
+  date: 2026-01-21T00:00:00.000Z
+  title: Motivair by Schneider Electric launches 2.5MW MCDU-70 CDU for AI factories
+  type: development
+  category:
+    - market
+  status: confirmed
+  severity: medium
+  location: null
+  affects:
+    - cooling
+  impacts:
+    - capacity-added
+  operators: []
+  vendors:
+    - Schneider Electric
+    - Motivair
+    - NVIDIA
+  summary: >
+    Motivair launched the MCDU-70, a 2.5MW CDU and its largest to date, which can scale past 10MW with multiple units. Six units in a 4+2
+    layout are positioned for 10MW designs such as NVIDIA's Omniverse DSX Blueprint. Schneider's CDU range now runs from 105kW to 2.5MW.
+  sources:
+    - publisher: Channel Insider
+      url: https://www.channelinsider.com/ai/emerging-tech/motivair-ai-factories-cooling-solution/
+    - publisher: IT Daily
+      url: https://itdaily.com/news/datacenter/schneider-electric-motivair-mcdu-70/
+- id: 2025-cyrusone-cme-chiller-failure
+  date: 2025-11-27T00:00:00.000Z
+  title: Chiller plant failure at CyrusOne CHI1 halts CME Group markets for 10+ hours
+  type: incident
+  category:
+    - physical
+  status: confirmed
+  severity: high
+  location:
+    city: Aurora
+    country: US
+    lat: 41.76
+    lon: -88.32
+  affects:
+    - cooling
+  impacts:
+    - outage
+    - financial
+  operators:
+    - CyrusOne
+  vendors: []
+  summary: >
+    A chiller plant failure at CyrusOne's CHI1 facility near Chicago disabled several cooling units. CME Group's Globex trading was halted
+    for more than 10 hours. CyrusOne used temporary cooling and later added cooling redundancy. The equipment vendor was not disclosed.
+  sources:
+    - publisher: Fortune
+      url: https://fortune.com/2025/11/30/cme-outage-financial-markets-data-center-cyrusone-aurora-illinois
+    - publisher: Insurance Journal (Bloomberg)
+      url: https://amp.insurancejournal.com/news/midwest/2025/12/01/849319.htm
+  root_cause:
+    summary: A chiller plant failure disabled several cooling units at the CHI1 facility.
+    confidence: likely
+    components:
+      - part: Chiller plant
+        role: origin
+        manufacturer: null
+        detail: The equipment vendor was not disclosed.
+- id: 2025-liquidstack-second-texas-plant
+  date: 2025-04-09T00:00:00.000Z
+  title: LiquidStack opens second Carrollton, Texas factory on CDU-1MW demand
+  type: development
+  category:
+    - capacity
+  status: confirmed
+  severity: low
+  location:
+    city: Carrollton
+    country: US
+    lat: 32.95
+    lon: -96.89
+  affects:
+    - cooling
+  impacts:
+    - capacity-added
+  operators: []
+  vendors:
+    - LiquidStack
+  summary: >
+    LiquidStack opened a second manufacturing site in Carrollton, TX, fully operational in May 2025, to meet demand for its CDU-1MW. The
+    CDU-1MW is on NVIDIA's Recommended Vendor List. The plant also builds immersion and modular systems.
+  sources:
+    - publisher: Cabling Installation & Maintenance (press release)
+      url: https://cablinginstall.com/data-center/press-release/55281136/liquidstack-opens-second-facility-in-texas

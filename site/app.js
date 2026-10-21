@@ -23,9 +23,9 @@ const fmtDate = (i) => toDate(i.date).toLocaleDateString('en-US', i.date_precisi
 const place = (i) => (i.location ? `${i.location.city}, ${i.location.country}` : 'Global');
 const reduceMotion = matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-const [incidents, supply, headlines] = await Promise.all(
+const [incidents, supply, headlines, campuses, hubs] = await Promise.all(
   // Reuse the build version stamped on this script's URL so data isn't served stale after a deploy.
-  ['incidents', 'supply-chain', 'headlines'].map((f) => fetch(`data/${f}.json${new URL(import.meta.url).search}`).then((r) => r.json())),
+  ['incidents', 'supply-chain', 'headlines', 'campuses', 'hubs'].map((f) => fetch(`data/${f}.json${new URL(import.meta.url).search}`).then((r) => r.json())),
 );
 const byId = new Map(incidents.map((i) => [i.id, i]));
 // focus = a cross-filter set by clicking a chart element: {kind, value, label}
@@ -731,6 +731,251 @@ listEl.addEventListener('pointermove', (e) => {
 // Keep the sticky filter bar just under the header, whose height changes when the nav wraps.
 const header = document.querySelector('.top'), controls = document.querySelector('.controls');
 new ResizeObserver(() => { controls.style.top = `${header.offsetHeight}px`; }).observe(header);
+
+// ---------- Opportunity radar ----------
+const STAGES = ['announced', 'permitting', 'under-construction', 'operational', 'paused', 'cancelled'];
+const ACTIVE = new Set(['announced', 'permitting', 'under-construction']);
+const STAGE_COLOR = { announced: 'var(--accent)', permitting: 'var(--medium)', 'under-construction': 'var(--capacity)', operational: 'var(--ok)', paused: 'var(--system)', cancelled: 'var(--critical)' };
+const REGIONS = {
+  'North America': ['US', 'CA'], 'Latin America': ['MX', 'BR', 'CL', 'CO', 'AR', 'PE'],
+  Europe: ['GB', 'IE', 'NL', 'DE', 'FR', 'ES', 'IT', 'SE', 'NO', 'FI', 'DK', 'PL', 'PT', 'BE', 'CH', 'AT', 'IS'],
+  'Middle East and Africa': ['SA', 'AE', 'QA', 'IL', 'ZA', 'NG', 'KE', 'EG', 'MA'],
+  'Asia-Pacific': ['SG', 'MY', 'ID', 'IN', 'JP', 'KR', 'AU', 'NZ', 'HK', 'TW', 'TH', 'VN', 'PH', 'CN'],
+};
+const regionOf = (cc) => Object.keys(REGIONS).find((r) => REGIONS[r].includes(cc)) ?? 'Other';
+const fmtMw = (mw) => (mw == null ? '—' : mw >= 1000 ? `${(mw / 1000).toFixed(mw % 1000 ? 1 : 0)} GW` : `${Math.round(mw)} MW`);
+const campusPlace = (c) => [c.location?.city, c.location?.region, c.location?.country].filter(Boolean).join(', ');
+const radarEl = { stage: document.getElementById('radar-stage'), region: document.getElementById('radar-region'),
+  mw: document.getElementById('radar-mw'), liquid: document.getElementById('radar-liquid') };
+radarEl.region.innerHTML += [...new Set(campuses.map((c) => regionOf(c.location?.country)))].sort()
+  .map((r) => `<option>${esc(r)}</option>`).join('');
+
+const radarList = () => campuses.filter((c) =>
+  (radarEl.stage.value === 'all' || (radarEl.stage.value === 'active' ? ACTIVE.has(c.stage) : c.stage === radarEl.stage.value)) &&
+  (radarEl.region.value === 'all' || regionOf(c.location?.country) === radarEl.region.value) &&
+  (c.capacity_mw ?? 0) >= +radarEl.mw.value &&
+  (!radarEl.liquid.checked || c.cooling?.liquid === true))
+  .sort((a, b) => (b.capacity_mw ?? 0) - (a.capacity_mw ?? 0));
+
+function renderRadar() {
+  const list = radarList();
+  const total = (xs) => xs.reduce((s, c) => s + (c.capacity_mw ?? 0), 0);
+  document.getElementById('radar-count').textContent = campuses.length
+    ? `${list.length} of ${campuses.length} campuses · ${fmtMw(total(list))} in view` : '';
+  const byStage = STAGES.map((st) => [st, total(campuses.filter((c) => c.stage === st))]).filter(([, mw]) => mw > 0);
+  const all = Math.max(1, byStage.reduce((s, [, mw]) => s + mw, 0));
+  const liquid = campuses.filter((c) => c.cooling?.liquid === true);
+  document.getElementById('radar-summary').innerHTML = campuses.length ? `
+    <div class="ev-label">Tracked capacity by stage</div>
+    <div class="stack">${byStage.map(([st, mw]) => `<span style="flex:${mw};background:${STAGE_COLOR[st]}" title="${pretty(st)}: ${fmtMw(mw)}">${mw / all > 0.08 ? fmtMw(mw) : ''}</span>`).join('')}</div>
+    <div class="legend">${byStage.map(([st, mw]) => `<span><i style="background:${STAGE_COLOR[st]}"></i>${pretty(st)} ${fmtMw(mw)}</span>`).join('')}</div>
+    <div class="ev-grid">
+      <div><b>${fmtMw(total(campuses.filter((c) => ACTIVE.has(c.stage))))}</b>in the active pipeline</div>
+      <div><b>${campuses.filter((c) => c.stage === 'under-construction').length}</b>campuses under construction</div>
+      <div><b>${liquid.length}<small>/${campuses.length}</small></b>with liquid cooling confirmed</div>
+      <div><b>${new Set(campuses.map((c) => c.location?.country)).size}</b>countries</div>
+    </div>` : '<div class="empty">Campus data is being researched and will appear here.</div>';
+  const table = document.getElementById('radar-table');
+  table.innerHTML = list.length ? `<thead><tr><th>Campus</th><th>Operator and tenants</th><th>Location</th><th class="num">Capacity</th><th>Stage</th><th>Online</th><th>Cooling</th><th></th></tr></thead>
+    <tbody>${list.map((c) => `<tr>
+      <td><strong>${esc(c.name)}</strong></td>
+      <td><button class="linkish" data-brief="${esc(c.operator)}">${esc(c.operator)}</button>${(c.tenants ?? []).length ? `<div class="muted small">${(c.tenants).map((t) => `<button class="linkish" data-brief="${esc(t)}">${esc(t)}</button>`).join(', ')}</div>` : ''}</td>
+      <td>${esc(campusPlace(c))}</td>
+      <td class="num">${fmtMw(c.capacity_mw)}${c.capacity_basis ? `<div class="muted small">${esc(c.capacity_basis)}</div>` : ''}</td>
+      <td><span class="stage" style="--sc:${STAGE_COLOR[c.stage]}">${pretty(c.stage)}</span></td>
+      <td class="mono">${esc(c.expected_online ?? '—')}</td>
+      <td>${c.cooling?.liquid === true ? '<span class="tag conf-confirmed">liquid</span>' : c.cooling?.liquid === false ? '<span class="tag">air</span>' : '<span class="muted">unknown</span>'}
+        ${(c.cooling?.vendors ?? []).length ? `<div class="muted small">${esc(c.cooling.vendors.join(', '))}</div>` : ''}${c.cooling?.notes ? `<div class="muted small">${esc(c.cooling.notes)}</div>` : ''}</td>
+      <td class="nowrap">${c.location ? `<button class="locate" data-campus="${esc(c.id)}">◎ Map</button>` : ''} ${c.sources.filter((x) => x.url).slice(0, 2).map((x, k) => `<a href="${esc(x.url)}" target="_blank" rel="noopener" title="${esc(x.publisher)}">[${k + 1}]</a>`).join(' ')}</td>
+    </tr>`).join('')}</tbody>` : campuses.length ? '<tbody><tr><td class="muted">No campuses match these filters.</td></tr></tbody>' : '';
+}
+Object.values(radarEl).forEach((el) => el.addEventListener('change', renderRadar));
+
+// Campuses as an optional layer on the flat map.
+const campusLayer = L.layerGroup();
+for (const c of campuses.filter((x) => x.location)) {
+  const s = Math.max(12, Math.min(30, 8 + Math.sqrt(c.capacity_mw ?? 50)));
+  L.marker([c.location.lat, c.location.lon], {
+    title: c.name,
+    icon: L.divIcon({ className: '', iconSize: [s, s], html: `<div class="campus-pin" style="--sc:${STAGE_COLOR[c.stage]};width:${s}px;height:${s}px"></div>` }),
+  }).bindPopup(`<strong>${esc(c.name)}</strong><br>${esc(c.operator)} · ${fmtMw(c.capacity_mw)} · ${pretty(c.stage)}<br>${esc(campusPlace(c))}`).addTo(campusLayer);
+}
+const showCampuses = document.getElementById('show-campuses');
+showCampuses.addEventListener('change', () => { showCampuses.checked ? campusLayer.addTo(map) : map.removeLayer(campusLayer); });
+document.getElementById('radar-table').addEventListener('click', (e) => {
+  const pin = e.target.closest('[data-campus]');
+  if (pin) {
+    const c = campuses.find((x) => x.id === pin.dataset.campus);
+    if (view !== 'flat') setView('flat');
+    showCampuses.checked = true; campusLayer.addTo(map);
+    document.getElementById('map').scrollIntoView({ behavior: reduceMotion ? 'auto' : 'smooth', block: 'center' });
+    map.flyTo([c.location.lat, c.location.lon], 6, { duration: 1.2 });
+  }
+});
+
+// ---------- Heat and water watch ----------
+const toRad = (d) => (d * Math.PI) / 180;
+const kmBetween = (a, b) => {
+  const h = Math.sin(toRad(b.lat - a.lat) / 2) ** 2 + Math.cos(toRad(a.lat)) * Math.cos(toRad(b.lat)) * Math.sin(toRad(b.lon - a.lon) / 2) ** 2;
+  return 12742 * Math.asin(Math.sqrt(h));
+};
+const WATER_RANK = { low: 0, 'low-medium': 1, 'medium-high': 2, high: 3, 'extremely high': 4, 'arid and low water use': 3 };
+let forecasts = null; // hub id -> { peak, day }
+async function loadForecasts() {
+  const url = `https://api.open-meteo.com/v1/forecast?latitude=${hubs.map((h) => h.lat).join(',')}&longitude=${hubs.map((h) => h.lon).join(',')}&daily=temperature_2m_max&forecast_days=7&timezone=auto`;
+  try {
+    const res = await (await fetch(url)).json();
+    const rows = Array.isArray(res) ? res : [res];
+    forecasts = new Map(hubs.map((h, k) => {
+      const d = rows[k]?.daily;
+      if (!d) return [h.id, null];
+      const i = d.temperature_2m_max.indexOf(Math.max(...d.temperature_2m_max));
+      return [h.id, { peak: d.temperature_2m_max[i], day: d.time[i] }];
+    }));
+  } catch { forecasts = new Map(); }
+  renderHeatWater();
+}
+function renderHeatWater() {
+  const near = (h, xs, loc) => xs.filter((x) => loc(x) && kmBetween(h, loc(x)) <= 300);
+  const rows = hubs.map((h) => {
+    const f = forecasts?.get(h.id);
+    const coolingHits = near(h, incidents.filter((i) => i.affects.includes('cooling')), (i) => i.location);
+    const pipeline = near(h, campuses.filter((c) => ACTIVE.has(c.stage)), (c) => c.location);
+    const mw = pipeline.reduce((s, c) => s + (c.capacity_mw ?? 0), 0);
+    const heat = f ? Math.max(0, f.peak - 27) : 0;
+    const score = heat * 2 + (WATER_RANK[h.water_stress] ?? 0) * 2 + coolingHits.length * 3 + Math.min(10, mw / 300);
+    return { h, f, coolingHits, pipeline, mw, score };
+  }).sort((a, b) => b.score - a.score);
+  const heatTag = (f) => !f ? '<span class="muted">—</span>'
+    : `<span class="temp ${f.peak >= 35 ? 'hot2' : f.peak >= 30 ? 'hot1' : ''}">${Math.round(f.peak)}°C <small>${Math.round(f.peak * 9 / 5 + 32)}°F</small></span>
+       <div class="muted small">${new Date(`${f.day}T12:00:00`).toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric' })}${f.peak >= 35 ? ' · heat alert' : ''}</div>`;
+  document.getElementById('hw-table').innerHTML = `<thead><tr><th>Hub</th><th>7-day peak</th><th>Water stress</th><th class="num">Cooling incidents nearby</th><th class="num">Active pipeline nearby</th><th>Watch level</th></tr></thead>
+    <tbody>${rows.map((r) => {
+      const level = r.score >= 14 ? ['high', 'var(--critical)'] : r.score >= 7 ? ['elevated', 'var(--medium)'] : ['normal', 'var(--ok)'];
+      return `<tr>
+        <td><strong>${esc(r.h.name)}</strong><div class="muted small">${esc(r.h.country)}</div></td>
+        <td>${heatTag(r.f)}</td>
+        <td>${r.h.water_stress ? `<span class="water w${WATER_RANK[r.h.water_stress]}">${esc(r.h.water_stress)}</span>${r.h.water_note ? `<div class="muted small">${r.h.water_note_url ? `<a href="${esc(r.h.water_note_url)}" target="_blank" rel="noopener">${esc(r.h.water_note)}</a>` : esc(r.h.water_note)}</div>` : ''}` : '<span class="muted">not yet sourced</span>'}</td>
+        <td class="num">${r.coolingHits.length ? r.coolingHits.map((i) => `<button class="linkish" data-jump="${esc(i.id)}" title="${esc(i.title)}">${fmtDate(i).slice(-4)}</button>`).join(' ') : '<span class="muted">0</span>'}</td>
+        <td class="num">${r.mw ? `${fmtMw(r.mw)}<div class="muted small">${r.pipeline.length} campus${r.pipeline.length === 1 ? '' : 'es'}</div>` : '<span class="muted">—</span>'}</td>
+        <td><span class="stage" style="--sc:${level[1]}">${level[0]}</span></td>
+      </tr>`;
+    }).join('')}</tbody>`;
+}
+document.getElementById('hw-table').addEventListener('click', (e) => {
+  const j = e.target.closest('[data-jump]');
+  if (j) jumpTo(j.dataset.jump);
+});
+loadForecasts(); // one small request for all hubs
+
+// ---------- Cooling vendor tracker ----------
+const COOLING_VENDORS = [
+  ['Vertiv', 'NYSE:VRT'], ['Schneider Electric', 'EURONEXT:SU'], ['Johnson Controls', 'NYSE:JCI'], ['Trane Technologies', 'NYSE:TT'],
+  ['Carrier', 'NYSE:CARR'], ['Modine', 'NYSE:MOD'], ['nVent', 'NYSE:NVT'], ['Daikin', 'TSE:6367'], ['Munters', 'OMXSTO:MTRS'],
+  ['LiquidStack', null], ['CoolIT Systems', null], ['Motivair', null], ['Boyd', null], ['Stulz', null],
+];
+const nameMatch = (list, name) => list.some((x) => x && (x === name || x.toLowerCase().startsWith(name.toLowerCase())));
+const eventsFor = (name) => incidents.filter((i) => nameMatch(partiesOf(i), name)).sort((a, b) => b.date.localeCompare(a.date));
+const campusesFor = (name) => campuses.filter((c) => nameMatch([c.operator, ...(c.tenants ?? []), ...(c.cooling?.vendors ?? [])], name));
+function renderVendors() {
+  document.getElementById('vendor-grid').innerHTML = COOLING_VENDORS.map(([name, sym]) => {
+    const ev = eventsFor(name), sites = campusesFor(name);
+    const latest = ev[0];
+    return `<button class="vendor" data-brief="${esc(name)}">
+      <span class="v-top"><strong>${esc(name)}</strong><span class="mono muted">${sym ? esc(sym.split(':')[1]) : 'private'}</span></span>
+      <span class="v-stats"><b>${ev.length}</b> tracked event${ev.length === 1 ? '' : 's'}${sites.length ? ` · <b>${sites.length}</b> named site${sites.length === 1 ? '' : 's'}` : ''}</span>
+      <span class="v-latest muted">${latest ? `${fmtDate(latest)} · ${esc(latest.title)}` : 'No tracked events yet'}</span>
+    </button>`;
+  }).join('');
+}
+
+// ---------- Operator briefs ----------
+const TICKERS = {
+  Microsoft: 'NASDAQ:MSFT', 'Microsoft Azure': 'NASDAQ:MSFT', Google: 'NASDAQ:GOOGL', 'Google Cloud': 'NASDAQ:GOOGL', Alphabet: 'NASDAQ:GOOGL',
+  Amazon: 'NASDAQ:AMZN', AWS: 'NASDAQ:AMZN', 'Amazon Web Services': 'NASDAQ:AMZN', Meta: 'NASDAQ:META', Oracle: 'NYSE:ORCL', 'Oracle Cloud': 'NYSE:ORCL',
+  CoreWeave: 'NASDAQ:CRWV', Nebius: 'NASDAQ:NBIS', Equinix: 'NASDAQ:EQIX', 'Digital Realty': 'NYSE:DLR', 'Iron Mountain': 'NYSE:IRM',
+  'Applied Digital': 'NASDAQ:APLD', 'Alibaba Cloud': 'NYSE:BABA', NVIDIA: 'NASDAQ:NVDA', Nvidia: 'NASDAQ:NVDA', AMD: 'NASDAQ:AMD',
+  'AT&T': 'NYSE:T', OVHcloud: 'EURONEXT:OVH', Kakao: 'KRX:035720', 'HPE': 'NYSE:HPE', 'Supermicro': 'NASDAQ:SMCI', 'Dell': 'NYSE:DELL',
+  Constellation: 'NASDAQ:CEG', Vistra: 'NYSE:VST', 'GE Vernova': 'NYSE:GEV', Eaton: 'NYSE:ETN',
+  ...Object.fromEntries(COOLING_VENDORS.filter(([, s]) => s)),
+};
+const allNames = [...new Set([...incidents.flatMap(partiesOf), ...campuses.flatMap((c) => [c.operator, ...(c.tenants ?? []), ...(c.cooling?.vendors ?? [])]),
+  ...COOLING_VENDORS.map(([n]) => n)].filter(Boolean))].sort((a, b) => a.localeCompare(b));
+document.getElementById('brief-names').innerHTML = allNames.map((n) => `<option value="${esc(n)}">`).join('');
+const popular = allNames.map((n) => [n, eventsFor(n).length + campusesFor(n).length]).sort((a, b) => b[1] - a[1]).slice(0, 12);
+document.getElementById('brief-quick').innerHTML = popular.map(([n, k]) => `<button class="pill" data-brief="${esc(n)}">${esc(n)} <span class="muted">${k}</span></button>`).join('');
+
+function keyPoints(name, ev, sites) {
+  const pts = [];
+  const cooling = ev.filter((i) => i.affects.includes('cooling'));
+  const security = ev.filter((i) => i.category.some((c) => SECURITY.has(c)));
+  const active = sites.filter((c) => ACTIVE.has(c.stage));
+  if (active.length) pts.push(`${fmtMw(active.reduce((s, c) => s + (c.capacity_mw ?? 0), 0))} across ${active.length} campus${active.length === 1 ? '' : 'es'} in the active pipeline${active.some((c) => c.stage === 'under-construction') ? `, ${active.filter((c) => c.stage === 'under-construction').length} under construction` : ''}.`);
+  const liquid = sites.filter((c) => c.cooling?.liquid === true);
+  if (liquid.length) pts.push(`Liquid cooling confirmed at ${liquid.map((c) => c.name).join(', ')}.`);
+  if (cooling.length) pts.push(`${cooling.length} tracked cooling-related incident${cooling.length === 1 ? '' : 's'}: ${cooling.map((i) => `${i.title} (${fmtDate(i)})`).join('; ')}.`);
+  if (security.length && security.length !== cooling.length) pts.push(`${security.length} security incident${security.length === 1 ? '' : 's'} tracked in total, ${security.filter((i) => SEV[i.severity] >= 2).length} rated high or critical.`);
+  const factors = [...new Set(ev.flatMap((i) => (i.supply_chain_factors ?? []).map((f) => componentName(f.component))))].filter(Boolean);
+  if (factors.length) pts.push(`Supply chain exposure cited in its incidents: ${factors.join(', ')}.`);
+  const dev = ev.filter((i) => i.type === 'development');
+  if (dev.length) pts.push(`Latest industry move: ${dev[0].title} (${fmtDate(dev[0])}).`);
+  if (!pts.length) pts.push('Nothing tracked yet beyond the entries below.');
+  return pts;
+}
+
+const briefDlg = document.getElementById('brief');
+function openBrief(name) {
+  const ev = eventsFor(name), sites = campusesFor(name);
+  const sym = TICKERS[name] ?? Object.entries(TICKERS).find(([k]) => name.toLowerCase().startsWith(k.toLowerCase()))?.[1];
+  document.getElementById('brief-body').innerHTML = `
+    <p class="eyebrow">Operator brief</p>
+    <h2 id="brief-title">${esc(name)}</h2>
+    <div class="ev-grid">
+      <div><b>${ev.filter((i) => i.category.some((c) => SECURITY.has(c))).length}</b>security events</div>
+      <div><b>${ev.filter((i) => !i.category.every((c) => SECURITY.has(c))).length}</b>industry developments</div>
+      <div><b>${sites.length}</b>campuses tracked</div>
+      <div><b>${fmtMw(sites.filter((c) => ACTIVE.has(c.stage)).reduce((s, c) => s + (c.capacity_mw ?? 0), 0))}</b>active pipeline</div>
+    </div>
+    ${sym ? `<div class="tradingview-widget-container brief-quote" id="brief-quote"></div>` : ''}
+    <h3>Key points</h3>
+    <ul class="key-points">${keyPoints(name, ev, sites).map((p) => `<li>${esc(p)}</li>`).join('')}</ul>
+    ${sites.length ? `<h3>Campuses</h3><ul class="brief-list">${sites.map((c) => `<li><strong>${esc(c.name)}</strong> · ${fmtMw(c.capacity_mw)} · ${pretty(c.stage)} · ${esc(campusPlace(c))}${c.cooling?.liquid === true ? ' · <span class="tag conf-confirmed">liquid</span>' : ''}</li>`).join('')}</ul>` : ''}
+    ${ev.length ? `<h3>Events</h3><ul class="brief-list">${ev.map((i) => `<li><button class="linkish" data-jump="${esc(i.id)}">${esc(i.title)}</button> <span class="meta">${fmtDate(i)} · ${i.severity}</span></li>`).join('')}</ul>` : ''}
+    <div class="brief-actions">
+      <button class="chip" data-filter="${esc(name)}" style="--c:var(--accent)">Filter the page to ${esc(name)}</button>
+      <button class="chip" data-print style="--c:var(--accent)">🖨 Print this brief</button>
+    </div>`;
+  if (sym) {
+    const s = document.createElement('script');
+    s.src = 'https://s3.tradingview.com/external-embedding/embed-widget-symbol-info.js';
+    s.async = true;
+    s.textContent = JSON.stringify({ symbol: sym, width: '100%', locale: 'en', colorTheme: 'dark', isTransparent: true });
+    document.getElementById('brief-quote').append(Object.assign(document.createElement('div'), { className: 'tradingview-widget-container__widget' }), s);
+  }
+  if (!briefDlg.open) briefDlg.showModal();
+}
+document.getElementById('brief-close').onclick = () => briefDlg.close();
+briefDlg.addEventListener('click', (e) => {
+  if (e.target === briefDlg) return briefDlg.close(); // backdrop click
+  const j = e.target.closest('[data-jump]');
+  if (j) { briefDlg.close(); jumpTo(j.dataset.jump); }
+  const f = e.target.closest('[data-filter]');
+  if (f) { briefDlg.close(); setFocus('party', f.dataset.filter, f.dataset.filter); document.getElementById('map').scrollIntoView({ behavior: 'smooth' }); }
+  if (e.target.closest('[data-print]')) { document.body.classList.add('print-brief'); window.print(); }
+});
+addEventListener('afterprint', () => document.body.classList.remove('print-brief'));
+// Any element with data-brief opens that company's brief.
+document.addEventListener('click', (e) => {
+  const b = e.target.closest('[data-brief]');
+  if (b) { e.preventDefault(); openBrief(b.dataset.brief); }
+});
+const briefSearch = document.getElementById('brief-search');
+const openTyped = () => { const v = briefSearch.value.trim(); if (v) openBrief(allNames.find((n) => n.toLowerCase() === v.toLowerCase()) ?? v); };
+document.getElementById('brief-open').onclick = openTyped;
+briefSearch.addEventListener('keydown', (e) => { if (e.key === 'Enter') openTyped(); });
+
+renderRadar();
+renderVendors();
 
 // ---------- Reveal on scroll ----------
 const io = new IntersectionObserver((entries) => {
