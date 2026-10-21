@@ -34,8 +34,17 @@ const FOCUS_TEST = {
   category: (i, v) => i.category.includes(v),
   party: (i, v) => partiesOf(i).includes(v),
   component: (i, v) => supply.components.find((c) => c.id === v)?.related_incidents.includes(i.id),
+  pair: (i, v) => { const [a, m] = v.split('|'); return i.affects.includes(a) && i.impacts.includes(m); },
 };
-const FOCUS_NOUN = { system: 'System hit', impact: 'Consequence', category: 'Threat type', party: 'Company', component: 'Supply chain' };
+const FOCUS_NOUN = { system: 'System hit', impact: 'Consequence', category: 'Threat type', party: 'Company', component: 'Supply chain', pair: 'System → consequence' };
+
+// CVE IDs from an incident's text and its NVD links, and whether CISA's KEV catalog is cited.
+// Other URLs are skipped: article slugs can mangle IDs (one source's slug has a typo'd CVE).
+const CVE_RE = /CVE-\d{4}-\d{4,7}/gi;
+const cvesOf = (i) => [...new Set([i.title, i.summary, i.root_cause?.summary, ...(i.root_cause?.components ?? []).map((c) => c.detail),
+  ...i.sources.map((s) => s.publisher), ...i.sources.filter((s) => /nvd\.nist\.gov/.test(s.url ?? '')).map((s) => s.url)]
+  .join(' ').match(CVE_RE)?.map((c) => c.toUpperCase()) ?? [])];
+const kevCited = (i) => /\bKEV\b|known exploited/i.test([i.summary, ...i.sources.map((s) => `${s.publisher} ${s.url}`)].join(' '));
 
 const matches = (i) =>
   i.category.some((c) => state.cats.has(c)) &&
@@ -131,8 +140,43 @@ function renderFocusBar(list) {
   if (!state.focus) return;
   bar.innerHTML = `<span class="k">${FOCUS_NOUN[state.focus.kind]}</span> <strong>${esc(state.focus.label)}</strong>
     <span class="muted">· ${list.length} incident${list.length === 1 ? '' : 's'}</span>
-    <button class="chip" style="--c:var(--accent)">Clear ×</button>`;
-  bar.querySelector('button').onclick = () => setFocus(null);
+    <button class="chip copy-view" style="--c:var(--accent)">Copy link to this view</button>
+    <button class="chip clear" style="--c:var(--accent)">Clear ×</button>`;
+  bar.querySelector('.clear').onclick = () => setFocus(null);
+  bar.querySelector('.copy-view').onclick = (e) => copyLink(location.href, e.currentTarget);
+}
+
+// ---------- Shareable URLs: filters live in the query string, an incident in the hash ----------
+function writeUrl() {
+  const p = new URLSearchParams();
+  if (state.cats.size < CATS.length) p.set('cat', [...state.cats].join(','));
+  if (state.minSev !== 'low') p.set('sev', state.minSev);
+  if (state.q) p.set('q', state.q);
+  if (state.focus) p.set('focus', `${state.focus.kind}:${state.focus.value}`);
+  const qs = p.toString();
+  const hash = byId.has(location.hash.slice(1)) ? location.hash : '';
+  history.replaceState(null, '', `${location.pathname}${qs ? `?${qs}` : ''}${hash}`);
+}
+function readUrl() {
+  const p = new URLSearchParams(location.search);
+  const cats = p.get('cat')?.split(',').filter((c) => CATS.some((x) => x.id === c));
+  if (cats?.length) {
+    state.cats = new Set(cats);
+    filters.querySelectorAll('.chip').forEach((b) => b.setAttribute('aria-pressed', String(state.cats.has(b.dataset.cat))));
+  }
+  if (SEV[p.get('sev')] !== undefined) { state.minSev = p.get('sev'); sevEl.value = state.minSev; }
+  if (p.get('q')) { state.q = p.get('q').toLowerCase(); searchEl.value = p.get('q'); }
+  const f = p.get('focus'), k = f?.slice(0, f.indexOf(':')), v = f?.slice(f.indexOf(':') + 1);
+  if (k && FOCUS_TEST[k]) {
+    const label = k === 'category' ? catLabel(v) : k === 'component' ? supply.components.find((c) => c.id === v)?.name
+      : k === 'pair' ? v.split('|').map(pretty).join(' → ') : k === 'party' ? v : pretty(v);
+    state.focus = { kind: k, value: v, label };
+  }
+}
+async function copyLink(url, btn) {
+  try { await navigator.clipboard.writeText(url); } catch { prompt('Copy this link:', url); return; }
+  const old = btn.textContent; btn.textContent = 'Copied ✓';
+  setTimeout(() => { btn.textContent = old; }, 1400);
 }
 
 // ---------- KPIs ----------
@@ -528,6 +572,114 @@ function renderCause(i) {
   </details>`;
 }
 
+// ---------- Analyst views ----------
+// Risk matrix: which systems were hit, and what that led to.
+function renderMatrix(list) {
+  const systems = [...new Set(list.flatMap((i) => i.affects))];
+  const impacts = [...new Set(list.flatMap((i) => i.impacts))];
+  const cell = (a, m) => list.filter((i) => i.affects.includes(a) && i.impacts.includes(m));
+  const rowTotal = (a) => list.filter((i) => i.affects.includes(a)).length;
+  systems.sort((a, b) => rowTotal(b) - rowTotal(a));
+  impacts.sort((a, b) => list.filter((i) => i.impacts.includes(b)).length - list.filter((i) => i.impacts.includes(a)).length);
+  const max = Math.max(1, ...systems.flatMap((a) => impacts.map((m) => cell(a, m).length)));
+  const el = document.getElementById('matrix');
+  if (!systems.length) { el.innerHTML = '<div class="empty">No incidents match these filters.</div>'; return; }
+  el.style.gridTemplateColumns = `minmax(90px, auto) repeat(${impacts.length}, minmax(44px, 1fr))`;
+  el.innerHTML = `<span></span>${impacts.map((m) => `<span class="mx-col">${esc(pretty(m))}</span>`).join('')}${
+    systems.map((a) => `<span class="mx-row">${esc(pretty(a))}</span>${impacts.map((m) => {
+      const hits = cell(a, m), n = hits.length;
+      const worst = hits.reduce((w, i) => Math.max(w, SEV[i.severity]), -1);
+      const on = state.focus?.kind === 'pair' && state.focus.value === `${a}|${m}`;
+      return `<button class="mx-cell${on ? ' on' : ''}" ${n ? '' : 'disabled'} data-pair="${a}|${m}"
+        style="--a:${n ? 0.15 + 0.85 * (n / max) : 0}" title="${esc(pretty(a))} → ${esc(pretty(m))}: ${n} incident${n === 1 ? '' : 's'}${n ? `, worst ${Object.keys(SEV)[worst]}` : ''}">${n || ''}</button>`;
+    }).join('')}`).join('')}`;
+}
+document.getElementById('matrix').addEventListener('click', (e) => {
+  const b = e.target.closest('[data-pair]');
+  if (!b) return;
+  const [a, m] = b.dataset.pair.split('|');
+  setFocus('pair', b.dataset.pair, `${pretty(a)} → ${pretty(m)}`);
+});
+
+// Companies that keep showing up, weighted by severity.
+function renderLeaders(list) {
+  const role = (p) => {
+    const r = [];
+    if (list.some((i) => (i.operators ?? []).includes(p))) r.push('operator');
+    if (list.some((i) => (i.vendors ?? []).includes(p) || (i.root_cause?.components ?? []).some((c) => c.manufacturer === p))) r.push('vendor or maker');
+    return r.join(' · ');
+  };
+  const rows = [...new Set(list.flatMap(partiesOf))].map((p) => {
+    const hits = list.filter((i) => partiesOf(i).includes(p));
+    return { p, n: hits.length, score: hits.reduce((s, i) => s + SEV[i.severity] + 1, 0), crit: hits.filter((i) => SEV[i.severity] >= 2).length };
+  }).sort((a, b) => b.score - a.score || a.p.localeCompare(b.p)).slice(0, 10);
+  const max = Math.max(1, ...rows.map((r) => r.score));
+  document.getElementById('leaders').innerHTML = rows.length ? rows.map((r, k) => `
+    <li><button data-party="${esc(r.p)}">
+      <span class="rank">${k + 1}</span>
+      <span class="who"><strong>${esc(r.p)}</strong><span class="muted">${role(r.p)}</span></span>
+      <span class="lbar"><i style="width:${(100 * r.score) / max}%"></i></span>
+      <span class="num">${r.n} incident${r.n === 1 ? '' : 's'}${r.crit ? ` · ${r.crit} high+` : ''}</span>
+    </button></li>`).join('') : '<li class="empty">No companies in this view.</li>';
+}
+document.getElementById('leaders').addEventListener('click', (e) => {
+  const b = e.target.closest('[data-party]');
+  if (b) setFocus('party', b.dataset.party, b.dataset.party);
+});
+
+// How much is actually known: evidence quality for the current view.
+function renderEvidence(list) {
+  const conf = ['confirmed', 'likely', 'suspected', 'unknown'];
+  const counts = conf.map((c) => list.filter((i) => (i.root_cause?.confidence ?? 'unknown') === c).length);
+  const origins = list.flatMap((i) => (i.root_cause?.components ?? []).filter((c) => c.role === 'origin'));
+  const named = origins.filter((c) => c.manufacturer).length, guessed = origins.filter((c) => !c.manufacturer && c.inferred).length;
+  const factors = list.reduce((s, i) => s + (i.supply_chain_factors?.length ?? 0), 0);
+  const linked = list.filter((i) => i.sources.some((s) => s.url)).length;
+  const total = Math.max(1, list.length);
+  document.getElementById('evidence').innerHTML = `
+    <div class="ev-label">Root cause confidence</div>
+    <div class="stack">${conf.map((c, k) => counts[k] ? `<span class="seg-${c}" style="flex:${counts[k]}" title="${c}: ${counts[k]}">${counts[k]}</span>` : '').join('')}</div>
+    <div class="legend">${conf.map((c, k) => `<span><i class="seg-${c}"></i>${c} ${counts[k]}</span>`).join('')}</div>
+    <div class="ev-grid">
+      <div><b>${named}<small>/${origins.length}</small></b>failed parts with a published maker</div>
+      <div><b>${guessed}</b>evidence-backed best guesses</div>
+      <div><b>${factors}</b>supply chain factors documented</div>
+      <div><b>${Math.round((100 * linked) / total)}%</b>incidents with linked sources</div>
+    </div>
+    <p class="muted small">Makers are only shown when a source names them. Most operators never publish the make of a failed part.</p>`;
+}
+
+// ---------- Exports ----------
+const csvCell = (v) => `"${String(v ?? '').replace(/"/g, '""')}"`;
+function download(name, type, text) {
+  const a = Object.assign(document.createElement('a'), { href: URL.createObjectURL(new Blob([text], { type })), download: name });
+  a.click(); setTimeout(() => URL.revokeObjectURL(a.href), 1000);
+}
+function exportCsv() {
+  const cols = ['id', 'date', 'title', 'type', 'category', 'severity', 'status', 'location', 'affects', 'impacts',
+    'operators', 'vendors', 'cves', 'root_cause', 'root_cause_confidence', 'failed_parts', 'supply_chain_factors', 'sources'];
+  const rows = visible().map((i) => [i.id, i.date, i.title, i.type, i.category.join('; '), i.severity, i.status, place(i),
+    i.affects.join('; '), i.impacts.join('; '), (i.operators ?? []).join('; '), (i.vendors ?? []).join('; '), cvesOf(i).join('; '),
+    i.root_cause?.summary, i.root_cause?.confidence,
+    (i.root_cause?.components ?? []).map((c) => [c.part, c.manufacturer, c.model].filter(Boolean).join(' / ')).join('; '),
+    (i.supply_chain_factors ?? []).map((f) => f.factor).join('; '), i.sources.map((s) => s.url ?? s.publisher).join(' ')]);
+  download('dc-security-incidents.csv', 'text/csv', [cols, ...rows].map((r) => r.map(csvCell).join(',')).join('\n'));
+}
+document.getElementById('export-csv').onclick = exportCsv;
+document.getElementById('export-json').onclick = () =>
+  download('dc-security-incidents.json', 'application/json', JSON.stringify(visible(), null, 2));
+document.getElementById('print-brief').onclick = () => window.print();
+// The printed briefing expands every root cause and states the filters used.
+addEventListener('beforeprint', () => {
+  document.querySelectorAll('.card details').forEach((d) => { d.dataset.wasOpen = d.open; d.open = true; });
+  const f = [state.cats.size < CATS.length && [...state.cats].map(catLabel).join(', '), state.minSev !== 'low' && `${state.minSev} and up`,
+    state.q && `"${state.q}"`, state.focus && `${FOCUS_NOUN[state.focus.kind]}: ${state.focus.label}`].filter(Boolean);
+  document.getElementById('print-head').innerHTML = `<h1>Data center security briefing</h1>
+    <p>${new Date().toLocaleDateString('en-US', { dateStyle: 'long' })} · ${visible().length} incidents · ${f.length ? `Filters: ${esc(f.join(' · '))}` : 'All incidents'}</p>
+    <p>Source: ${esc(location.href)}</p>`;
+});
+addEventListener('afterprint', () => document.querySelectorAll('.card details').forEach((d) => { d.open = d.dataset.wasOpen === 'true'; }));
+
 function renderList(list) {
   document.getElementById('list-count').textContent = `${list.length} of ${incidents.length} shown`;
   document.getElementById('incident-list').innerHTML = list.length ? list.map((i) => `
@@ -537,11 +689,16 @@ function renderList(list) {
         ${i.category.map((c) => `<span class="tag" style="color:${catColor(c)}">${catLabel(c)}</span>`).join('')}
         <span class="tag">${i.type}</span>
         ${i.status !== 'confirmed' ? `<span class="tag">${i.status}</span>` : ''}
-        ${i.location ? `<button class="locate" data-locate="${esc(i.id)}" title="Show on the map">◎ Locate</button>` : ''}
+        ${kevCited(i) ? '<span class="tag kev" title="Listed in CISA\'s Known Exploited Vulnerabilities catalog">KEV · exploited</span>' : ''}
+        <span class="card-actions">
+          ${i.location ? `<button class="locate" data-locate="${esc(i.id)}" title="Show on the map">◎ Locate</button>` : ''}
+          <button class="locate" data-copy="${esc(i.id)}" title="Copy a link to this incident">🔗 Link</button>
+        </span>
       </div>
       <h3>${esc(i.title)}</h3>
       <div class="meta">${fmtDate(i)} · ${esc(place(i))}</div>
-      <div class="card-links">${partiesOf(i).map((p) => `<button class="pill" data-party="${esc(p)}">${esc(p)}</button>`).join('')}</div>
+      <div class="card-links">${partiesOf(i).map((p) => `<button class="pill" data-party="${esc(p)}">${esc(p)}</button>`).join('')}${
+        cvesOf(i).map((c) => `<a class="pill cve" href="https://nvd.nist.gov/vuln/detail/${c}" target="_blank" rel="noopener" title="Open in NVD">${c}</a>`).join('')}</div>
       <p>${esc(i.summary)}</p>
       ${renderCause(i)}
       <div class="sources">Sources: ${i.sources.map((s) => s.url ? `<a href="${esc(s.url)}" target="_blank" rel="noopener">${esc(s.publisher)}</a>` : esc(s.publisher)).join(', ')}${i.sources.every((s) => !s.url) ? ' · links pending' : ''}</div>
@@ -553,6 +710,8 @@ const listEl = document.getElementById('incident-list');
 listEl.addEventListener('click', (e) => {
   const loc = e.target.closest('[data-locate]');
   if (loc) return locate(byId.get(loc.dataset.locate));
+  const cp = e.target.closest('[data-copy]');
+  if (cp) return copyLink(`${location.origin}${location.pathname}#${cp.dataset.copy}`, cp);
   const party = e.target.closest('[data-party]');
   if (party) setFocus('party', party.dataset.party, party.dataset.party);
 });
@@ -586,9 +745,17 @@ function render() {
   renderBeeswarm(list);
   renderSankey(list);
   renderNetwork(list);
+  renderMatrix(list);
+  renderLeaders(list);
+  renderEvidence(list);
   renderList(list);
+  writeUrl();
 }
 renderSupply();
+readUrl();
 // Globe by default; the flat map on phones (a globe there traps page scrolling) or without WebGL.
 setView(matchMedia('(max-width: 700px)').matches ? 'flat' : 'globe');
 render();
+// A shared link to one incident: open its details and scroll to it once the page has laid out.
+const linked = byId.get(decodeURIComponent(location.hash.slice(1)));
+if (linked) setTimeout(() => { jumpTo(linked.id); }, 400);

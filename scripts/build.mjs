@@ -133,4 +133,34 @@ const components = supply.components.map((c) => ({
 write('supply-chain.json', { ...supply, as_of: iso(supply.as_of), components });
 write('headlines.json', headlines.map((h) => ({ ...h, date: iso(h.date) })));
 write('vocabulary.json', vocab);
+
+// Atom feed of incidents, newest first, for feed readers and SOC tooling.
+const SITE = 'https://knapply.github.io/data-center-security/';
+const xml = (s) => String(s ?? '').replace(/[<>&'"]/g, (c) => ({ '<': '&lt;', '>': '&gt;', '&': '&amp;', "'": '&apos;', '"': '&quot;' })[c]);
+const stamp = (d) => `${d}T00:00:00Z`;
+const entries = sorted.slice(0, 50).map((i) => {
+  const link = `${SITE}#${i.id}`;
+  const body = [i.summary, i.root_cause && `Root cause (${i.root_cause.confidence}): ${i.root_cause.summary}`,
+    `Severity: ${i.severity}. Location: ${i.location ? `${i.location.city}, ${i.location.country}` : 'global'}.`].filter(Boolean).join('\n\n');
+  return `  <entry>
+    <id>${xml(link)}</id>
+    <title>${xml(`[${i.severity}] ${i.title}`)}</title>
+    <link href="${xml(link)}"/>
+    <updated>${stamp(i.date)}</updated>
+    ${i.category.map((c) => `<category term="${xml(c)}"/>`).join('')}
+    <summary>${xml(body)}</summary>
+  </entry>`;
+});
+fs.writeFileSync(path.join(out, 'feed.xml'), `<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <title>Data Center Security Watch</title>
+  <subtitle>Curated physical, IT/OT and supply-chain security incidents affecting data centers</subtitle>
+  <id>${SITE}</id>
+  <link href="${SITE}"/>
+  <link rel="self" href="${SITE}feed.xml"/>
+  <updated>${stamp(sorted[0]?.date ?? iso(new Date()))}</updated>
+  <author><name>Data Center Security Watch</name></author>
+${entries.join('\n')}
+</feed>
+`);
 console.log('Built _site/');
