@@ -60,17 +60,24 @@
             <option value="critical">Critical only</option>
           </select>
         </label>
-        <input id="search" type="search" placeholder="Search incidents, vendors, places" aria-label="Search incidents">
+        <input id="search" type="search" placeholder="Search incidents, vendors, places  ( / )" aria-label="Search incidents">
       </div>
+      <div class="focus-bar" id="focus-bar" hidden></div>
     </div>
 
     <section class="panel map-panel reveal" id="map">
       <div class="panel-head">
         <h2>Incident map</h2>
         <span class="muted small" id="unmapped"></span>
+        <div class="seg" role="group" aria-label="Map view">
+          <button id="view-globe" aria-pressed="true">3D globe</button>
+          <button id="view-flat" aria-pressed="false">Flat map</button>
+        </div>
       </div>
       <div class="map-wrap">
-        <div id="leaflet"></div>
+        <div id="globe"></div>
+        <div id="leaflet" hidden></div>
+        <div class="globe-hint" id="globe-hint">Drag to spin · scroll to zoom · click a pulse · arcs link incidents that share a company</div>
         <aside class="map-detail" id="map-detail" hidden></aside>
         <div class="map-legend">
           <span><i style="background:var(--physical)"></i>Physical</span>
@@ -141,6 +148,7 @@
   <script src="https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/d3@7.9.0/dist/d3.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/d3-sankey@0.12.3/dist/d3-sankey.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/globe.gl@2.46.2/dist/globe.gl.min.js" defer></script>
   <script type="module" src="app.js"></script>
 </body>
 </html>
