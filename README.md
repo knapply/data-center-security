@@ -10,6 +10,11 @@ A curated tracker of security events affecting data centers worldwide. It covers
 - **Supply chain watch**: risk levels for GPUs, transformers, batteries, cooling, firmware, and subsea capacity
 - **How threats cascade**: Sankey diagram from threat category to affected system to impact
 - **Connections**: network graph linking incidents, systems, and vendors
+- **Risk matrix**: system hit × consequence heatmap; click a cell to filter
+- **Who keeps showing up**: operators, vendors, and makers ranked by severity-weighted incidents
+- **How much is known**: root-cause confidence and evidence quality for the current view
+- **CVE and KEV tags** on incidents, linking to NVD
+- **Share, export, subscribe**: filters live in the URL, CSV/JSON export, a printable briefing, and an Atom feed at [`feed.xml`](https://knapply.github.io/data-center-security/feed.xml)
 
 ## How it's curated
 Entries are drafted by Claude Code against the editorial rules in [`CLAUDE.md`](CLAUDE.md) and land as pull requests. A person reviews each one before merging. GitHub Actions only validate the data and deploy the site.

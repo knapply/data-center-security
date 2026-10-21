@@ -254,3 +254,72 @@ button.kpi:hover .kpi-go, button.kpi:focus-visible .kpi-go { opacity: 1; transfo
 .pill:hover { background: color-mix(in srgb, var(--party) 25%, transparent); }
 .card details, .card a { position: relative; z-index: 1; }
 #sankey g g, .net-node { cursor: pointer; }
+
+/* ---------- Analysis: risk matrix ---------- */
+.matrix { display: grid; gap: 4px; align-items: stretch; overflow-x: auto; }
+.mx-col { font: 11px var(--mono); color: var(--muted); text-align: center; align-self: end; padding-bottom: 4px; line-height: 1.2; }
+.mx-row { font-size: 13px; font-weight: 600; align-self: center; padding-right: 8px; white-space: nowrap; }
+.mx-cell { min-height: 38px; border-radius: 6px; border: 1px solid var(--border); cursor: pointer; font: 600 13px var(--mono); color: var(--text);
+  background: color-mix(in srgb, var(--critical) calc(var(--a) * 100%), var(--surface)); transition: transform .15s, box-shadow .15s; }
+.mx-cell:not([disabled]):hover { transform: scale(1.08); box-shadow: 0 0 16px color-mix(in srgb, var(--critical) 60%, transparent); z-index: 1; }
+.mx-cell[disabled] { cursor: default; background: var(--surface); opacity: .5; }
+.mx-cell.on { outline: 2px solid var(--accent); outline-offset: 1px; }
+
+/* ---------- Analysis: leaderboard ---------- */
+.leaders { list-style: none; margin: 0; padding: 0; display: grid; gap: 4px; }
+.leaders button { width: 100%; display: grid; grid-template-columns: 22px minmax(0, 1.2fr) minmax(60px, 1fr) auto; gap: 10px; align-items: center;
+  background: transparent; border: 1px solid transparent; border-radius: 8px; padding: 6px 8px; color: var(--text); font: inherit; text-align: left; cursor: pointer; }
+.leaders button:hover { background: var(--surface-2); border-color: var(--border); }
+.leaders .rank { font: 600 12px var(--mono); color: var(--muted); }
+.leaders .who { display: flex; flex-direction: column; min-width: 0; font-size: 14px; }
+.leaders .who strong { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.leaders .who .muted { font-size: 11px; }
+.lbar { height: 6px; border-radius: 3px; background: var(--surface-3); overflow: hidden; }
+.lbar i { display: block; height: 100%; border-radius: 3px; background: linear-gradient(90deg, var(--party), var(--critical)); box-shadow: 0 0 10px var(--party); }
+.leaders .num { font: 12px var(--mono); color: var(--muted); white-space: nowrap; }
+@media (max-width: 700px) { .leaders button { grid-template-columns: 22px minmax(0, 1fr) auto; } .lbar { display: none; } }
+
+/* ---------- Evidence quality ---------- */
+.ev-label { font: 11px var(--mono); text-transform: uppercase; letter-spacing: .08em; color: var(--muted); margin-bottom: 6px; }
+.stack { display: flex; height: 26px; border-radius: 6px; overflow: hidden; gap: 2px; }
+.stack span { display: grid; place-items: center; font: 600 12px var(--mono); color: #061018; min-width: 24px; }
+.seg-confirmed { background: var(--ok); } .seg-likely { background: var(--accent); } .seg-suspected { background: var(--medium); } .seg-unknown { background: var(--system); }
+.legend { display: flex; flex-wrap: wrap; gap: 4px 14px; margin: 8px 0 16px; font-size: 12px; color: var(--muted); text-transform: capitalize; }
+.legend i { display: inline-block; width: 9px; height: 9px; border-radius: 2px; margin-right: 6px; }
+.ev-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 12px; }
+.ev-grid div { background: var(--surface-2); border: 1px solid var(--border); border-radius: 10px; padding: 10px 12px; font-size: 13px; color: var(--muted); }
+.ev-grid b { display: block; font: 700 26px/1.1 var(--display); color: var(--text); }
+.ev-grid small { font-size: 14px; color: var(--muted); }
+
+/* ---------- Card extras: KEV, CVEs, actions ---------- */
+.kev { color: var(--critical); border-color: var(--critical); background: color-mix(in srgb, var(--critical) 15%, transparent); animation: kev 2s ease-in-out infinite; }
+@keyframes kev { 50% { box-shadow: 0 0 12px color-mix(in srgb, var(--critical) 60%, transparent); } }
+.pill.cve { background: color-mix(in srgb, var(--it-ot) 12%, transparent); border-color: color-mix(in srgb, var(--it-ot) 45%, transparent); color: var(--it-ot); font-family: var(--mono); text-decoration: none; }
+.card-actions { margin-left: auto; display: inline-flex; gap: 6px; position: relative; z-index: 1; }
+.card-actions .locate { margin-left: 0; }
+.exports { display: flex; flex-wrap: wrap; gap: 6px; margin-left: auto; }
+.exports .chip { text-decoration: none; padding: 4px 12px; color: var(--text); }
+.print-head { display: none; }
+
+/* ---------- Printed briefing ---------- */
+@media print {
+  :root { --text: #111; --muted: #555; --surface: #fff; --surface-2: #fff; --border: #ccc; --border-strong: #999; }
+  body { background: #fff; color: #111; font-size: 11pt; }
+  body::before, .top, .ticker, .hero, .controls, .banner, .map-panel, #timeline, #supply, #impact, .analysis, #evidence-panel,
+  .panel:has(#network), .about, .exports, .card-actions, .card-links button, .tooltip, #list-count { display: none !important; }
+  .print-head { display: block; padding: 0 0 10px; border-bottom: 2px solid #111; margin-bottom: 12px; }
+  .print-head h1 { font-size: 20pt; margin: 0 0 4px; }
+  .print-head p { margin: 2px 0; font-size: 10pt; color: #444; }
+  main { padding: 0; max-width: none; }
+  .reveal { opacity: 1 !important; transform: none !important; }
+  .cards { display: block; }
+  .card { break-inside: avoid; background: #fff !important; box-shadow: none !important; transform: none !important; border: 1px solid #bbb; border-left: 4px solid var(--c); margin-bottom: 10px; }
+  .card::after { display: none; }
+  .card p, .cause p, .about p { color: #222; }
+  .cause { background: #fafafa; }
+  .tag, .pill { color: #333 !important; border-color: #999 !important; background: none !important; animation: none !important; }
+  a { color: #111; }
+}
+.analysis { grid-template-columns: minmax(0, 1.25fr) minmax(0, 1fr); }
+@media (max-width: 960px) { .analysis { grid-template-columns: minmax(0, 1fr); } }
+.mx-col { writing-mode: vertical-rl; transform: rotate(180deg); justify-self: center; text-align: left; white-space: nowrap; padding: 0 0 4px; }

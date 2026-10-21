@@ -12,6 +12,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.css">
   <link rel="stylesheet" href="style.css">
+  <link rel="alternate" type="application/atom+xml" title="Data Center Security Watch: new incidents" href="feed.xml">
 </head>
 <body>
   <header class="top">
@@ -25,7 +26,9 @@
       <a href="#supply">Supply chain</a>
       <a href="#impact">Impact</a>
       <a href="#incidents">Incidents</a>
+      <a href="#risk-matrix">Analysis</a>
       <a href="#about">About</a>
+      <a href="feed.xml" title="Subscribe to new incidents">RSS</a>
     </nav>
     <div class="status"><span class="pulse-dot"></span><span id="status-text">Monitoring</span></div>
   </header>
@@ -44,6 +47,7 @@
     <div class="kpis" id="stats"></div>
   </section>
 
+  <div class="print-head" id="print-head"></div>
   <main>
     <div id="seed-banner" class="banner" hidden>
       Seed data: these entries are well-known events written up to bootstrap the site. Their sources are still being verified and linked.
@@ -119,6 +123,31 @@
       <svg id="sankey" role="img" aria-label="Sankey diagram from threat category to affected system to impact"></svg>
     </section>
 
+    <div class="grid-2 analysis">
+      <section class="panel reveal" id="risk-matrix">
+        <div class="panel-head">
+          <h2>Risk matrix</h2>
+          <span class="muted small">System hit × consequence. Darker = more incidents. Click a cell to filter.</span>
+        </div>
+        <div class="matrix" id="matrix" role="grid" aria-label="Incidents by system hit and consequence"></div>
+      </section>
+      <section class="panel reveal" id="leaders-panel">
+        <div class="panel-head">
+          <h2>Who keeps showing up</h2>
+          <span class="muted small">Companies ranked by incidents, weighted by severity</span>
+        </div>
+        <ol class="leaders" id="leaders"></ol>
+      </section>
+    </div>
+
+    <section class="panel reveal" id="evidence-panel">
+      <div class="panel-head">
+        <h2>How much is known</h2>
+        <span class="muted small">Evidence quality for the incidents in view</span>
+      </div>
+      <div id="evidence"></div>
+    </section>
+
     <section class="panel reveal">
       <div class="panel-head">
         <h2>Connections</h2>
@@ -131,6 +160,12 @@
       <div class="panel-head">
         <h2>Incidents</h2>
         <span class="muted small" id="list-count"></span>
+        <div class="exports" role="group" aria-label="Export the incidents in view">
+          <button id="export-csv" class="chip" style="--c:var(--accent)">⤓ CSV</button>
+          <button id="export-json" class="chip" style="--c:var(--accent)">⤓ JSON</button>
+          <button id="print-brief" class="chip" style="--c:var(--accent)">🖨 Print briefing</button>
+          <a class="chip" style="--c:var(--medium)" href="feed.xml">RSS feed</a>
+        </div>
       </div>
       <div class="cards" id="incident-list"></div>
     </section>
