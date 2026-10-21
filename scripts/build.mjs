@@ -112,6 +112,12 @@ if (process.argv.includes('--check')) process.exit(0);
 const out = path.join(root, '_site');
 fs.rmSync(out, { recursive: true, force: true });
 fs.cpSync(path.join(root, 'site'), out, { recursive: true });
+// Stamp asset links with a build version. Pages caches files for 10 minutes, so without this a
+// returning visitor can get new HTML with an old script right after a deploy.
+const version = (process.env.GITHUB_SHA ?? Date.now().toString(36)).slice(0, 10);
+const indexPath = path.join(out, 'index.html');
+fs.writeFileSync(indexPath, fs.readFileSync(indexPath, 'utf8')
+  .replace(/(href|src)="(style\.css|app\.js)"/g, `$1="$2?v=${version}"`));
 fs.mkdirSync(path.join(out, 'data'), { recursive: true });
 const sorted = incidents.map((x) => ({ ...x, date: iso(x.date) })).sort((a, b) => b.date.localeCompare(a.date));
 const write = (f, v) => fs.writeFileSync(path.join(out, 'data', f), JSON.stringify(v));

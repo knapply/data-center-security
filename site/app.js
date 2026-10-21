@@ -19,7 +19,8 @@ const place = (i) => (i.location ? `${i.location.city}, ${i.location.country}` :
 const reduceMotion = matchMedia('(prefers-reduced-motion: reduce)').matches;
 
 const [incidents, supply, headlines] = await Promise.all(
-  ['incidents', 'supply-chain', 'headlines'].map((f) => fetch(`data/${f}.json`).then((r) => r.json())),
+  // Reuse the build version stamped on this script's URL so data isn't served stale after a deploy.
+  ['incidents', 'supply-chain', 'headlines'].map((f) => fetch(`data/${f}.json${new URL(import.meta.url).search}`).then((r) => r.json())),
 );
 const byId = new Map(incidents.map((i) => [i.id, i]));
 // focus = a cross-filter set by clicking a chart element: {kind, value, label}
