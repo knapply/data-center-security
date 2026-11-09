@@ -21,6 +21,8 @@ A curated tracker of the data center industry: security incidents (physical, IT/
 - **CVE and KEV tags** on incidents, linking to NVD
 - **Share, export, subscribe**: filters live in the URL, CSV/JSON export, a printable briefing, and an Atom feed at [`feed.xml`](https://knapply.github.io/data-center-security/feed.xml)
 
+- **Data center graph** ([`graph.html`](https://knapply.github.io/data-center-security/graph.html)): a searchable, campus-level network of companies, products, components, campuses, grid operators, utilities, standards, policies and conferences, built from open sources. Plain CSVs in [`site/data/graph/`](site/data/graph/): `nodes.csv`, `edges.csv`, `sources.csv`. Every row cites its sources and carries a confidence level and, where known, start and end dates. Capacity is split into announced, current reported, permitted onsite generation, and a verified column that stays blank until a permit, interconnection or filing source supports it. Includes Epoch AI data (CC BY 4.0). People and job roles are not included.
+
 ## How it's curated
 Entries are drafted by Claude Code against the editorial rules in [`CLAUDE.md`](CLAUDE.md) and land as pull requests. A person reviews each one before merging. GitHub Actions only validate the data and deploy the site.
 
